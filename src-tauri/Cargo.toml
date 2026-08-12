@@ -1,0 +1,27 @@
+[package]
+name = "resonance-sistrum"
+version = "0.1.0"
+description = "The sovereign musician's instrument — capture, layer, and shape music that does not exist yet, on your own device, with nothing leaving it."
+authors = ["Quantum Weaver"]
+edition = "2021"
+
+[lib]
+name = "resonance_sistrum_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+strip = true
+opt-level = "s"
+lto = "thin"

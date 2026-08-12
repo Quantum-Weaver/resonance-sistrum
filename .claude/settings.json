@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo check *)",
+      "Bash(npm audit *)",
+      "Bash(npm outdated *)"
+    ],
+    "additionalDirectories": [
+      "c:\\_superposition\\resonance-sistrum\\src-tauri"
+    ]
+  },
+  "attribution": {
+    "commit": "Co-authored-by: Quantum Weaver <audhdities@proton.me>\nCo-authored-by: Aethelred <aethelred.cello@proton.me>"
+  }
+}
