@@ -75,10 +75,17 @@ gaia, ziggy, skapa, awen and bubbles.*
       **The operational rule:** `tauri icon` **rewrites `icon.png`** as a 512 derivative
       every run, so **restore `icon.png` from the library after any regeneration** — done
       for this pass.
-- [ ] **Re-run `tauri icon` after `tauri android init`** — KP's ⚛ note: *"we will need
-      to do it again after android init to cover the gen folder."* `src-tauri/gen/`
-      does not exist yet and is gitignored; its `res/mipmap-*` set is populated from
-      `icons/` at that point, not from this pass. ⬜
+- [x] **Second icon pass, after `tauri android init`** — KP's ⚛ note: *"we will need to
+      do it again after android init to cover the gen folder,"* and he ran the init by
+      his own hand. `src-tauri/gen/android` now stands, and the pass **rewrote every
+      `gen/app/src/main/res/mipmap-*` file** — verified by hash before and after, not
+      assumed — leaving them **byte-identical to the repo's own `icons/android/` set**.
+      His art all the way down to the launcher. `gen/` is gitignored, so this lives on
+      disk only and **must be re-run after any regeneration of `gen/`.**
+      **Two traps, recorded so nobody pays for them twice:** `tauri icon` with no
+      argument looks for `./app-icon.png` and fails — **pass the path explicitly**; and
+      it rewrites `icons/icon.png` again on every run, so **`icon.png` was restored from
+      `resonance-assets/logo-icons/sistrum.png`** afterward, hash-verified.
 - [x] **THE CHECK-IN** — `ff1bc8c` *"the body - mirrored from echoes, rebranded,
       versions reset"* · **156 files, 29,764 insertions** · pushed to
       `origin/main` (`1459e86..ff1bc8c`), working tree clean. Co-authored per the
@@ -91,8 +98,13 @@ gaia, ziggy, skapa, awen and bubbles.*
       by `adapter-static` in **5.05s**. First attempt, after a rename that included the
       Rust crate and its lib name. *(`esbuild`'s held-back postinstall turned out not
       to block the build — measured rather than predicted.)*
-- [ ] First `npm run tauri dev` — the desktop shell actually opening ⬜
-- [ ] **Tested:** ⬜ KP's hands
+- [x] **The desktop shell opens** — KP's own hands, his words: *"verified desktop dev
+      opens clean."* The mirrored body runs.
+- [x] **`tauri android init`** — KP's own hand. `src-tauri/gen/android` stands (gradle
+      wrapper, `app/`, `buildSrc/`), and it touched `src-tauri/Cargo.toml` with an
+      end-of-line rewrite only — **content diff zero**, the rebrand intact:
+      `resonance-sistrum` · `0.1.0` · `resonance_sistrum_lib`.
+- [ ] **Tested:** ⬜ KP's hands — Android on the device
 
 *One stray for KP's ruling: `src-tauri/icons/resonance-echoes-icon.png` (758,901 b,
 1024×1024, Echoes' own logo, set aside by his hand) is still in the folder and would
