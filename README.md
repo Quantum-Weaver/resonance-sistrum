@@ -1,6 +1,16 @@
-# resonance-sistrum
+# 🪇 Resonance Sistrum
 
 *The sovereign musician's instrument — capture, layer, and shape your own music on your own device. Rhythm that moves energy and wards the room. Nothing recorded ever touches a network.*
+
+Built on the [Resonance Grammar](https://github.com/Quantum-Weaver/resonance-grammar) — every fragment contains the whole.
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/status-founded-1e90ff.svg)](docs/CHECKLIST.md)
+[![Standard](https://img.shields.io/badge/standard-resonance--standards-orange.svg)](https://github.com/Quantum-Weaver/resonance-standards)
+[![Grammar](https://img.shields.io/badge/built%20on-resonance--grammar-8a2be2.svg)](https://github.com/Quantum-Weaver/resonance-grammar)
+[![Data collected](https://img.shields.io/badge/data%20collected-none-brightgreen.svg)](PHILOSOPHY.md)
+[![Recording](https://img.shields.io/badge/recording-never%20leaves%20the%20device-8a2be2.svg)](#)
 
 ---
 
