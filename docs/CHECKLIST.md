@@ -110,7 +110,67 @@ gaia, ziggy, skapa, awen and bubbles.*
 1024×1024, Echoes' own logo, set aside by his hand) is still in the folder and would
 ride along on the check-in.*
 
-### Phase 2: Awen fills it ⬜
+### Phase 2: The domain — works · takes · feelings ✅
+*KP's ⚛ rulings: **"yes, works, takes, feelings, moment-marks, release"** · **"yes
+both"** (a feeling hangs on a work AND on a take) · **"resonance-khoros will likely be
+where the release goes easily."** Domain before the waters, at his word, so the
+recorder never lands on a schema about to change under it.*
+
+**Nothing was invented. Every noun is the house's own:**
+
+| Noun | Whose word it is | Where it lives |
+|---|---|---|
+| `work` | `the-release-model` — *"a release references works, never absorbs them"* | `works` table |
+| `take` | `the-recorder` | `takes` table — **meaning only**; the file on disk is the truth |
+| `feeling` | the retargeted Echoes journal | `feelings` table |
+| `mark` | `the-moment-marks` — already built, append-only by law | a `.marks.json` sidecar, **never this database** |
+| `release` | `the-release-model` | **`resonance-khoros`**, not here |
+
+- [x] **Migration v1** `sistrum_domain_works_takes_feelings`; the database is now
+      `sqlite:sistrum.db`. **Echoes' three migrations were not carried** — they are
+      another app's history. Nothing was lost: no data existed when this ran.
+- [x] **`works`** — a work id is a **promise**: Khorós reaches back to it by id, so
+      ids are generated once and never regenerated.
+- [x] **`takes`** — keyed by `file_name`, carrying `work_id` · name · note · the audio
+      facts. **Nothing infers a take's work**, per Khorós' own law: *"ambiguous pairs
+      return to the artist."*
+- [x] **`feelings`** — the Echoes shape plus nullable `work_id` **and**
+      `take_file_name`. A feeling about the song, a feeling about *this attempt* at
+      it, or a feeling belonging to nothing at all — all three are honest.
+- [x] **`takes.provenance` — the held place.** KP's ⚛ ruling: *"none of that belongs
+      in the recorder, the recorder db structure simply requires a jsonb column to
+      handle the expected use case, the colum will come to life when reeady"* — *"i
+      meant json."* Nothing writes it, nothing validates it, and **nothing may drop
+      it**: unreadable json comes back as the raw string rather than being discarded.
+- [x] Stores: `db.ts` (one connection for the domain), `work.svelte.ts`,
+      `take.svelte.ts`, `feeling.svelte.ts`. `echo.svelte.ts` removed.
+- [x] **`deleteWork` ungroups, never destroys** — takes and feelings are released to
+      NULL and the take **files** are never touched. Deleting audio stays a separate,
+      explicit act by the hand that made it.
+- [x] UI retargeted end to end — **and KP's verbatim quotes about Echoes were left
+      standing in three places**, because a record is not copy.
+- [x] **Verified rather than assumed:** `svelte-check` **329 files, 0 errors, 0
+      warnings** · `vite build` **4.89s** · **`cargo check` exit 0** on the rewritten
+      migrations.
+
+**What the held column is held FOR** — his ⚛ vision, written here so the next hand
+knows why an empty column exists: *every musician in a band or an orchestra records
+their part **sovereignly**; an engineer finishes the project; and all credentials
+combine so the Sanctuary system can **pay everyone involved no matter how small the
+role** — regardless of the project's size or shape.* Opt-in always: **"no force or
+deceptive theft."**
+
+Three of its pieces are already built waters — **`the-signet`** (identity as a
+snapshot never a reference; combined authorship read out by `deriveLegend`),
+**`the-envelope`** (versioned carrier, import non-destructive by law),
+**`the-moment-marks`** (structure shared, contents sovereign). **Two do not exist yet,
+and they are the two that money requires:** a **verifiable** credential — the signet
+says of itself, unprompted, *"a seal, not a lock… if a door ever needs a lock, that is
+a different tool and it should say so"* — and **the splits**. Neither belongs in a
+recorder, and a work's credit must derive from **grants**, never from possession of a
+file.
+
+### Phase 3: Awen fills it ⬜
 *Comes after the check-in, per KP's sequence. The waters already exist as standalone
 tools in `resonance-awen`: `the-recorder`, `the-encoder`, `the-tuner`,
 `the-metronome`, `the-waveform`, `the-moment-marks`, `the-player`,
@@ -129,12 +189,9 @@ that looks missing.*
 
 **Inherited from Echoes and deliberately left standing for Awen** *(recorded so none
 of it reads as an oversight):*
-- The **domain model is still Echoes'** — the `echoes` table, its indexes and
-  migrations in `src-tauri/src/lib.rs`, `sqlite:echoes.db`, and
-  `src/lib/stores/echo.svelte.ts` whole. This becomes creations/tracks with emotion
-  tags when Awen feeds.
-- **UI copy** still says *echo/echoes* across `+page.svelte`, `insights/`,
-  `settings/`, `ComfortBar`; the `EchoesDoor` type in `Sidebar.svelte`.
+- ~~The domain model is still Echoes'~~ · ~~UI copy still says echo/echoes~~ —
+  **both closed in Phase 2 above.** What remains inherited is art and configuration,
+  below.
 - **Art is Echoes'** — `static/` and the 19 files in `src-tauri/icons/`.
 - **`"csp": null`** in `tauri.conf.json`, inherited. Fathom's rule from the Compass
   stands as the aim: a wrong CSP **fails quietly** and dev is not proof, so this wants

@@ -27,9 +27,9 @@
 	// and the Settings foot, by KP's ⚛ stroke: no hats until the realm grows
 	// rooms; the arithmetic handles growth — and the panels are DERIVED from
 	// the screen's own measure, never arranged by opinion.
-	type EchoesDoor = Door & { href: string; icon: IconName };
+	type SistrumDoor = Door & { href: string; icon: IconName };
 
-	const door = (id: string, href: string, icon: IconName, label: string): EchoesDoor => ({
+	const door = (id: string, href: string, icon: IconName, label: string): SistrumDoor => ({
 		id,
 		href,
 		icon,
@@ -89,8 +89,8 @@
 	}
 
 	const wornPanel = $derived(shrine.panels[shrine.worn] ?? null);
-	const wornDoors = $derived((wornPanel?.doors ?? []) as EchoesDoor[]);
-	const footDoor = MENU.foot.door as EchoesDoor;
+	const wornDoors = $derived((wornPanel?.doors ?? []) as SistrumDoor[]);
+	const footDoor = MENU.foot.door as SistrumDoor;
 
 	// The vessel opened the ComfortBar panel — they want to see it, not the nav.
 	$effect(() => {

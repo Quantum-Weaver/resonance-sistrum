@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { echoStore } from '$lib/stores/echo.svelte';
+	import { feelingStore } from '$lib/stores/feeling.svelte';
 	import { SENSES } from '$lib/data/senses';
 	import { EMOJI_DEFS } from '$lib/data/emojis';
-	import type { Echo } from '$lib/types/types';
+	import type { Feeling } from '$lib/types/types';
 
-	const echoes = $derived(echoStore.echoes);
+	const feelings = $derived(feelingStore.feelings);
 
 	// ── Your Dictionary (folksonomy editor, Compass pattern) ──────────────────
 
@@ -19,12 +19,12 @@
 			return;
 		}
 		selectedDictEmoji = emoji;
-		editingPersonalDef = echoStore.getPersonalDefinition(emoji);
+		editingPersonalDef = feelingStore.getPersonalDefinition(emoji);
 	}
 
 	function savePersonalDef() {
 		if (!selectedDictEmoji) return;
-		echoStore.setPersonalDefinition(selectedDictEmoji, editingPersonalDef);
+		feelingStore.setPersonalDefinition(selectedDictEmoji, editingPersonalDef);
 	}
 
 	function dayKey(d: Date): string {
@@ -35,7 +35,7 @@
 
 	const topEmojis = $derived.by(() => {
 		const counts: Record<string, number> = {};
-		for (const e of echoes) {
+		for (const e of feelings) {
 			if (e.emoji) counts[e.emoji] = (counts[e.emoji] || 0) + 1;
 		}
 		return Object.entries(counts)
@@ -55,7 +55,7 @@
 	const bySense = $derived.by(() => {
 		const counts: Record<string, number> = {};
 		for (const s of SENSES) counts[s.id] = 0;
-		for (const e of echoes) {
+		for (const e of feelings) {
 			if (e.sense in counts) counts[e.sense]++;
 		}
 		return SENSES
@@ -68,10 +68,10 @@
 	// ── 3. Streak ──────────────────────────────────────────────────────────────
 
 	const streak = $derived.by(() => {
-		if (echoes.length === 0) return 0;
+		if (feelings.length === 0) return 0;
 
 		const days = new Set<string>();
-		for (const e of echoes) days.add(dayKey(new Date(e.timestamp)));
+		for (const e of feelings) days.add(dayKey(new Date(e.timestamp)));
 
 		const today = new Date();
 		const todayStr = dayKey(today);
@@ -109,9 +109,9 @@
 	];
 
 	const timeData = $derived.by((): TimeData | null => {
-		if (echoes.length === 0) return null;
+		if (feelings.length === 0) return null;
 		const b: Record<TODKey, number> = { morning: 0, afternoon: 0, evening: 0, night: 0 };
-		for (const e of echoes) {
+		for (const e of feelings) {
 			const h = new Date(e.timestamp).getHours();
 			if (h >= 5 && h < 12) b.morning++;
 			else if (h >= 12 && h < 17) b.afternoon++;
@@ -121,14 +121,14 @@
 		const maxVal = Math.max(b.morning, b.afternoon, b.evening, b.night);
 		const dominant = (Object.entries(b).find(([, v]) => v === maxVal)?.[0] ?? 'morning') as TODKey;
 		const nonZero = Object.values(b).filter(v => v > 0).length;
-		const isEven = maxVal / echoes.length < 0.4;
+		const isEven = maxVal / feelings.length < 0.4;
 		return { b, dominant, nonZero, isEven };
 	});
 
 	const timeObservation = $derived.by((): string | null => {
 		if (!timeData) return null;
 		const { dominant, nonZero, isEven } = timeData;
-		if (nonZero === 1) return `All your echoes are from the ${dominant} so far.`;
+		if (nonZero === 1) return `All your feelings are from the ${dominant} so far.`;
 		if (isEven) return 'You log throughout the day.';
 		return `You often log in the ${dominant}.`;
 	});
@@ -146,15 +146,15 @@
 			const d = new Date();
 			d.setDate(d.getDate() - i);
 			const key = dayKey(d);
-			const dayEchoes = echoes.filter(e => dayKey(new Date(e.timestamp)) === key);
-			const best = dayEchoes.reduce<Echo | null>(
+			const dayFeelings = feelings.filter(e => dayKey(new Date(e.timestamp)) === key);
+			const best = dayFeelings.reduce<Feeling | null>(
 				(b, e) =>
 					!b || e.intensity > b.intensity || (e.intensity === b.intensity && e.timestamp > b.timestamp)
 						? e
 						: b,
 				null
 			);
-			return { key, emoji: best?.emoji ?? null, date: d, count: dayEchoes.length };
+			return { key, emoji: best?.emoji ?? null, date: d, count: dayFeelings.length };
 		})
 	);
 
@@ -162,15 +162,15 @@
 
 	// ── Not Sure count (Feature 4) ─────────────────────────────────────────────
 
-	const notSureCount = $derived(echoes.filter((e) => e.sense === 'not_sure').length);
+	const notSureCount = $derived(feelings.filter((e) => e.sense === 'not_sure').length);
 
 	// ── 6. Intensity Trend ─────────────────────────────────────────────────────
 
 	const intensityTrend = $derived.by((): 'increasing' | 'decreasing' | 'stable' | 'insufficient' => {
 		const now = Date.now();
 		const week = 7 * 24 * 60 * 60 * 1000;
-		const thisWeek = echoes.filter(e => now - e.timestamp < week);
-		const lastWeek = echoes.filter(e => {
+		const thisWeek = feelings.filter(e => now - e.timestamp < week);
+		const lastWeek = feelings.filter(e => {
 			const age = now - e.timestamp;
 			return age >= week && age < 2 * week;
 		});
@@ -195,10 +195,10 @@
 	}
 
 	const patterns = $derived.by((): PatternEntry[] | null => {
-		if (echoes.length < 20) return null;
+		if (feelings.length < 20) return null;
 		const senseCounts: Record<string, number> = {};
 		const combinations: Record<string, { senseId: string; emoji: string; count: number }> = {};
-		for (const e of echoes) {
+		for (const e of feelings) {
 			if (!e.emoji || e.emoji === '❓' || e.sense === 'not_sure') continue;
 			senseCounts[e.sense] = (senseCounts[e.sense] ?? 0) + 1;
 			const key = `${e.sense}::${e.emoji}`;
@@ -236,20 +236,20 @@
 		<div class="card">
 			<div class="card-label">Most felt</div>
 			{#if topEmojis.length === 0}
-				<p class="card-empty">Log your first echo to see patterns.</p>
+				<p class="card-empty">Log your first feeling to see patterns.</p>
 			{:else}
 				<div class="emoji-cloud">
 					{#each topEmojis as { emoji, count }}
 						<span
 							class="cloud-emoji"
 							style="font-size: {emojiSize(count)};"
-							title="{count} {count === 1 ? 'echo' : 'echoes'}"
+							title="{count} {count === 1 ? 'feeling' : 'feelings'}"
 						>{emoji}</span>
 					{/each}
 				</div>
 				<p class="card-note">
 					Your most felt: {topEmojis[0].emoji}
-					({topEmojis[0].count} {topEmojis[0].count === 1 ? 'echo' : 'echoes'})
+					({topEmojis[0].count} {topEmojis[0].count === 1 ? 'feeling' : 'feelings'})
 				</p>
 			{/if}
 		</div>
@@ -269,10 +269,10 @@
 			{#if topSense}
 				<p class="card-note">You feel most through {topSense.emoji} {topSense.name}.</p>
 			{:else}
-				<p class="card-empty">Log an echo to see sense distribution.</p>
+				<p class="card-empty">Log an feeling to see sense distribution.</p>
 			{/if}
 			{#if notSureCount > 0}
-				<p class="card-note">+ {notSureCount} {notSureCount === 1 ? 'echo' : 'echoes'} you weren't sure how to categorize.</p>
+				<p class="card-note">+ {notSureCount} {notSureCount === 1 ? 'feeling' : 'feelings'} you weren't sure how to categorize.</p>
 			{/if}
 		</div>
 
@@ -280,7 +280,7 @@
 		<div class="card">
 			<div class="card-label">Streak</div>
 			{#if streak === 0}
-				<p class="card-empty">Log an echo today to start a streak.</p>
+				<p class="card-empty">Log an feeling today to start a streak.</p>
 			{:else}
 				<div class="streak-display">
 					<span class="streak-num">{streak}</span>
@@ -313,7 +313,7 @@
 			{#if timeObservation}
 				<p class="card-note">{timeObservation}</p>
 			{:else}
-				<p class="card-empty">Log echoes to see when you feel most.</p>
+				<p class="card-empty">Log feelings to see when you feel most.</p>
 			{/if}
 		</div>
 
@@ -321,7 +321,7 @@
 		<div class="card">
 			<div class="card-label">This week</div>
 			{#if !hasThisWeek}
-				<p class="card-empty">Log an echo today to start your week.</p>
+				<p class="card-empty">Log an feeling today to start your week.</p>
 			{:else}
 				<div class="mood-row">
 					{#each recentMood as day, i}
@@ -339,29 +339,29 @@
 			<div class="card-label">Intensity</div>
 			<p class="card-insight">
 				{#if intensityTrend === 'increasing'}
-					Your echoes are feeling more intense lately.
+					Your feelings are feeling more intense lately.
 				{:else if intensityTrend === 'decreasing'}
-					Your echoes have been gentler this week.
+					Your feelings have been gentler this week.
 				{:else if intensityTrend === 'stable'}
 					Your intensity has been steady.
 				{:else}
-					Log more echoes to see intensity patterns.
+					Log more feelings to see intensity patterns.
 				{/if}
 			</p>
 		</div>
 
 		<!-- 7. Patterns -->
-		{#if echoes.length >= 20}
+		{#if feelings.length >= 20}
 		<div class="card">
 			<div class="card-label">Patterns</div>
 			{#if patterns && patterns.length > 0}
 				{#each patterns as p}
 					<p class="card-insight">
-						{p.senseEmoji} {p.senseName} with {p.emoji} appears a lot — {p.count} of your {p.senseTotal} {p.senseName} echoes feel this way.
+						{p.senseEmoji} {p.senseName} with {p.emoji} appears a lot — {p.count} of your {p.senseTotal} {p.senseName} feelings feel this way.
 					</p>
 				{/each}
 			{:else}
-				<p class="card-insight">Your echoes are varied. No strong patterns yet.</p>
+				<p class="card-insight">Your feelings are varied. No strong patterns yet.</p>
 			{/if}
 		</div>
 		{/if}

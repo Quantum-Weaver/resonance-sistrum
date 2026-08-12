@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { uiStore } from '$lib/stores/ui.svelte';
-	import { echoStore } from '$lib/stores/echo.svelte';
+	import { feelingStore } from '$lib/stores/feeling.svelte';
 
 	let expanded = $state(false);
 	let previousPath = $state(page.url.pathname);
@@ -34,9 +34,9 @@
 
 	// Live, not a stale placeholder (Compass pattern: the panel reflects real state).
 	const statsLine = $derived.by(() => {
-		const n = echoStore.totalCount;
-		if (n === 0) return 'No echoes yet — your journey begins here.';
-		return `${n} ${n === 1 ? 'echo' : 'echoes'} gathered so far.`;
+		const n = feelingStore.totalCount;
+		if (n === 0) return 'No feelings yet — your journey begins here.';
+		return `${n} ${n === 1 ? 'feeling' : 'feelings'} gathered so far.`;
 	});
 
 	onMount(() => {
@@ -44,7 +44,7 @@
 	});
 
 	function onQuickAdd() {
-		// Phase 1 will wire this to the echo form
+		// Phase 1 will wire this to the feeling form
 		goto('/add');
 	}
 
@@ -70,7 +70,7 @@
 			<button class="comfort-bar__greeting-btn" onclick={toggleExpanded}>
 				{greeting}
 			</button>
-			<button class="comfort-bar__quick-add" onclick={onQuickAdd} aria-label="Quick add echo">
+			<button class="comfort-bar__quick-add" onclick={onQuickAdd} aria-label="Quick add feeling">
 				+
 			</button>
 		</div>

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import { echoStore } from '$lib/stores/echo.svelte';
+	import { feelingStore } from '$lib/stores/feeling.svelte';
 	import { SENSES, type Sense } from '$lib/data/senses';
 	import { EMOJI_DEFS } from '$lib/data/emojis';
 
@@ -27,7 +27,7 @@
 	// Edit mode
 	let editId = $state<string | null>(null);
 	const isEditMode = $derived(editId !== null);
-	let prefilled = false; // plain var prevents re-fill on subsequent echoes updates
+	let prefilled = false; // plain var prevents re-fill on subsequent feelings updates
 
 	onMount(() => {
 		const id = page.url.searchParams.get('edit');
@@ -37,26 +37,26 @@
 	});
 
 	$effect(() => {
-		const allEchoes = echoStore.echoes;
+		const allFeelings = feelingStore.feelings;
 		const id = editId;
-		if (!id || prefilled || allEchoes.length === 0) return;
-		const echo = allEchoes.find((e) => e.id === id);
-		if (!echo) return;
-		name = echo.name;
-		selectedSense = echo.sense;
-		selectedSubcategory = echo.subcategory || 'custom';
+		if (!id || prefilled || allFeelings.length === 0) return;
+		const feeling = allFeelings.find((f) => f.id === id);
+		if (!feeling) return;
+		name = feeling.name;
+		selectedSense = feeling.sense;
+		selectedSubcategory = feeling.subcategory || 'custom';
 		customSubcategoryText = '';
-		selectedEmoji = echo.emoji;
-		note = echo.note ?? '';
-		intensity = echo.intensity;
+		selectedEmoji = feeling.emoji;
+		note = feeling.note ?? '';
+		intensity = feeling.intensity;
 		useCustomTime = true;
-		customTimestamp = toLocalISO(new Date(echo.timestamp));
+		customTimestamp = toLocalISO(new Date(feeling.timestamp));
 		prefilled = true;
 	});
 
-	// Progressive disclosure: hide advanced fields until 10 echoes
+	// Progressive disclosure: hide advanced fields until 10 feelings
 	let showAdvanced = $state(false);
-	const isSimplified = $derived(!showAdvanced && echoStore.totalCount < 10);
+	const isSimplified = $derived(!showAdvanced && feelingStore.totalCount < 10);
 
 	// Emoji nudge: show "no pressure" after 5s with no emoji selected
 	let showEmojiNudge = $state(false);
@@ -71,7 +71,7 @@
 
 	const disambiguationSenses = $derived.by((): Sense[] => {
 		if (!selectedEmoji || selectedEmoji === disambigDismissedForEmoji) return [];
-		const priorUses = echoStore.echoes.filter(
+		const priorUses = feelingStore.feelings.filter(
 			(e) => e.emoji === selectedEmoji && e.sense !== 'not_sure'
 		);
 		if (priorUses.length === 0) return [];
@@ -124,9 +124,9 @@
 		};
 		try {
 			if (editId) {
-				await echoStore.updateEcho(editId, payload);
+				await feelingStore.updateFeeling(editId, payload);
 			} else {
-				await echoStore.addEcho(payload);
+				await feelingStore.addFeeling(payload);
 			}
 			saveSuccess = true;
 			await new Promise((r) => setTimeout(r, 900));
@@ -144,14 +144,14 @@
 <div class="add-page">
 	<header class="add-header">
 		<button class="back-btn" onclick={() => goto('/')}>←</button>
-		<h1 class="add-title">{isEditMode ? 'Edit Echo' : 'New Echo'}</h1>
+		<h1 class="add-title">{isEditMode ? 'Edit feeling' : 'New feeling'}</h1>
 	</header>
 
 	<div class="form">
 		<!-- DB error banner -->
-		{#if echoStore.dbError}
+		{#if feelingStore.dbError}
 			<div class="db-error-banner">
-				⚠️ Database not ready: {echoStore.dbError}
+				⚠️ Database not ready: {feelingStore.dbError}
 			</div>
 		{/if}
 
@@ -250,7 +250,7 @@
 				{@const def = EMOJI_DEFS.find((d) => d.emoji === selectedEmoji)}
 				{#if def}
 					<!-- The vessel's own definition outranks the Sanctuary's (folksonomy). -->
-					<p class="emoji-def">{echoStore.getPersonalDefinition(def.emoji) || def.definition}</p>
+					<p class="emoji-def">{feelingStore.getPersonalDefinition(def.emoji) || def.definition}</p>
 				{/if}
 			{/if}
 			{#if disambiguationSenses.length > 0}
@@ -276,7 +276,7 @@
 
 		{#if isSimplified}
 			<div class="disclosure-hint">
-				<span class="disclosure-text">More options unlock after 10 echoes.</span>
+				<span class="disclosure-text">More options unlock after 10 feelings.</span>
 				<button class="disclosure-toggle" onclick={() => (showAdvanced = true)}>Advanced</button>
 			</div>
 		{/if}
@@ -328,9 +328,9 @@
 				class="save-btn"
 				class:success={saveSuccess}
 				onclick={save}
-				disabled={!name.trim() || saving || !!echoStore.dbError || saveSuccess}
+				disabled={!name.trim() || saving || !!feelingStore.dbError || saveSuccess}
 			>
-				{saveSuccess ? '✓' : saving ? 'Saving…' : isEditMode ? 'Update' : 'Save Echo'}
+				{saveSuccess ? '✓' : saving ? 'Saving…' : isEditMode ? 'Update' : 'Save feeling'}
 			</button>
 		</section>
 		{#if saveError}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { themeStore } from '$lib/stores/theme.svelte';
-	import { echoStore } from '$lib/stores/echo.svelte';
+	import { feelingStore } from '$lib/stores/feeling.svelte';
 	import { PRESET_THEMES } from '$lib/theme/theme';
 	import { openUrl } from '@tauri-apps/plugin-opener';
 	import { getVersion } from '@tauri-apps/api/app';
@@ -60,7 +60,7 @@
 
 	// ── Data Sovereignty section ────────────────────────────────────────────────
 
-	const echoCount = $derived(echoStore.totalCount);
+	const feelingCount = $derived(feelingStore.totalCount);
 
 	// purgeState controls the double-confirmation flow for both purge paths
 	let purgeState = $state<'idle' | 'confirm1' | 'confirm2'>('idle');
@@ -77,16 +77,16 @@
 		// This shape is the family's to inherit (schema-versioned,
 		// app-namespaced): envelope/envelopeVersion identify the format,
 		// `app` namespaces the payload, `data` carries the app's tables.
-		const allEchoes = await echoStore.getAllEchoes();
-		const folksonomy = { ...echoStore.personalDefinitions };
+		const allFeelings = await feelingStore.getAllFeelings();
+		const folksonomy = { ...feelingStore.personalDefinitions };
 		const payload = {
 			envelope: 'resonance-export',
 			envelopeVersion: 1,
 			app: 'resonance-sistrum',
 			appVersion: appVersion || 'unknown',
 			exportedAt: new Date().toISOString(),
-			counts: { echoes: allEchoes.length, folksonomy: Object.keys(folksonomy).length },
-			data: { echoes: allEchoes, folksonomy }
+			counts: { feelings: allFeelings.length, folksonomy: Object.keys(folksonomy).length },
+			data: { feelings: allFeelings, folksonomy }
 		};
 		const json = JSON.stringify(payload, null, 2);
 		const blob = new Blob([json], { type: 'application/json' });
@@ -106,7 +106,7 @@
 	let importReport = $state<string | null>(null);
 	let importError = $state<string | null>(null);
 
-	function isImportableEcho(e: unknown): boolean {
+	function isImportableFeeling(e: unknown): boolean {
 		const r = e as Record<string, unknown>;
 		return (
 			!!r &&
@@ -128,44 +128,44 @@
 		importReport = null;
 		try {
 			const parsed = JSON.parse(await file.text());
-			let echoesIn: unknown[] = [];
+			let feelingsIn: unknown[] = [];
 			let folkIn: Record<string, unknown> = {};
 			if (Array.isArray(parsed)) {
 				// Legacy bare-array export (pre-envelope, ≤ v1.2.0) — still honored:
 				// a vessel's old backup must never be told it's worthless.
-				echoesIn = parsed;
+				feelingsIn = parsed;
 			} else if (parsed?.envelope === 'resonance-export' && parsed?.data) {
 				if (parsed.app !== 'resonance-sistrum') {
 					throw new Error(
 						`This file belongs to ${parsed.app ?? 'another app'} — Sistrum imports only its own envelopes.`
 					);
 				}
-				echoesIn = Array.isArray(parsed.data.echoes) ? parsed.data.echoes : [];
+				feelingsIn = Array.isArray(parsed.data.feelings) ? parsed.data.feelings : [];
 				if (parsed.data.folksonomy && typeof parsed.data.folksonomy === 'object') {
 					folkIn = parsed.data.folksonomy as Record<string, unknown>;
 				}
 			} else {
 				throw new Error('Not a Resonance Sistrum export file.');
 			}
-			const valid = echoesIn.filter(isImportableEcho) as Parameters<
-				typeof echoStore.importEchoes
+			const valid = feelingsIn.filter(isImportableFeeling) as Parameters<
+				typeof feelingStore.importFeelings
 			>[0];
-			const malformed = echoesIn.length - valid.length;
-			const { added, skipped } = await echoStore.importEchoes(valid);
+			const malformed = feelingsIn.length - valid.length;
+			const { added, skipped } = await feelingStore.importFeelings(valid);
 			// Folksonomy merges non-destructively too: an existing definition is
 			// the vessel's current mind and is never overwritten by an older file.
 			let defsAdded = 0;
 			let defsKept = 0;
 			for (const [emoji, def] of Object.entries(folkIn)) {
 				if (typeof def !== 'string' || !def) continue;
-				if (echoStore.getPersonalDefinition(emoji)) defsKept++;
+				if (feelingStore.getPersonalDefinition(emoji)) defsKept++;
 				else {
-					echoStore.setPersonalDefinition(emoji, def);
+					feelingStore.setPersonalDefinition(emoji, def);
 					defsAdded++;
 				}
 			}
 			const parts = [
-				`${added} ${added === 1 ? 'echo' : 'echoes'} imported`,
+				`${added} ${added === 1 ? 'feeling' : 'feelings'} imported`,
 				skipped ? `${skipped} already present` : '',
 				defsAdded ? `${defsAdded} definitions added` : '',
 				defsKept ? `${defsKept} definitions kept as yours` : '',
@@ -196,7 +196,7 @@
 			// Awaited: the export must be complete IN HAND before anything
 			// deletes — export-then-purge may never destroy the remainder (E1).
 			if (pendingExport) await exportData();
-			await echoStore.purgeAll();
+			await feelingStore.purgeAll();
 			// Clear everything, not a curated list — future keys must not
 			// survive a purge by omission (Compass pattern).
 			localStorage.clear();
@@ -266,14 +266,14 @@
 	<section class="section">
 		<h2 class="section-title">Data Sovereignty</h2>
 
-		<p class="echo-count">
-			{echoCount === 0
-				? 'No echoes stored yet.'
-				: `${echoCount} ${echoCount === 1 ? 'echo' : 'echoes'} stored on your device.`}
+		<p class="feeling-count">
+			{feelingCount === 0
+				? 'No feelings stored yet.'
+				: `${feelingCount} ${feelingCount === 1 ? 'feeling' : 'feelings'} stored on your device.`}
 		</p>
 
 		<div class="data-actions">
-			<button class="btn-data" onclick={exportData} disabled={echoCount === 0}>
+			<button class="btn-data" onclick={exportData} disabled={feelingCount === 0}>
 				Export All Data
 			</button>
 			<button class="btn-data" onclick={() => importInput?.click()}>
@@ -286,7 +286,7 @@
 				bind:this={importInput}
 				onchange={handleImportFile}
 			/>
-			<button class="btn-data warning" onclick={() => startPurge(true)} disabled={echoCount === 0}>
+			<button class="btn-data warning" onclick={() => startPurge(true)} disabled={feelingCount === 0}>
 				Export &amp; Purge
 			</button>
 		</div>
@@ -299,7 +299,7 @@
 		{/if}
 
 		<p class="privacy-line">
-			Your echoes never leave this device.
+			Your feelings never leave this device.
 			<button class="privacy-link" onclick={openPrivacy}>Privacy Policy</button>
 			{#if privacyError}<span class="privacy-url">{PRIVACY_URL}</span>{/if}
 		</p>
@@ -308,7 +308,7 @@
 			<p class="danger-label">Danger zone</p>
 
 			{#if purgeState === 'idle'}
-				<button class="btn-danger" onclick={() => startPurge(false)} disabled={echoCount === 0}>
+				<button class="btn-danger" onclick={() => startPurge(false)} disabled={feelingCount === 0}>
 					Purge All Data
 				</button>
 
@@ -316,9 +316,9 @@
 				<div class="confirm-card">
 					<p class="confirm-text">
 						{#if pendingExport}
-							This will export your data and permanently delete all your echoes. This cannot be undone.
+							This will export your data and permanently delete all your feelings. This cannot be undone.
 						{:else}
-							This will permanently delete all your echoes. This cannot be undone.
+							This will permanently delete all your feelings. This cannot be undone.
 						{/if}
 					</p>
 					<div class="confirm-actions">
@@ -331,9 +331,9 @@
 				<div class="confirm-card final">
 					<p class="confirm-text">
 						{#if pendingExport}
-							Are you absolutely sure? Your echoes will be downloaded then permanently deleted.
+							Are you absolutely sure? Your feelings will be downloaded then permanently deleted.
 						{:else}
-							Are you absolutely sure? All echoes, insights, and settings will be removed.
+							Are you absolutely sure? All feelings, insights, and settings will be removed.
 						{/if}
 					</p>
 					{#if purgeError}
@@ -491,7 +491,7 @@
 	}
 
 	/* ── Data Sovereignty ── */
-	.echo-count {
+	.feeling-count {
 		font-size: 0.875rem;
 		color: var(--text-muted);
 		margin: 0;

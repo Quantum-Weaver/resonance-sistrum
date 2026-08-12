@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { themeStore } from '$lib/stores/theme.svelte';
-	import { echoStore } from '$lib/stores/echo.svelte';
+	import { feelingStore } from '$lib/stores/feeling.svelte';
 	import { getThemeColors } from '$lib/theme/theme';
 	import { onMount } from 'svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
@@ -16,7 +16,7 @@
 
 	onMount(async () => {
 		themeStore.loadTheme();
-		await echoStore.initDB();
+		await feelingStore.initDB();
 		const done = localStorage.getItem('onboarding_complete');
 		if (!done && page.url.pathname !== '/onboarding') {
 			goto('/onboarding');

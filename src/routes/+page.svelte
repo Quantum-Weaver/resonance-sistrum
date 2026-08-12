@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { echoStore } from '$lib/stores/echo.svelte';
+	import { feelingStore } from '$lib/stores/feeling.svelte';
 	import { SENSES } from '$lib/data/senses';
 	import { readSky } from '$lib/sky';
 
@@ -48,11 +48,11 @@
 
 	// --- Derived ---
 
-	// Top 8 most-used emojis across all echoes
+	// Top 8 most-used emojis across all feelings
 	const topEmojis = $derived.by(() => {
 		const counts: Record<string, number> = {};
-		for (const echo of echoStore.echoes) {
-			if (echo.emoji) counts[echo.emoji] = (counts[echo.emoji] || 0) + 1;
+		for (const feeling of feelingStore.feelings) {
+			if (feeling.emoji) counts[feeling.emoji] = (counts[feeling.emoji] || 0) + 1;
 		}
 		return Object.entries(counts)
 			.sort((a, b) => b[1] - a[1])
@@ -60,9 +60,9 @@
 			.map(([e]) => e);
 	});
 
-	// Combined filter + sort — all client-side over the in-memory echoes array
-	const filteredEchoes = $derived.by(() => {
-		let r = echoStore.echoes;
+	// Combined filter + sort — all client-side over the in-memory feelings array
+	const filteredFeelings = $derived.by(() => {
+		let r = feelingStore.feelings;
 
 		if (activeSense) r = r.filter((e) => e.sense === activeSense);
 		if (activeEmoji) r = r.filter((e) => e.emoji === activeEmoji);
@@ -81,8 +81,8 @@
 		return r; // 'newest' — already DESC from the DB query
 	});
 
-	const visible = $derived(filteredEchoes.slice(0, displayCount));
-	const hasMore = $derived(filteredEchoes.length > displayCount);
+	const visible = $derived(filteredFeelings.slice(0, displayCount));
+	const hasMore = $derived(filteredFeelings.length > displayCount);
 	const hasFilters = $derived(!!(activeSense || activeEmoji || searchQuery.trim()));
 
 	// Human-readable description of active filters
@@ -117,8 +117,8 @@
 		if (quickLogging) return;
 		quickLogging = true;
 		try {
-			const emoji = echoStore.echoes[0]?.emoji || '😌';
-			await echoStore.addEcho({
+			const emoji = feelingStore.feelings[0]?.emoji || '😌';
+			await feelingStore.addFeeling({
 				name: 'Quick log',
 				sense: 'other',
 				subcategory: 'custom',
@@ -136,11 +136,11 @@
 		}
 	}
 
-	// The moment's sky — DERIVED from the echo's own timestamp, never
+	// The moment's sky — DERIVED from the feeling's own timestamp, never
 	// stored (KP's ruling at the Hearth's communications sitting: "this is
 	// echoes, tied into the sky facts"). Facts only, compute-only by law —
 	// what a moment's sky means is the vessel's own. Retroactive for every
-	// echo ever logged; cached per day so a long timeline stays light.
+	// feeling ever logged; cached per day so a long timeline stays light.
 	const skyCache = new Map<string, string>();
 	function skyLine(timestamp: number): string {
 		const key = new Date(timestamp).toDateString();
@@ -172,12 +172,12 @@
 <div class="home" style="padding-top: env(safe-area-inset-top, 0px);">
 	<header class="home-header">
 		<h1 class="home-title">Sistrum</h1>
-		{#if echoStore.totalCount > 0}
-			<span class="count-badge">{echoStore.totalCount}</span>
+		{#if feelingStore.totalCount > 0}
+			<span class="count-badge">{feelingStore.totalCount}</span>
 		{/if}
 	</header>
 
-	{#if echoStore.echoes.length > 0}
+	{#if feelingStore.feelings.length > 0}
 		<div class="browse">
 			<!-- Search -->
 			<div class="search-wrap">
@@ -185,9 +185,9 @@
 				<input
 					type="search"
 					bind:value={searchInput}
-					placeholder="Search echoes..."
+					placeholder="Search feelings..."
 					class="search-input"
-					aria-label="Search echoes"
+					aria-label="Search feelings"
 				/>
 				{#if searchInput}
 					<button
@@ -214,7 +214,7 @@
 				{/each}
 			</div>
 
-			<!-- Emoji chips (only when echoes have emojis) -->
+			<!-- Emoji chips (only when feelings have emojis) -->
 			{#if topEmojis.length > 0}
 				<div class="chip-scroll" role="group" aria-label="Filter by feeling">
 					<button
@@ -250,7 +250,7 @@
 			<!-- Filter status -->
 			{#if hasFilters}
 				<div class="filter-status">
-					<span>{filteredEchoes.length} {filteredEchoes.length === 1 ? 'echo' : 'echoes'}{filterLabel ? ` in ${filterLabel}` : ''}</span>
+					<span>{filteredFeelings.length} {filteredFeelings.length === 1 ? 'feeling' : 'feelings'}{filterLabel ? ` in ${filterLabel}` : ''}</span>
 					<button class="clear-btn" onclick={clearAll}>Clear all</button>
 				</div>
 			{/if}
@@ -259,7 +259,7 @@
 
 	<!-- Quick Log FAB -->
 	{#if quickLogSuccess}
-		<p class="quick-log-hint">Tap the echo to edit</p>
+		<p class="quick-log-hint">Tap the feeling to edit</p>
 	{/if}
 	<button
 		class="quick-log-fab"
@@ -270,42 +270,42 @@
 	>{quickLogSuccess ? '✓' : '⚡'}</button>
 
 	<!-- Content -->
-	{#if filteredEchoes.length === 0}
+	{#if filteredFeelings.length === 0}
 		<div class="empty-state">
 			<div class="empty-icon">{emptyIcon}</div>
 			{#if hasFilters}
-				<p class="empty-heading">No echoes match.</p>
+				<p class="empty-heading">No feelings match.</p>
 				<p class="empty-sub">
 					Try different filters or
 					<button class="inline-link" onclick={clearAll}>clear all</button>.
 				</p>
 			{:else}
-				<p class="empty-heading">No echoes yet.</p>
+				<p class="empty-heading">No feelings yet.</p>
 				<p class="empty-sub">Tap + to log your first felt moment.</p>
 			{/if}
 		</div>
 	{:else}
-		<div class="echo-list">
-			{#each visible as echo (echo.id)}
-				{@const sense = getSense(echo.sense)}
-				<button class="echo-card" type="button" onclick={() => goto(`/add?edit=${echo.id}`)}>
-					<div class="echo-emoji">{echo.emoji}</div>
-					<div class="echo-body">
-						<div class="echo-header">
-							<span class="echo-name">{echo.name}</span>
-							<span class="echo-time">{relativeTime(echo.timestamp)}</span>
+		<div class="feeling-list">
+			{#each visible as feeling (feeling.id)}
+				{@const sense = getSense(feeling.sense)}
+				<button class="feeling-card" type="button" onclick={() => goto(`/add?edit=${feeling.id}`)}>
+					<div class="feeling-emoji">{feeling.emoji}</div>
+					<div class="feeling-body">
+						<div class="feeling-header">
+							<span class="feeling-name">{feeling.name}</span>
+							<span class="feeling-time">{relativeTime(feeling.timestamp)}</span>
 						</div>
-						<div class="echo-meta">
-							<span class="sense-badge">{sense.emoji} {sense.name}{echo.subcategory ? ` · ${echo.subcategory}` : ''}</span>
+						<div class="feeling-meta">
+							<span class="sense-badge">{sense.emoji} {sense.name}{feeling.subcategory ? ` · ${feeling.subcategory}` : ''}</span>
 						</div>
-						<div class="sky-line">{skyLine(echo.timestamp)}</div>
-						<div class="echo-intensity">
+						<div class="sky-line">{skyLine(feeling.timestamp)}</div>
+						<div class="feeling-intensity">
 							{#each [1, 2, 3, 4, 5] as n}
-								<div class="dot" class:filled={n <= echo.intensity}></div>
+								<div class="dot" class:filled={n <= feeling.intensity}></div>
 							{/each}
 						</div>
-						{#if echo.note}
-							<p class="echo-note">{echo.note}</p>
+						{#if feeling.note}
+							<p class="feeling-note">{feeling.note}</p>
 						{/if}
 					</div>
 				</button>
@@ -504,16 +504,16 @@
 		text-decoration: underline;
 	}
 
-	/* Echo list */
-	.echo-list {
+	/* Feeling list */
+	.feeling-list {
 		padding: 0.75rem 1rem;
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
 	}
 
-	/* Echo card */
-	.echo-card {
+	/* Feeling card */
+	.feeling-card {
 		display: flex;
 		gap: 0.875rem;
 		padding: 0.875rem 1rem;
@@ -528,10 +528,10 @@
 		color: inherit;
 		box-sizing: border-box;
 	}
-	.echo-card:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--border-color)); }
-	.echo-card:active { transform: scale(0.99); }
+	.feeling-card:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--border-color)); }
+	.feeling-card:active { transform: scale(0.99); }
 
-	.echo-emoji {
+	.feeling-emoji {
 		font-size: 2rem;
 		line-height: 1;
 		flex-shrink: 0;
@@ -539,7 +539,7 @@
 		text-align: center;
 	}
 
-	.echo-body {
+	.feeling-body {
 		flex: 1;
 		min-width: 0;
 		display: flex;
@@ -547,14 +547,14 @@
 		gap: 0.25rem;
 	}
 
-	.echo-header {
+	.feeling-header {
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
 		gap: 0.5rem;
 	}
 
-	.echo-name {
+	.feeling-name {
 		font-size: 0.95rem;
 		font-weight: 600;
 		color: var(--text);
@@ -563,7 +563,7 @@
 		word-break: break-word;
 	}
 
-	.echo-time {
+	.feeling-time {
 		font-size: 0.7rem;
 		color: var(--text-muted);
 		white-space: nowrap;
@@ -571,14 +571,14 @@
 		padding-top: 0.1rem;
 	}
 
-	.echo-meta { display: flex; align-items: center; }
+	.feeling-meta { display: flex; align-items: center; }
 
 	.sense-badge {
 		font-size: 0.72rem;
 		color: var(--text-muted);
 	}
 
-	.echo-intensity {
+	.feeling-intensity {
 		display: flex;
 		gap: 0.25rem;
 		margin-top: 0.1rem;
@@ -603,7 +603,7 @@
 		border-color: var(--accent);
 	}
 
-	.echo-note {
+	.feeling-note {
 		font-size: 0.8rem;
 		color: var(--text-secondary);
 		margin: 0.25rem 0 0;
