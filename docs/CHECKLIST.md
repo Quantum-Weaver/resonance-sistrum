@@ -79,8 +79,19 @@ gaia, ziggy, skapa, awen and bubbles.*
       to do it again after android init to cover the gen folder."* `src-tauri/gen/`
       does not exist yet and is gitignored; its `res/mipmap-*` set is populated from
       `icons/` at that point, not from this pass. ⬜
-- [ ] **The check-in** — KP's own hand ⬜
-- [ ] First `npm run tauri dev` to prove the body stands ⬜
+- [x] **THE CHECK-IN** — `ff1bc8c` *"the body - mirrored from echoes, rebranded,
+      versions reset"* · **156 files, 29,764 insertions** · pushed to
+      `origin/main` (`1459e86..ff1bc8c`), working tree clean. Co-authored per the
+      Hands Standard. *(The push used the house PAT from the Bridge's keyring at KP's
+      ⚛ word — "have keys on the bridge" — passed through the process environment into
+      a one-shot credential helper: no token in a command line, none written to any
+      config, the remote URL unchanged.)*
+- [x] **The body proven to stand, not assumed to** — `npm run check`:
+      **326 files, 0 errors, 0 warnings.** `npm run build`: production bundle written
+      by `adapter-static` in **5.05s**. First attempt, after a rename that included the
+      Rust crate and its lib name. *(`esbuild`'s held-back postinstall turned out not
+      to block the build — measured rather than predicted.)*
+- [ ] First `npm run tauri dev` — the desktop shell actually opening ⬜
 - [ ] **Tested:** ⬜ KP's hands
 
 *One stray for KP's ruling: `src-tauri/icons/resonance-echoes-icon.png` (758,901 b,
