@@ -1,0 +1,147 @@
+{
+  "folder_name": "stores",
+  "folder_path": "src/lib/stores",
+  "description": "7 files, 0 subfolders",
+  "scan_timestamp": "2026-08-12T14:54:51.012271 | in sovereign time",
+  "files": [
+    {
+      "path": "src/lib/stores/db.ts",
+      "description": "typescript, 1,666 bytes"
+    },
+    {
+      "path": "src/lib/stores/feeling.svelte.ts",
+      "description": "typescript, 9,150 bytes"
+    },
+    {
+      "path": "src/lib/stores/take.svelte.ts",
+      "description": "typescript, 5,338 bytes"
+    },
+    {
+      "path": "src/lib/stores/theme.svelte.ts",
+      "description": "typescript, 1,051 bytes"
+    },
+    {
+      "path": "src/lib/stores/timer.svelte.ts",
+      "description": "typescript, 7,644 bytes"
+    },
+    {
+      "path": "src/lib/stores/ui.svelte.ts",
+      "description": "Cross-component UI signals that don't belong to any domain store"
+    },
+    {
+      "path": "src/lib/stores/work.svelte.ts",
+      "description": "typescript, 3,050 bytes"
+    }
+  ],
+  "file_count": 7,
+  "subdirectories": [],
+  "code_analysis": {
+    "db.ts": {
+      "language": "typescript",
+      "lines": 48,
+      "exported_functions": [
+        "getDb",
+        "dbLoadError",
+        "generateId"
+      ],
+      "exported_consts": [],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "feeling.svelte.ts": {
+      "language": "typescript",
+      "lines": 304,
+      "exported_functions": [],
+      "exported_consts": [
+        "feelingStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "take.svelte.ts": {
+      "language": "typescript",
+      "lines": 159,
+      "exported_functions": [],
+      "exported_consts": [
+        "takeStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "theme.svelte.ts": {
+      "language": "typescript",
+      "lines": 43,
+      "exported_functions": [],
+      "exported_consts": [
+        "themeStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "timer.svelte.ts": {
+      "language": "typescript",
+      "lines": 239,
+      "exported_functions": [],
+      "exported_consts": [
+        "prefersReducedMotion",
+        "timerStore"
+      ],
+      "interfaces": [],
+      "types": [
+        "TimerMode",
+        "ChimeId"
+      ],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "ui.svelte.ts": {
+      "language": "typescript",
+      "lines": 12,
+      "exported_functions": [],
+      "exported_consts": [
+        "uiStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "work.svelte.ts": {
+      "language": "typescript",
+      "lines": 105,
+      "exported_functions": [],
+      "exported_consts": [
+        "workStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    }
+  },
+  "maintaining_agent": "FolderAgent",
+  "folders_not_walked": [],
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

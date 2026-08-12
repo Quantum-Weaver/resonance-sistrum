@@ -1,0 +1,76 @@
+{
+  "folder_name": "components",
+  "folder_path": "src/lib/components",
+  "description": "4 files, 1 subfolders",
+  "scan_timestamp": "2026-08-12T14:54:50.982307 | in sovereign time",
+  "files": [
+    {
+      "path": "src/lib/components/ComfortBar.svelte",
+      "description": "surface, 5,146 bytes"
+    },
+    {
+      "path": "src/lib/components/GradientPulse.svelte",
+      "description": "surface, 1,005 bytes"
+    },
+    {
+      "path": "src/lib/components/Sidebar.svelte",
+      "description": "surface, 9,820 bytes"
+    },
+    {
+      "path": "src/lib/components/TimerVisualization.svelte",
+      "description": "surface, 18,223 bytes"
+    }
+  ],
+  "file_count": 4,
+  "subdirectories": [
+    "src/lib/components/icons"
+  ],
+  "code_analysis": {
+    "ComfortBar.svelte": {
+      "language": "svelte",
+      "lines": 208,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "GradientPulse.svelte": {
+      "language": "svelte",
+      "lines": 55,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "Sidebar.svelte": {
+      "language": "svelte",
+      "lines": 364,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "TimerVisualization.svelte": {
+      "language": "svelte",
+      "lines": 599,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    }
+  },
+  "maintaining_agent": "FolderAgent",
+  "folders_not_walked": [],
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

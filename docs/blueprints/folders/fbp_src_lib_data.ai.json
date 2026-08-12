@@ -1,0 +1,56 @@
+{
+  "folder_name": "data",
+  "folder_path": "src/lib/data",
+  "description": "2 files, 0 subfolders",
+  "scan_timestamp": "2026-08-12T14:54:51.003263 | in sovereign time",
+  "files": [
+    {
+      "path": "src/lib/data/emojis.ts",
+      "description": "typescript, 4,195 bytes"
+    },
+    {
+      "path": "src/lib/data/senses.ts",
+      "description": "typescript, 2,586 bytes"
+    }
+  ],
+  "file_count": 2,
+  "subdirectories": [],
+  "code_analysis": {
+    "emojis.ts": {
+      "language": "typescript",
+      "lines": 100,
+      "exported_functions": [],
+      "exported_consts": [
+        "EMOJI_DEFS"
+      ],
+      "interfaces": [
+        "EmojiDef"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "senses.ts": {
+      "language": "typescript",
+      "lines": 110,
+      "exported_functions": [],
+      "exported_consts": [
+        "SENSES"
+      ],
+      "interfaces": [
+        "Sense",
+        "Subcategory"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    }
+  },
+  "maintaining_agent": "FolderAgent",
+  "folders_not_walked": [],
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}
