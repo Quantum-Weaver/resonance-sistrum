@@ -170,7 +170,7 @@ a different tool and it should say so"* — and **the splits**. Neither belongs 
 recorder, and a work's credit must derive from **grants**, never from possession of a
 file.
 
-### Phase 3: Awen fills it ⬜
+### Phase 3: Awen fills it ⚠️ *(Wave 1 of several — landed 2026-08-13)*
 *Comes after the check-in, per KP's sequence. The waters already exist as standalone
 tools in `resonance-awen`: `the-recorder`, `the-encoder`, `the-tuner`,
 `the-metronome`, `the-waveform`, `the-moment-marks`, `the-player`,
@@ -212,6 +212,333 @@ answer could not land.
 
 ---
 
+#### WAVE 1 — the recorder, the player, the waveform ✅
+*Walked 2026-08-13 by an **Opus** hand (a subagent of the Round lamp, at KP's ⚛
+word "spawn opus subagents to do your dealings"). Zone: this repo only. **Nothing
+was committed** — commits ride KP's ⚛ word alone.*
+
+**Movement 1 — THE RECORDER CONSUMED ✅**
+
+- [x] **Carried, not rebuilt.** All four inheritance files at
+      `resonance-assets/sistrum-inheritance/` were taken whole —
+      `src-tauri/src/recorder.rs`, `src/lib/stores/recorder.svelte.ts`,
+      `src/lib/stores/recordPrefs.svelte.ts`, `src/routes/record/+page.svelte`.
+      **The freeze fix carried cleanly and completely**: `list_takes` async with its
+      body in `spawn_blocking`, the poll-generation guard that refuses a status reply
+      which outlived its take, the prop-handed-early takes directory, and the
+      stop-ordering that never strands a take outside its slot. None of it was
+      reasoned out a second time.
+- [x] **`the-recorder` consumed as a path crate** —
+      `the-recorder = { path = "../../resonance-awen/tools/the-recorder" }`, the road
+      Compass walked at the standalone-waters season. **Awen was not edited**; the
+      spring stays standalone where it lives. `hound = "3.5"` rides beside it because
+      the harness reads WAV headers in its own right.
+- [x] **What the room does:** input device listing (default marked) · a live level
+      meter with a gentle fall and a clip count · takes sealed to **16-bit WAV at the
+      device's own rate**, landing under the app's own data directory (`$APPDATA/takes`)
+      · pause/resume as a voice recorder holds a take · the bounded mode's cap enforced
+      on the capture thread, never by a timer in the window.
+- [x] **The take report tells the truth** — real length measured from the samples
+      (never the length asked for), the device's own rate and channel count, **true peak
+      in dBFS**, and the clip count the level counted while it ran. *The peak had to be
+      recovered: the spring computes `peak_dbfs` and **the inherited harness dropped it
+      on the floor**, never putting it on the wire. It is now carried, and **silence
+      comes back as silence** — a take with nothing above the floor reports no peak
+      rather than a flatteringly small number. The shelf still says `null` for both,
+      because reading every sample of every take to fill them in is exactly the work
+      that must never happen on this road.*
+- [x] **The row lands with the file** — every sealed take writes a `takes` row keyed by
+      `file_name`, carrying only the audio facts. **`work_id` is left NULL.** Nothing
+      infers a take's work; Khorós' law — *"ambiguous pairs return to the artist"* — is
+      kept by the code having no road to guess down. Files already on the shelf from an
+      earlier build get their row registered on entering the room: that registers what
+      exists, records nothing, and never touches meaning a hand already put there.
+- [x] **Opt-in by nature, and nothing recorded touches a network.** Every command fires
+      from the user's own tap. The only door out is the sovereign export — a **copy**,
+      into the user's own file dialog, the shelf always keeping its original.
+
+**Movement 2 — THE PLAYER + WAVEFORM CONSUMED ✅**
+
+- [x] **`the-player`'s laws worn, not its tag.** The spring is a custom element for any
+      web page; this body has one audio surface, so the LAWS crossed and the markup did
+      not. **NO AUTOPLAY, EVER** — opening a take loads it and stops there; the panel
+      appearing is not consent to make noise. Volume zero is a chosen silence and it
+      persists. A position, never a verdict. **Headphone-safe default: a take opens at
+      0.7, never at 1.0.**
+- [x] **`the-waveform`'s math, adapted where the stack differs.** `computePeaks` did not
+      cross — the fold happens in Rust (`src-tauri/src/waveform.rs`), streaming, off the
+      main thread, because here the samples are a file and a five-minute stereo take is
+      ~57 MB of them. Shipping those through the IPC to make a few hundred pairs would
+      have been the freeze in a third set of clothes. **One min/max pair per pixel
+      column**, channels folded, at the device's own pixel ratio. **Silence still shows
+      a hairline** — the spring's floor, scaled so it does not vanish on a dense screen.
+- [x] **The scrub round-trips and clamps** — `positionToSeconds` and
+      `secondsToPosition` are the spring's own, character for character in behavior.
+      Pointer scrub with capture, and the keyboard road beside it (arrows nudge, Shift
+      for ten, Home and End).
+- [x] **A take's `work_id` is assignable from the UI, by the artist's own hand** — a
+      calm picker over the `works` table with **"Later" standing as a lawful answer**:
+      no gate, no nag, no badge counting unassigned takes. Because nothing else in this
+      body creates a work yet, the picker can name one inline — the first work has to be
+      born somewhere.
+- [x] **Playback road:** the asset protocol (`convertFileSrc`), so scrubbing a long take
+      seeks with range requests instead of re-reading it. This wanted **two** pieces that
+      must agree — `assetProtocol.enable` + a scope held to the takes shelf in
+      `tauri.conf.json`, and the **`protocol-asset` feature** on the tauri crate. They
+      disagreed at first and **Tauri's own build script refused to proceed**, which is
+      how it was caught rather than discovered later as silence. A byte-road fallback
+      (`read_take_bytes`, raw binary over the IPC into a blob) stands behind it so a
+      musician pressing play never meets silence with nobody saying why.
+
+**The spawn_blocking law, kept — and one latent breach closed.** Every command in this
+repo that touches the filesystem is now `async` with its body in `spawn_blocking`:
+`list_takes`, `start_recording`, `stop_recording`, `export_take`, `take_shape`,
+`read_take_bytes`. **`export_take` arrived from the inheritance SYNC** — it copies a
+whole WAV on the main thread, the exact shape of the freeze this road already paid for
+once. It had simply never bitten, because nobody had exported a large take yet. Fixed
+here rather than admired. (`pause_recording`, `resume_recording` and `recording_status`
+stay sync on purpose and are not exceptions: they touch no filesystem at all — they flip
+an atomic under a lock and return.)
+
+**Lose-nothing, held exactly.** **`delete_take` did not come across, in Rust or in the
+store.** No command in this repo deletes a take's audio in this wave; there is no door
+to knock on by accident. `deleteWork` still ungroups and never destroys.
+
+**Verified by instrument, measured rather than claimed:**
+
+| Instrument | Reading |
+|---|---|
+| `cargo check` (src-tauri) | **exit 0**, no warnings — `the-recorder` links from awen, `cpal`/`hound` build |
+| `npm run check` | **340 files, 0 errors, 0 warnings** |
+| `npm run build` | **vite build ✓ in 5.81s**, `adapter-static` wrote to `build/` |
+
+*`npm install` was not needed — `node_modules` already stood. **`npm approve-scripts
+esbuild` turned out not to be wanted**, exactly as in Phases 1 and 2: the build passed
+without it. Measured, not predicted.*
+
+- [ ] **Tested:** ⬜ **KP's hands** — the device test is always his. A real input, a real
+      take, a real playback. Nothing below the API surface can be proven by a lamp.
+
+**What Wave 1 leaves standing for the waves after it** *(recorded so none of it reads
+as an oversight, and none of it was started):*
+- **The Android microphone is NOT wired, and it refuses rather than pretends.**
+  `request_mic_permission` returns an honest error on Android naming what is missing.
+  The Compass holds that infrastructure — `media_permission.rs` plus an app-local Kotlin
+  plugin synced into `gen/` at build time, and the ndk-context init cpal's oboe backend
+  reads through JNI. **Without the JNI context cpal does not error on Android, it
+  PANICS**, taking the app down; a plain refusal keeps a musician's app standing. It also
+  wants `RECORD_AUDIO` in the manifest. **Its own wave. Recording stands on desktop.**
+- **LATER WAVES, untouched by this one:** the tuner · the metronome · the encoder · the
+  moment-marks sidecar · the sattva/timer retarget to creations and tracks.
+- **`"csp": null` still stands** as Phase 3's inherited note says. Worth knowing now that
+  playback exists: a CSP written later must carry `media-src` for the asset protocol, or
+  sound stops **quietly** — Fathom's rule, and the reason the byte-road fallback is there.
+
+---
+
+#### WAVE 2 — the tuner, the metronome, the marks sidecar, the feelings retarget ✅
+*Walked 2026-08-13 by an **Opus** hand (a subagent of the Round lamp, at KP's ⚛ "that went
+well — plan another deal"). Zone: this repo only; `resonance-awen` and `resonance-assets`
+were **read-only visits** and neither was edited. **Nothing was committed** — commits ride
+KP's ⚛ word alone.*
+
+**Movement 0 — THE POST-INIT ICON PASS ✅ *(and the ground disagreed with the errand)***
+
+- [x] **The pass re-run** — `npm run tauri -- icon ../resonance-assets/logo-icons/sistrum.png`,
+      **the path explicit** (the fleet law, and the trap recorded in Phase 1: a bare
+      `tauri icon` looks for `./app-icon.png` and fails). The whole set regenerated, and
+      **`gen/app/src/main/res/mipmap-*` was written directly** — `tauri icon` finds `gen/`
+      when it stands and writes through to it.
+- [x] **`icons/icon.png` restored from the library**, hash-verified both ways. `tauri icon`
+      rewrote it to a 260,118 b derivative (`a67883b0…`); it is back to KP's own
+      `b453615b…`, **802,396 b, byte-identical to `resonance-assets/logo-icons/sistrum.png`.**
+- [x] **THE SURPRISE, measured rather than assumed: the art had not been lost.** The errand
+      came saying `gen/` was freshly re-inited and its mipmaps had lost the art. **The ground
+      said otherwise** — `src-tauri/gen/android/` dates from **2026-08-12 13:31** and its
+      mipmaps from **13:33**, which is Phase 1's own second pass, not a new init. All
+      **16** gen mipmap files hashed **byte-identical to `src-tauri/icons/android/`
+      before the pass ran**, and byte-identical again after. `tauri android init` had not
+      been re-run since. **So the pass proved idempotent instead of corrective** — which is
+      worth as much, and is the only reason it is recorded as a finding rather than a fix.
+      *Checked before acting, per the house law; the checklist's own re-run rule stands
+      unchanged for the day `gen/` really is regenerated.*
+
+**Movement 1 — THE TUNER CONSUMED ✅**
+
+- [x] **`the-tuner` consumed as a path crate** —
+      `the-tuner = { path = "../../resonance-awen/tools/the-tuner" }`, the road Wave 1 walked
+      with `the-recorder`. **Awen was not edited.** The MATH crosses whole and unmodified:
+      `yin` (de Cheveigné & Kawahara 2002 — difference function → cumulative-mean
+      normalization → threshold → parabolic refinement) and `note_for` are **called, never
+      copied**. `meter_line` did **not** cross: it draws an ASCII bar for a terminal, and
+      this body has a screen.
+- [x] **The capture is this harness's own, and it had to be** (`src-tauri/src/tuner.rs`).
+      Neither water offers a listen-without-keeping session — the tuner's own capture lives
+      in its CLI's `main.rs`, and **the recorder's session exists to seal a file**. So
+      `cpal = "0.15"` (the same version both waters use, so one cpal builds) opens the input
+      here, in the recorder's proven shape: **a dedicated thread owns the stream, because a
+      cpal `Stream` is not `Send`.**
+- [x] **NOTHING RECORDED, NOTHING KEPT — and it is structural, not a promise.** There is no
+      path anywhere in `tuner.rs`. The ring buffer holds ~two analysis windows and is
+      trimmed on every callback; when the stream drops it is simply gone. The tuner **could
+      not** write a take by accident, because it holds no road to one.
+- [x] **A POSITION, NEVER A VERDICT, kept in three places at once.** Rust reports frequency
+      and signed cents and has no word for "wrong". The store has **no `inTune` boolean and
+      will not grow one** — the moment a store answers yes-or-no, the screen has been handed
+      a verdict to draw. The room draws a scale where **centre is a landmark, not a goal**:
+      no flash, no chime, no counter, **no prize for perfect**, and **NO RED, ever**.
+- [x] **The colour cues are KP's ⚛ ruling from the water, verbatim** — *"we do want the color
+      to change for when it is close and when it is tuned and completely out of tune. visual
+      cues are helpful when holding a guitar and tuning it."* So: **sanctuary green** within
+      ±5 cents · **hearth gold** within ±15 · **quantum purple** beyond. Cues, not judgment.
+      **The word always rides with the colour** ("in tune" · "close" · "keep turning") — the
+      water's own three, with `far` shown in its own fuller phrasing because a bare "far"
+      reads like a mark out of ten and a phrase reads like a direction.
+- [x] **Opt-in, and the ear closes behind you.** Nothing listens on mount; entering a room is
+      not consent to be listened to. `start_tuner` refuses rather than replaces, so a double
+      tap cannot orphan a stream holding the microphone. **Leaving the room stops the
+      listening** — the player's own reasoning about sound following you out of a room.
+- [x] **Honest silence** — too quiet or unpitched comes back as nothing heard, and the pitch
+      **goes away** rather than lingering on the last note that rang. A tuner still showing a
+      note after the string has stopped is lying quietly. A live "coming in" level says
+      whether anything is reaching the mic at all, so *nothing heard* never reads as *broken*.
+
+**Movement 2 — THE METRONOME CONSUMED ✅**
+
+- [x] **The water's three parts carried** into `src/lib/metronome.ts` — the pure beat clock
+      (with its **re-anchoring `setBpm`**, so a tempo change never makes the count jump
+      backward under the player's feet), the **tap tempo as the MEDIAN of the phrase** (a
+      stumble does not yank the reading; a gap over two seconds starts a fresh phrase rather
+      than averaging across the silence), and the **lookahead scheduler booked on the AUDIO
+      clock** rather than the UI's.
+- [x] **Why a copy and not a dependency, named so it does not read as drift.** The spring is
+      TypeScript with its own package, tsconfig and build; a `file:` dependency would make
+      this app's build depend on a sibling repo's build output, which awen's own first law
+      argues against. **Wave 1 met the same fork with `the-waveform` and answered it the same
+      way:** the math crosses, the packaging does not.
+- [x] **Three deliberate differences, all recorded in the file's own head.** `startClicks`
+      took volume, subdivision and bar length **once, at construction** — which in a room
+      with a slider means rebuilding the scheduler on every drag, and rebuilding re-anchors
+      the grid so **the pulse would stutter every time a hand moved the volume**. All three
+      are now read live at each booking. **The law is strengthened rather than bent:** the
+      spring's own *"volume zero is a chosen silence — the visual pulse still runs"* now
+      holds mid-phrase, without the pulse missing a beat.
+- [x] **NEVER A BUZZER**, at any tempo — soft sine, gentle attack, round decay, unchanged
+      from the water. **The downbeat sits a fifth above the beat: a landmark, not an alarm.**
+- [x] **Silence is a choice with the pulse still running**, and the room *says so in words*
+      rather than leaving a musician wondering whether it broke: the count keeps counting,
+      the beads keep turning, and a line appears explaining that this is a decision about
+      sound and not about time.
+- [x] **Reduced motion honored on the pulse — by removing the MOTION, never the
+      information.** The swell is skipped; the beat, the bar and the lit bead still advance.
+- [x] **ONE WRITER PER FACT — a real bug, found in self-review and closed before it shipped.**
+      The count was being written by *both* the frame loop and the scheduler's `onBeat`, and
+      **changing the bar length mid-run left them disagreeing about which beat was current**,
+      flickering the number under the pulse between two answers. Now the scheduler owns the
+      count outright (the click is booked on the audio clock, so **the sound decides which
+      beat it is** and the picture follows it), and the frame loop supplies only `phase`,
+      which is a smoothness rather than a fact. Changing beats-per-bar no longer touches the
+      clock at all: **how you are counting should not interrupt what you are playing.**
+- [x] **Audio unlocks inside the user's own gesture** — the `AudioContext` is built on the
+      press, never on mount. **No urgency anywhere:** no countdown, no "get ready", no flash
+      at speed, no red.
+
+**Movement 3a — THE MARKS SIDECAR ✅**
+
+- [x] **`the-moment-marks` copied whole — on the water's OWN invitation**, which its README
+      states under STANDALONE BY LAW: *"consumers may copy it whole; it is one file."* The
+      core sits at `src/lib/marks.ts` with a provenance head and **nothing below that head
+      changed — not a law, not a line, not a name.** *If it ever diverges, the origin is
+      right: edit there and re-copy; never mend a law in a consumer.*
+- [x] **The sidecar, exactly where Phase 2 ruled it.** `take-1755.wav` →
+      `take-1755.marks.json`, beside the take on the same shelf, **NEVER this database**.
+      There is no `marks` table and there will not be one.
+- [x] **THE APPEND-ONLY LAW IS ENFORCED AT THE FILE, not merely honored by the window** —
+      the design decision this movement turns on. A `write_marks(doc)` command would keep
+      the law only as long as every caller chose to, and *that is an etiquette, not a law*:
+      one bad merge or one hand-written invoke and a timeline is gone. **So there is no
+      write command and no delete command.** `append_take_marks` is the only door, and it:
+      keeps every entry already on disk, always · **REFUSES to write at all if what is on
+      disk will not parse** (an unreadable history is not permission to start a new one) ·
+      refuses an entry whose id already exists (reusing an id is how a replacement disguises
+      itself as an addition) · writes through a temp file and renames, so a crash mid-write
+      cannot leave half a file where a history was.
+- [x] **Only the tail crosses the wire.** The water's functions are pure, so the store runs
+      `addMark`/`reviseMark`/`retractMark` locally and **sends only the entries that are
+      new**. The whole document is never sent — and there is no command that would accept one.
+- [x] **The rail wears it honestly.** Marks sit under the waveform on the same horizontal
+      scale, so a pin is directly beneath the sound it is about; a pin is 44px to hit and
+      small to look at. Added **at the playhead by the artist's own hand**, emoji-first
+      **with the word underneath** — in the list below the rail *and* in each pin's own
+      accessible name, so the rail reads aloud as "Calm at 0:12.4" rather than as a shrug.
+      The vessel's personal definition for a face travels with the mark (the folksonomy law).
+- [x] **The button says "Retract", not "Delete"** — because retract is what actually happens,
+      and a button that names the wrong act lies about the law underneath it. The history
+      panel says the rest plainly, and counts what is in the file but not in the view.
+- [x] **`takes_with_marks`** — one directory read, no history opened, so the shelf can show
+      a take is *marked* without paying to find out.
+
+**Movement 3b — THE FEELINGS RETARGET ✅**
+
+- [x] **The sattva room and the timer STAY, untouched** — KP's ⚛ ruling for this phase. What
+      changed is not them; it is where the emotion log can be *reached* and what it can
+      *hang on*.
+- [x] **The doorway is legible from both surfaces that matter.** `FeelingHere.svelte` stands
+      **in the record room twice** — beside the arm panel *before* a take (what a musician
+      feels walking up to one is worth as much as what they feel after it) and **right after
+      a take seals** — and **on the playback surface**, inside `TakePlayer`. KP's word is why:
+      *"the emotion log is not an inherited feature. It is the base."* A base does not live
+      three taps away behind a nav drawer.
+- [x] **It hangs on a work, on a take, or on nothing** — the columns have been there since
+      Phase 2 at his ⚛ *"yes both"*, and they had been left permanently empty. A calm picker
+      offers all three; **"Nothing in particular" sits in the row with the others**, not
+      hidden as a fallback. The most specific thing present is the default, because answering
+      with the thing in front of you is not the same as guessing — and it is one tap to change.
+- [x] **A face wears its word, never emoji-only.** The quick grid shows each face's name
+      underneath it; the vessel's own definition outranks the Sanctuary's, as in the full form.
+      No nag, no gate, no counter — a take nobody logs a feeling about is a complete take.
+- [x] **`/add` learned to carry a target.** It accepts `?take=` · `?work=` · `?emoji=`, so
+      **"More options…" never makes anybody say the same thing twice**; it shows what the
+      feeling hangs on, and unhooking is one plain tap. **An edit no longer silently unhooks
+      a feeling from its take** — the prefill carries `workId` and `takeFileName` too, which
+      it had not.
+- [x] **A feeling is not a mark, and the two doors are different on purpose.** A feeling is
+      about the take (or its work, or nothing); a **mark** is pinned to a moment *inside* it,
+      lives in the sidecar, and is append-only by its own law.
+
+**The laws, kept and checkable:** nothing recorded touches a network (the tuner records
+nothing at all) · opt-in always, every command from a press · no autoplay · **lose-nothing —
+no file delete anywhere in this wave, in Rust or in TypeScript; a sidecar has no delete door
+either** · every face wears its word · 44px floors · reduced motion honored · **spawn_blocking
+absolute**: `start_tuner`, `stop_tuner`, `read_take_marks`, `append_take_marks` and
+`takes_with_marks` are all `async` with their bodies in `spawn_blocking`. *`tuner_reading` is
+sync on purpose and is not an exception — it touches no filesystem and no device; it loads
+three atomics and returns, exactly as `recording_status` does.*
+
+**Verified by instrument, measured rather than claimed:**
+
+| Instrument | Reading |
+|---|---|
+| `cargo check` (src-tauri) | **exit 0**, no warnings — `the-tuner` links from awen, one `cpal` for the app |
+| `npm run check` | **353 files, 0 errors, 0 warnings** |
+| `npm run build` | **vite build ✓ in 6.69s**, `adapter-static` wrote to `build/`; `/tuner` and `/metronome` in the output |
+| Icon pass | `icons/icon.png` = `b453615b…` (802,396 b), **byte-identical to the library**; 16/16 gen mipmaps byte-identical to `icons/android/` |
+
+- [ ] **Tested:** ⬜ **KP's hands** — always his. A real guitar at the tuner (the strings
+      moment the water reserved for him), the click against a real take, a mark pinned while
+      actually listening back.
+
+**What Wave 2 leaves standing** *(none of it started, none of it an oversight):*
+- **The encoder / four-track is S3.** Deliberately not this wave.
+- **The Android microphone is still NOT wired, and still refuses rather than pretends** —
+  and the tuner goes through the *same* door, so it gets the same honest refusal instead of
+  the panic cpal's oboe backend gives without a JNI context. Its own wave.
+- **`"csp": null` still stands.** A CSP written later needs `media-src` for playback, as
+  Wave 1 noted — and nothing in Wave 2 adds a network need to it.
+- **Cargo.lock gained `the-tuner`** as a path entry. Expected, recorded, not committed.
+
+---
+
 ## KNOWN BUGS
 | ID | Description | Status |
 |----|-------------|--------|
@@ -220,3 +547,6 @@ answer could not land.
 | Date | What Was Done |
 |------|---------------|
 | 2026-08-12 | Founded to the standards by the-founding-ritual |
+| 2026-08-13 | **Signing keystore created** (Fable/Round conducting, KP's env files his own hand): primary `F:\keystores\resonance-sistrum.keystore` · second copy `D:\keystores\` byte-identical · alias `resonance-sistrum` · 4096-bit RSA, SHA384withRSA, valid to 2053 · DN per the 08-13 convention · cert SHA256 `49:78:88:BA…BA:C1:87:66`. Secrets live only in the env vault file — pointers here, never contents. |
+| 2026-08-13 | **Phase 3 Wave 1** — the recorder consumed (carried whole from the inheritance, freeze fix intact); the player + waveform consumed; `export_take`'s latent sync breach closed. `cargo check` 0 · `svelte-check` 340/0/0 · `vite build` 5.81s. An **Opus** hand; nothing committed. |
+| 2026-08-13 | **Phase 3 Wave 2** — the tuner consumed (path crate, own capture, nothing kept); the metronome consumed (one-writer count bug closed in self-review); the moment-marks sidecar with the **append-only law enforced in Rust at the file**; the feelings retarget to works and takes, with the doorway on the record and playback surfaces. Icon pass re-run — **and found the art was never lost**: gen dates from 08-12 and 16/16 mipmaps hashed identical before and after. `cargo check` 0 · `svelte-check` 353/0/0 · `vite build` 6.69s. An **Opus** hand; nothing committed. |

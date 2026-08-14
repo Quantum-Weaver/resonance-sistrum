@@ -3,8 +3,23 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { feelingStore } from '$lib/stores/feeling.svelte';
+	import { workStore } from '$lib/stores/work.svelte';
 	import { SENSES, type Sense } from '$lib/data/senses';
 	import { EMOJI_DEFS } from '$lib/data/emojis';
+
+	// WAVE 2 (2026-08-13, an **Opus** hand): this form can now HANG A FEELING
+	// ON A CREATION. It arrives carrying `?take=` or `?work=` from the quick
+	// doorway beside the work, so pressing "More options…" never makes anybody
+	// say the same thing twice.
+	//
+	// The columns have been here since Phase 2, at KP's ⚛ "yes both" — a
+	// feeling about the song, a feeling about THIS attempt at it, or a feeling
+	// belonging to nothing at all. This page simply stopped leaving the first
+	// two permanently empty.
+	//
+	// "Belongs to nothing" stays the default and stays lawful: the log's whole
+	// reason — "how we discover our values and internal core interests" — does
+	// not require a subject.
 
 	function toLocalISO(date: Date): string {
 		const offset = date.getTimezoneOffset() * 60000;
@@ -29,8 +44,35 @@
 	const isEditMode = $derived(editId !== null);
 	let prefilled = false; // plain var prevents re-fill on subsequent feelings updates
 
+	// What this feeling hangs on, carried in from the doorway that opened it.
+	let targetWorkId = $state<string | null>(null);
+	let targetTakeFileName = $state<string | null>(null);
+	const targetWorkTitle = $derived(
+		targetWorkId ? (workStore.byId(targetWorkId)?.title ?? null) : null
+	);
+
 	onMount(() => {
-		const id = page.url.searchParams.get('edit');
+		const params = page.url.searchParams;
+
+		// The quick doorway's handoff. A take name or a work id arrives here
+		// exactly as it was chosen there; nothing is inferred from either one.
+		const take = params.get('take');
+		if (take) targetTakeFileName = take;
+		const work = params.get('work');
+		if (work) {
+			targetWorkId = work;
+			void workStore.loadWorks();
+		}
+		const carriedEmoji = params.get('emoji');
+		if (carriedEmoji) selectedEmoji = carriedEmoji;
+		// A feeling about sound being made has an honest default sense, and it
+		// is still one tap from any other.
+		if (take || work) {
+			selectedSense = 'heard';
+			selectedSubcategory = 'music';
+		}
+
+		const id = params.get('edit');
 		if (!id) return;
 		editId = id;
 		showAdvanced = true;
@@ -51,6 +93,12 @@
 		intensity = feeling.intensity;
 		useCustomTime = true;
 		customTimestamp = toLocalISO(new Date(feeling.timestamp));
+		// What it already hangs on comes with it. An edit that quietly
+		// unhooked a feeling from its take would be losing something a hand
+		// put there.
+		targetWorkId = feeling.workId ?? null;
+		targetTakeFileName = feeling.takeFileName ?? null;
+		if (targetWorkId) void workStore.loadWorks();
 		prefilled = true;
 	});
 
@@ -120,7 +168,9 @@
 			emoji: selectedEmoji || '✨',
 			note: note.trim() || undefined,
 			intensity,
-			timestamp: getTimestamp()
+			timestamp: getTimestamp(),
+			workId: targetWorkId ?? undefined,
+			takeFileName: targetTakeFileName ?? undefined
 		};
 		try {
 			if (editId) {
@@ -153,6 +203,37 @@
 			<div class="db-error-banner">
 				⚠️ Database not ready: {feelingStore.dbError}
 			</div>
+		{/if}
+
+		<!-- WHAT IT HANGS ON. Shown only when there is something — a feeling
+		     belonging to nothing needs no row explaining that it belongs to
+		     nothing. Unhooking is one plain tap and is never discouraged. -->
+		{#if targetTakeFileName || targetWorkId}
+			<section class="form-section">
+				<div class="section-label">Hangs on</div>
+				<div class="hangs-row">
+					{#if targetTakeFileName}
+						<span class="hangs-chip">
+							🎙️ {targetTakeFileName.replace(/\.wav$/, '')}
+							<button
+								class="hangs-off"
+								aria-label="Unhook this feeling from the take"
+								onclick={() => (targetTakeFileName = null)}>×</button
+							>
+						</span>
+					{/if}
+					{#if targetWorkId}
+						<span class="hangs-chip">
+							🎼 {targetWorkTitle ?? 'a work'}
+							<button
+								class="hangs-off"
+								aria-label="Unhook this feeling from the work"
+								onclick={() => (targetWorkId = null)}>×</button
+							>
+						</span>
+					{/if}
+				</div>
+			</section>
 		{/if}
 
 		<!-- Name -->
@@ -417,6 +498,43 @@
 		text-transform: none;
 		letter-spacing: 0;
 		color: var(--accent);
+	}
+
+	/* What it hangs on */
+	.hangs-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.hangs-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		min-height: 44px;
+		padding: 0.4rem 0.5rem 0.4rem 0.85rem;
+		background: color-mix(in srgb, var(--accent) 10%, transparent);
+		border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border-color));
+		border-radius: 22px;
+		color: var(--text);
+		font-size: 0.85rem;
+	}
+
+	.hangs-off {
+		min-width: 30px;
+		min-height: 30px;
+		border-radius: 50%;
+		border: none;
+		background: transparent;
+		color: var(--text-muted);
+		font-size: 1rem;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.hangs-off:hover {
+		color: var(--text);
+		background: color-mix(in srgb, var(--text-muted) 18%, transparent);
 	}
 
 	/* Name input */

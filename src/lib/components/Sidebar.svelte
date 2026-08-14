@@ -39,6 +39,15 @@
 	const MENU: Menu = {
 		doors: [
 			door('home', '/', 'home', 'Home'),
+			// The instrument's own verb, standing where it can be reached in one
+			// tap. Sistrum makes new sound; the room that makes it is not buried.
+			door('record', '/record', 'record', 'Record'),
+			// The two waters of Wave 2, standing beside the verb they serve —
+			// a musician reaches for a tuner and a click on the way to a take,
+			// not from somewhere else in the app. Neither listens or sounds
+			// until its own room is opened and its own button pressed.
+			door('tuner', '/tuner', 'tuner', 'Tuner'),
+			door('metronome', '/metronome', 'metronome', 'Metronome'),
 			door('insights', '/insights', 'insights', 'Insights'),
 			door('timer', '/timer', 'timer', 'Timer'),
 			door('sattva', '/sattva', 'sattva', 'Sattva'),

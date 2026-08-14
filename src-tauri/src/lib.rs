@@ -1,8 +1,61 @@
 use tauri_plugin_sql::{Migration, MigrationKind};
 
+// The waters, consumed (Phase 3 Wave 1, 2026-08-13, an Opus hand):
+//   recorder — `the-recorder`'s record verb wrapped for this body, carried
+//              whole from resonance-assets/sistrum-inheritance with the S25
+//              freeze fix already in it.
+//   waveform — `the-waveform`'s fold and `the-player`'s bytes, adapted to a
+//              stack where the samples live on disk instead of in the page.
+//
+// And Wave 2 (2026-08-13, an Opus hand):
+//   tuner    — `the-tuner`'s YIN math called from a path crate; the capture is
+//              this harness's own, because the tuner keeps nothing and no
+//              existing water offers a listen-without-keeping session.
+//   marks    — `the-moment-marks` worn by takes, in a `.marks.json` SIDECAR
+//              beside each take's WAV and NEVER in this database (Phase 2's
+//              own ruling). The append-only law is enforced at the file: the
+//              only write door appends, and it refuses rather than overwrite.
+//
+// The metronome is the third water of this wave and it has no Rust at all —
+// it is a beat clock and a Web Audio scheduler, and both belong in the window.
+mod marks;
+mod recorder;
+mod tuner;
+mod waveform;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Welcome to Resonance Sistrum, {}.", name)
+}
+
+/// The microphone door.
+///
+/// Desktop has no runtime permission model for a local input — the platform
+/// asks on its own if it asks at all, so the honest answer is yes.
+///
+/// ANDROID IS NOT WIRED HERE YET, AND IT REFUSES RATHER THAN PRETENDS. The
+/// Compass holds that infrastructure (`media_permission.rs` plus an app-local
+/// Kotlin plugin synced into `gen/` at build time, and the ndk-context init
+/// that cpal's oboe backend reads through JNI). Without the JNI context cpal
+/// does not return an error on Android — it PANICS, which takes the app down
+/// with it. A plain refusal that names what is missing is the kinder failure,
+/// and it keeps a musician's running app standing. Wiring it is its own wave.
+#[tauri::command]
+async fn request_mic_permission(app_handle: tauri::AppHandle) -> Result<bool, String> {
+    #[cfg(target_os = "android")]
+    {
+        let _ = app_handle;
+        return Err(
+            "the microphone is not wired on Android in Sistrum yet — the permission bridge \
+             and the JNI context cpal needs are their own wave. Recording stands on desktop."
+                .into(),
+        );
+    }
+    #[cfg(not(target_os = "android"))]
+    {
+        let _ = app_handle;
+        Ok(true)
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -105,7 +158,41 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        // The recorder's managed state. One room, one running take — the state
+        // itself is what refuses a second start over a live one.
+        .manage(recorder::RecorderState::default())
+        // The tuner's managed state. One ear, one listening — and like the
+        // recorder's, the state itself is what refuses a second start over a
+        // live one, so a double tap cannot orphan a stream holding the mic.
+        .manage(tuner::TunerState::default())
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            request_mic_permission,
+            // ── The record room ──────────────────────────────────────────
+            recorder::list_input_devices,
+            recorder::start_recording,
+            recorder::pause_recording,
+            recorder::resume_recording,
+            recorder::recording_status,
+            recorder::stop_recording,
+            recorder::list_takes,
+            recorder::export_take,
+            // ── The shape and the sound ──────────────────────────────────
+            waveform::take_shape,
+            waveform::read_take_bytes,
+            // ── The tuner room (Wave 2) ──────────────────────────────────
+            // Nothing listens until start_tuner is pressed; nothing it hears
+            // is recorded and nothing is kept.
+            tuner::start_tuner,
+            tuner::stop_tuner,
+            tuner::tuner_reading,
+            // ── The marks sidecar (Wave 2) ───────────────────────────────
+            // Note what is NOT here: there is no write and no delete. The
+            // only write door appends, by law.
+            marks::read_take_marks,
+            marks::append_take_marks,
+            marks::takes_with_marks,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running Resonance Sistrum");
 }

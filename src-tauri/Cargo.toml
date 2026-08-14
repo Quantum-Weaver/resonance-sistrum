@@ -13,13 +13,41 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = [] }
+# `protocol-asset` is what lets a take PLAY. The asset protocol serves the
+# take's own file to the window with range requests, so scrubbing a long take
+# seeks instead of re-reading it — and tauri.conf.json's assetProtocol scope
+# holds it to the takes shelf and nowhere else. The build script refuses to
+# proceed if the feature and the config disagree, which is how this was caught
+# rather than discovered later as silence.
+tauri = { version = "2", features = ["protocol-asset"] }
 tauri-plugin-opener = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
 tauri-plugin-sql = { version = "2", features = ["sqlite"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
+# The springs' waters (resonance-awen), consumed as path crates — the road
+# Compass walked at the standalone-waters season, 2026-08-08. The tools stay
+# standalone where they live; this repo only depends on them, and neither was
+# edited to be consumed.
+#
+#   the-recorder — the record verb (Wave 1).
+#   the-tuner    — the YIN pitch math and the nearest-note reading (Wave 2).
+#                  Only its LIBRARY crosses; `meter_line` draws an ASCII bar
+#                  for a terminal and this body has a screen, so the position
+#                  is drawn in Svelte from the same signed cents.
+the-recorder = { path = "../../resonance-awen/tools/the-recorder" }
+the-tuner = { path = "../../resonance-awen/tools/the-tuner" }
+
+# `hound` is here in its own right because the harness reads WAV headers and
+# folds WAV samples (list_takes, take_shape) without going back through the
+# recorder to do it. `cpal` likewise: the tuner keeps NOTHING, so it cannot
+# borrow the recorder's session — that session exists to seal a file — and it
+# opens its own input stream instead. Same version as both waters use, so one
+# cpal builds for the whole app.
+hound = "3.5"
+cpal = "0.15"
 
 [profile.release]
 strip = true
