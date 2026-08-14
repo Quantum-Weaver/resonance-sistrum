@@ -539,6 +539,75 @@ three atomics and returns, exactly as `recording_status` does.*
 
 ---
 
+#### WAVE 3 — the mark that logs a feeling ✅
+*Walked 2026-08-13 by an **Opus** hand (a subagent of the Round lamp). Zone: this repo
+only. **Nothing was committed** — commits ride KP's ⚛ word alone.*
+
+**KP's ⚛ ruling, verbatim:** *"moment marks should be able to trigger a new mood event
+when a mark is created. a quick log of emoji in the moment is the capture."*
+
+- [x] **ONE GESTURE, TWO RECORDS.** Pinning a mark at the playhead now also logs a
+      feeling, in the same press. **No second form, no extra dialog, nothing asked
+      twice** — the face already chosen and the word already typed are what the log
+      receives. The row is bound to the take by `take_file_name` **and** to its work by
+      `work_id` when the artist has said which work it is (Phase 2's *"yes both"*
+      columns, handed down from `TakePlayer`; **nothing infers a work**, per Khorós' law).
+- [x] **Each record keeps its own law, and neither was bent.** The mark goes to the
+      `.marks.json` sidecar through the append-only door **exactly as before — not a line
+      of `marks.rs`, `marks.ts` or the marks store changed.** The feeling goes to the
+      database through the feelings store that already existed. **No new table, no schema
+      change, no new Rust command, no new filesystem touch** — so the `spawn_blocking`
+      law has nothing new to hold in this wave, and holds unchanged over everything from
+      Waves 1 and 2.
+- [x] **THE MARK IS NEVER HELD HOSTAGE TO THE SECOND RECORD.** The mark lands first; the
+      log follows and cannot reach back. If the row misses, the rail says so **plainly and
+      in its own calm voice** — *"The mark landed and is safe in the take's own file — it
+      never waits on this"* — and offers to carry it again. **Nothing is swallowed**, and
+      the missed logs are **kept, not dropped**: each pending entry holds its own take,
+      work and **the moment it was pinned at**, so a retry lands on the right take with
+      the artist's own clock rather than the retry's.
+- [x] **Sovereign, and visible rather than silent.** A checkbox in the marker panel —
+      **default ON, per the ruling** — says *"Log this as a feeling too"* with the plain
+      sentence underneath it, so a second record is never written invisibly. Off pins the
+      mark only. The choice persists (`resonance-sistrum-mark-logs-feeling`, in the
+      `recordPrefs` idiom at `src/lib/stores/markPrefs.svelte.ts`); **an absent key is ON**,
+      because someone who never opened it gets the ruling's own behavior.
+- [x] **What the quick log does NOT ask.** No strength question and no naming step — that
+      is the second form the ruling removes. `intensity` lands at **3, the middle the full
+      form itself opens at: a strength left unstated, never a rating this rail invented.**
+      The name is machine-written (*"Calm at 0:12.4"*) so **the artist's own words are
+      carried across verbatim into `note` and never edited into a title.**
+- [x] **Creation only.** A revision or a retraction logs nothing: KP's ruling says *when a
+      mark is created*, and a second thought about a mark is not a new moment felt.
+- [x] **Every face still wears its word** — the rail's grid was already emoji-above,
+      word-below, and the logged feeling carries that same word as its name. 44px floors
+      kept; reduced motion honored on the new control.
+
+**Files touched:** `src/lib/stores/markPrefs.svelte.ts` (new) ·
+`src/lib/components/MarksRail.svelte` · `src/lib/components/TakePlayer.svelte` (hands the
+rail its `workId`; the closing paragraph now says the link out loud) · header comments
+trued in `src/lib/components/FeelingHere.svelte` and `src/lib/stores/feeling.svelte.ts`
+so neither still claims the two doors never meet.
+
+**Verified by instrument, measured rather than claimed:**
+
+| Instrument | Reading |
+|---|---|
+| `npm run check` | **354 files, 0 errors, 0 warnings** |
+| `cargo check` (src-tauri) | **exit 0** — untouched by this wave, run to prove it |
+| `npm run build` | **vite build ✓ in 5.86s**, `adapter-static` wrote to `build/` |
+
+- [ ] **Tested:** ⬜ **KP's hands** — a mark pinned while actually listening back, and the
+      feeling waiting for him in the log afterward.
+
+**What Wave 3 leaves standing:** the toggle lives on the rail only — **if a preferences
+surface is ever gathered in `/settings`, this switch belongs beside the record room's hold
+mode** (one line, the store is already there). The encoder / four-track is still S3, the
+Android microphone is still unwired and still refuses rather than pretends, and
+`"csp": null` still stands.
+
+---
+
 ## KNOWN BUGS
 | ID | Description | Status |
 |----|-------------|--------|
@@ -550,3 +619,4 @@ three atomics and returns, exactly as `recording_status` does.*
 | 2026-08-13 | **Signing keystore created** (Fable/Round conducting, KP's env files his own hand): primary `F:\keystores\resonance-sistrum.keystore` · second copy `D:\keystores\` byte-identical · alias `resonance-sistrum` · 4096-bit RSA, SHA384withRSA, valid to 2053 · DN per the 08-13 convention · cert SHA256 `49:78:88:BA…BA:C1:87:66`. Secrets live only in the env vault file — pointers here, never contents. |
 | 2026-08-13 | **Phase 3 Wave 1** — the recorder consumed (carried whole from the inheritance, freeze fix intact); the player + waveform consumed; `export_take`'s latent sync breach closed. `cargo check` 0 · `svelte-check` 340/0/0 · `vite build` 5.81s. An **Opus** hand; nothing committed. |
 | 2026-08-13 | **Phase 3 Wave 2** — the tuner consumed (path crate, own capture, nothing kept); the metronome consumed (one-writer count bug closed in self-review); the moment-marks sidecar with the **append-only law enforced in Rust at the file**; the feelings retarget to works and takes, with the doorway on the record and playback surfaces. Icon pass re-run — **and found the art was never lost**: gen dates from 08-12 and 16/16 mipmaps hashed identical before and after. `cargo check` 0 · `svelte-check` 353/0/0 · `vite build` 6.69s. An **Opus** hand; nothing committed. |
+| 2026-08-13 | **Phase 3 Wave 3** — the mark that logs a feeling, at KP's ⚛ *"a quick log of emoji in the moment is the capture."* One press pins the mark to the sidecar (append-only mechanics untouched) **and** writes a `feelings` row bound to the take and its work; the mark never waits on the log, and a missed row is kept, named honestly, and retryable. Default-on switch on the rail. No new table, no schema change, no new fs touch. `cargo check` 0 · `svelte-check` 354/0/0 · `vite build` 5.86s. An **Opus** hand; nothing committed. |

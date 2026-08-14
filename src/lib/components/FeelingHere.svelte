@@ -38,7 +38,12 @@
 	//
 	// A FEELING IS NOT A MARK. A feeling is about the take; a MARK is pinned
 	// to a moment INSIDE it, lives in a `.marks.json` sidecar, and is
-	// append-only by its own law. Different doors on purpose.
+	// append-only by its own law. Two records, two laws — and since Wave 3 the
+	// marks rail also logs a feeling in the same press it pins a mark (KP's ⚛
+	// "a quick log of emoji in the moment is the capture"). That is one gesture
+	// reaching two records, never one record with two homes. THIS door stays
+	// exactly what it was: the plain way to say how a whole take felt, with the
+	// strength and the naming this rail deliberately does not stop to ask for.
 
 	let {
 		workId = null,

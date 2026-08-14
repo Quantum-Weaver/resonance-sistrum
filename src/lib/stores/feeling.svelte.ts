@@ -15,9 +15,17 @@ import type { Feeling } from '$lib/types/types';
 // plus the honest third case: a feeling in the room belongs to nobody and is
 // still worth keeping.
 //
-// For feeling pinned to a POSITION inside a take, this store is the wrong
-// door: that is `the-moment-marks`, append-only by its own law, living in a
-// `.marks.json` sidecar rather than in this database.
+// A POSITION inside a take is not this store's to keep: that is
+// `the-moment-marks`, append-only by its own law, living in a `.marks.json`
+// sidecar rather than in this database.
+//
+// The two are JOINED BY A GESTURE and not by a table (Phase 3 Wave 3,
+// 2026-08-13, an **Opus** hand), at KP's ⚛ ruling: "moment marks should be able
+// to trigger a new mood event when a mark is created. a quick log of emoji in
+// the moment is the capture." The marks rail calls `addFeeling` here with the
+// face the artist just pinned. Nothing about this store changed to allow it —
+// the row it writes is an ordinary feeling on a take, and the moment it came
+// from stays where moments live, in the sidecar.
 
 // Personal emoji definitions — the folksonomy layer of the Resonance Grammar.
 // Same key convention as Compass and Echoes so the pattern is defined once.

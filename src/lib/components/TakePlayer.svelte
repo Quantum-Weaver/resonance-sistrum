@@ -26,6 +26,14 @@
 	//     about its work, or about nothing). KP's ⚛ word: "the emotion log is
 	//     not an inherited feature. It is the base." So it stands here, where
 	//     the listening happens, rather than three taps away behind the nav.
+	//
+	// WAVE 3 JOINS THEM WITHOUT MERGING THEM (2026-08-13, an **Opus** hand), at
+	// KP's ⚛ ruling: "moment marks should be able to trigger a new mood event
+	// when a mark is created. a quick log of emoji in the moment is the
+	// capture." Pinning a mark now logs a feeling in the SAME press — two
+	// records, two laws, one gesture. The doorway below stays exactly where it
+	// was: a feeling about the whole take still has its own plain door, and one
+	// logged from the rail is about the moment the mark is pinned at.
 
 	let { take, onclose }: { take: TakeFile; onclose: () => void } = $props();
 
@@ -150,11 +158,17 @@
 	</div>
 
 	<!-- The marks rail sits directly under the shape, sharing its scale, so a
-	     pin is beneath the sound it is about. -->
+	     pin is beneath the sound it is about.
+
+	     `workId` is handed down for the QUICK LOG (Wave 3): a feeling logged by
+	     pinning a mark hangs on this take AND on its work when the artist has
+	     said which work it is. Handed, never inferred — the picker below is the
+	     only thing that decides a take's work. -->
 	<MarksRail
 		fileName={take.file_name}
 		{duration}
 		position={playhead}
+		workId={row?.workId ?? null}
 		onseek={(secs) => playbackStore.seek(secs)}
 	/>
 
@@ -194,7 +208,8 @@
 	<p class="keeping">
 		The take itself stays on the shelf. Exporting copies it; nothing here moves or removes it. Marks
 		are kept in a file beside the take and are append-only — retracting one takes it out of the view,
-		never out of the history.
+		never out of the history. Pinning a mark also logs the face you chose as a feeling, unless you
+		switch that off on the rail.
 	</p>
 </section>
 
