@@ -1,7 +1,7 @@
 # ─── SOVEREIGNTY — NEVER COMMIT ───────────────────────────
 *.keystore
 *.jks
-*.apk
+*.apk*
 *.aab
 .env
 .env.*
@@ -14,9 +14,13 @@ secrets.yaml
 secrets.yml
 *.db
 *.sqlite
+*.p12
+*.pfx
+keystore.properties
+key.properties
+local.properties
 
 # ─── BUILD OUTPUT ──────────────────────────────────────────
-src-tauri/gen/
 target/
 dist/
 build/
@@ -50,3 +54,6 @@ desktop.ini
 # ─── SANCTUARY-SPECIFIC ────────────────────────────────────
 helper.md
 generate_blueprint.py
+
+# Release artifacts (signed builds live on disk + device, never in git)
+release/
