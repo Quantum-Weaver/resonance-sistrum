@@ -43,11 +43,17 @@ same sitting as the work it records.
   it so the mark lands first and is **never held hostage** to the second record:
   a missed log is kept with its own take, work and pinned moment, and retried
   against the artist's own clock. No cap on how many a song carries.
-- **The path-dependency seam — flagged, not fixed** (2026-08-14).
-  `src-tauri/Cargo.toml` reaches out of this repo twice by relative path:
-  `the-recorder` and `the-tuner` at `../../resonance-awen/tools/`. **A lone clone
-  does not build** without the sibling awen checkout beside it, and how a clone
-  should be told is unwritten — his to rule. Compass walked the same road first;
+- **The path-dependency seam — RULED 2026-08-19, KP ⚛, his words verbatim:**
+  *"i should have not used the word mirror and said distribute from the source,
+  one source to edit, distribute updates from it the apps should be whole"* ·
+  *"everything should only have one point of edit from my perspective, but be
+  usable from any."* `src-tauri/Cargo.toml` reaches out of this repo twice by
+  relative path (`the-recorder` and `the-tuner` at `../../resonance-awen/tools/`),
+  so **a lone clone does not build** — and the cure is now written: the two
+  waters get **distributed whole into this app** (edit-at-origin headers, updated
+  by distribution runs, never hand-edited here), the way cosmic already travels.
+  The conversion is its own wave at his deal; until it runs, the sibling awen
+  checkout stands beside this repo to build. Compass walked the same road first;
   the seam is the family's, not this repo's invention.
 
 ## Structure
@@ -65,3 +71,40 @@ that cannot be fixed after the fact. Signing and versions: `release-road`. The
 Android side: `android-tauri` — the microphone is NOT wired here and refuses
 honestly, because without the JNI context cpal does not error on Android, it
 PANICS.
+
+
+## Standards
+
+This repo follows the
+[Sanctuary Standards](https://github.com/Quantum-Weaver/resonance-standards).
+`.gitignore`, this file, and `docs/CHECKLIST.md` are **SEED-class** --
+planted once from the standards and this repo's own from then on. No
+agent overwrites them (DOC-CLASSES law).
+
+*(Section landed 2026-08-19 at KP's word: "standards section should be in
+claude md files.")*
+
+
+## The forge and the link tender
+
+*(Landed 2026-08-19 at KP's word: each CLAUDE.md carries how THIS realm uses
+them. tend.py is the one button — it sets UTF-8 once and never commits.)*
+
+- **Blueprint forge** — one forge, every realm, no local copies (KP ⚛
+  2026-08-03). Regenerate this realm's structure map (lands whole at
+  `docs/blueprints/` + one journal line; structure is DISCOVERED, never
+  declared — never hand-draw a tree):
+
+      python c:/_superposition/resonance-ziggy/tend.py forge run --root c:/_superposition/resonance-sistrum
+
+- **Link tender** — every markdown pointer in this realm, both house shapes,
+  resolved three ways; every mend ledgered at
+  `resonance-ziggy/modules/link-tender/MENDS.md`. **Dry first, always**, and
+  read the report before mending:
+
+      python c:/_superposition/resonance-ziggy/tend.py links dry --root c:/_superposition/resonance-sistrum
+      python c:/_superposition/resonance-ziggy/tend.py links mend --root c:/_superposition/resonance-sistrum
+
+  Its laws hold here as everywhere: homes are never entered, history is
+  reported never rewritten, a pointer it may not verify is never "fixed,"
+  and mimirs-well is sealed absolutely.
