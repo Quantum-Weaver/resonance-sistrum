@@ -1,0 +1,39 @@
+{
+  "tier": "domain",
+  "domain_name": "src",
+  "domain_path": "src",
+  "self": "sistrum/src/dbp.ai.json",
+  "parent": "sistrum/pbp.ai.json",
+  "description": "2 files, 2 subfolders",
+  "objects": [
+    {
+      "blueprint": "sistrum/src/lib/obp.ai.json",
+      "object_path": "src/lib",
+      "description": "3 files, 10 subfolders",
+      "folder_count": 13,
+      "total_files": 79
+    },
+    {
+      "blueprint": "sistrum/src/routes/obp.ai.json",
+      "object_path": "src/routes",
+      "description": "3 files, 9 subfolders",
+      "folder_count": 10,
+      "total_files": 12
+    }
+  ],
+  "object_count": 2,
+  "folders_reporting_directly": [
+    {
+      "blueprint": "sistrum/src/fbp.ai.json",
+      "folder_path": "src",
+      "description": "2 files, 2 subfolders",
+      "file_count": 2,
+      "subdirectory_count": 2
+    }
+  ],
+  "total_folders": 24,
+  "total_files": 93,
+  "integration_timestamp": "2026-08-21T15:20:01.950263 | in sovereign time",
+  "maintaining_agent": "DomainAgent",
+  "note": "Links only. Every object's details live at its own address."
+}

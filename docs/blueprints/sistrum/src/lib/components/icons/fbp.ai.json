@@ -1,0 +1,136 @@
+{
+  "tier": "folder",
+  "folder_name": "icons",
+  "folder_path": "src/lib/components/icons",
+  "self": "sistrum/src/lib/components/icons/fbp.ai.json",
+  "parent": "sistrum/src/lib/obp.ai.json",
+  "description": "9 files, 0 subfolders",
+  "files": [
+    {
+      "path": "src/lib/components/icons/IconHome.svelte",
+      "description": "surface, 374 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconInsights.svelte",
+      "description": "surface, 539 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconMetronome.svelte",
+      "description": "surface, 427 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconRecord.svelte",
+      "description": "surface, 425 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/Icons.svelte",
+      "description": "surface, 1,129 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconSattva.svelte",
+      "description": "surface, 547 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconSettings.svelte",
+      "description": "surface, 963 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconTimer.svelte",
+      "description": "surface, 378 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconTuner.svelte",
+      "description": "surface, 634 bytes"
+    }
+  ],
+  "file_count": 9,
+  "subdirectories": [],
+  "code_analysis": {
+    "IconHome.svelte": {
+      "language": "svelte",
+      "lines": 7,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconInsights.svelte": {
+      "language": "svelte",
+      "lines": 10,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconMetronome.svelte": {
+      "language": "svelte",
+      "lines": 10,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconRecord.svelte": {
+      "language": "svelte",
+      "lines": 10,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "Icons.svelte": {
+      "language": "svelte",
+      "lines": 48,
+      "uses_runes": [
+        "$derived",
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconSattva.svelte": {
+      "language": "svelte",
+      "lines": 10,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconSettings.svelte": {
+      "language": "svelte",
+      "lines": 8,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconTimer.svelte": {
+      "language": "svelte",
+      "lines": 9,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconTuner.svelte": {
+      "language": "svelte",
+      "lines": 15,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.725409 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

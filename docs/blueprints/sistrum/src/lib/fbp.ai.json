@@ -1,0 +1,108 @@
+{
+  "tier": "folder",
+  "folder_name": "lib",
+  "folder_path": "src/lib",
+  "self": "sistrum/src/lib/fbp.ai.json",
+  "parent": "sistrum/src/lib/obp.ai.json",
+  "description": "3 files, 10 subfolders",
+  "files": [
+    {
+      "path": "src/lib/marks.ts",
+      "description": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+    },
+    {
+      "path": "src/lib/metronome.ts",
+      "description": "metronome.ts"
+    },
+    {
+      "path": "src/lib/waveform.ts",
+      "description": "waveform.ts"
+    }
+  ],
+  "file_count": 3,
+  "subdirectories": [
+    "src/lib/components",
+    "src/lib/cosmic",
+    "src/lib/cumdach",
+    "src/lib/data",
+    "src/lib/epagoge",
+    "src/lib/sky",
+    "src/lib/stores",
+    "src/lib/styles",
+    "src/lib/theme",
+    "src/lib/types"
+  ],
+  "code_analysis": {
+    "marks.ts": {
+      "language": "typescript",
+      "lines": 322,
+      "exported_functions": [
+        "newDoc",
+        "addMark",
+        "reviseMark",
+        "retractMark",
+        "readMarks",
+        "shareDoc",
+        "mergeDocs",
+        "parseDoc",
+        "parseTime",
+        "fmtTime"
+      ],
+      "exported_consts": [],
+      "interfaces": [
+        "MediaRef",
+        "Mark",
+        "MarksDoc",
+        "MarkInput",
+        "MarkChanges"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "metronome.ts": {
+      "language": "typescript",
+      "lines": 253,
+      "exported_functions": [
+        "createBeatClock",
+        "clampBpm",
+        "createTapTempo",
+        "startClicks"
+      ],
+      "exported_consts": [],
+      "interfaces": [
+        "BeatSample",
+        "ClickOptions"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "waveform.ts": {
+      "language": "typescript",
+      "lines": 96,
+      "exported_functions": [
+        "positionToSeconds",
+        "secondsToPosition",
+        "drawWaveform"
+      ],
+      "exported_consts": [],
+      "interfaces": [
+        "WaveformStyle"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.714296 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

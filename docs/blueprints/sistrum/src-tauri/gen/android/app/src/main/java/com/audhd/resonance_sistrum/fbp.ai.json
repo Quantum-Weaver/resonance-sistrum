@@ -1,0 +1,31 @@
+{
+  "tier": "folder",
+  "folder_name": "resonance_sistrum",
+  "folder_path": "src-tauri/gen/android/app/src/main/java/com/audhd/resonance_sistrum",
+  "self": "sistrum/src-tauri/gen/android/app/src/main/java/com/audhd/resonance_sistrum/fbp.ai.json",
+  "parent": "sistrum/src-tauri/gen/obp.ai.json",
+  "description": "1 files, 1 subfolders",
+  "files": [
+    {
+      "path": "src-tauri/gen/android/app/src/main/java/com/audhd/resonance_sistrum/MainActivity.kt",
+      "description": "file, 278 bytes"
+    }
+  ],
+  "file_count": 1,
+  "subdirectories": [
+    "src-tauri/gen/android/app/src/main/java/com/audhd/resonance_sistrum/plugin"
+  ],
+  "code_analysis": {},
+  "folders_not_walked": [
+    {
+      "name": "generated",
+      "address": "src-tauri/gen/android/app/src/main/java/com/audhd/resonance_sistrum/generated",
+      "files_on_disk": 10,
+      "walked": false,
+      "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
+    }
+  ],
+  "scan_timestamp": "2026-08-21T15:20:01.830291 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

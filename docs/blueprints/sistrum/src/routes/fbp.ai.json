@@ -1,0 +1,76 @@
+{
+  "tier": "folder",
+  "folder_name": "routes",
+  "folder_path": "src/routes",
+  "self": "sistrum/src/routes/fbp.ai.json",
+  "parent": "sistrum/src/routes/obp.ai.json",
+  "description": "3 files, 9 subfolders",
+  "files": [
+    {
+      "path": "src/routes/+layout.svelte",
+      "description": "surface, 2,310 bytes"
+    },
+    {
+      "path": "src/routes/+layout.ts",
+      "description": "Tauri doesn't have a Node.js server to do proper SSR"
+    },
+    {
+      "path": "src/routes/+page.svelte",
+      "description": "surface, 17,474 bytes"
+    }
+  ],
+  "file_count": 3,
+  "subdirectories": [
+    "src/routes/add",
+    "src/routes/insights",
+    "src/routes/metronome",
+    "src/routes/onboarding",
+    "src/routes/record",
+    "src/routes/sattva",
+    "src/routes/settings",
+    "src/routes/timer",
+    "src/routes/tuner"
+  ],
+  "code_analysis": {
+    "+layout.svelte": {
+      "language": "svelte",
+      "lines": 88,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "+layout.ts": {
+      "language": "typescript",
+      "lines": 6,
+      "exported_functions": [],
+      "exported_consts": [
+        "ssr"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "+page.svelte": {
+      "language": "svelte",
+      "lines": 680,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.781136 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

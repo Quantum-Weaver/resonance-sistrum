@@ -1,0 +1,25 @@
+{
+  "tier": "folder",
+  "folder_name": "x86_64",
+  "folder_path": "src-tauri/gen/android/app/src/main/jniLibs/x86_64",
+  "self": "sistrum/src-tauri/gen/android/app/src/main/jniLibs/x86_64/fbp.ai.json",
+  "parent": "sistrum/src-tauri/gen/obp.ai.json",
+  "description": "2 files, 0 subfolders",
+  "files": [
+    {
+      "path": "src-tauri/gen/android/app/src/main/jniLibs/x86_64/libc++_shared.so",
+      "description": "file, 1,617,608 bytes"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/jniLibs/x86_64/libresonance_sistrum_lib.so",
+      "description": "file, 31,304,064 bytes"
+    }
+  ],
+  "file_count": 2,
+  "subdirectories": [],
+  "code_analysis": {},
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.843020 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

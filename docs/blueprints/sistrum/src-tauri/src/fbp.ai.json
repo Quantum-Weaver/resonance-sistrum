@@ -1,0 +1,146 @@
+{
+  "tier": "folder",
+  "folder_name": "src",
+  "folder_path": "src-tauri/src",
+  "self": "sistrum/src-tauri/src/fbp.ai.json",
+  "parent": "sistrum/src-tauri/src/obp.ai.json",
+  "description": "7 files, 0 subfolders",
+  "files": [
+    {
+      "path": "src-tauri/src/lib.rs",
+      "description": "rust, 10,321 bytes"
+    },
+    {
+      "path": "src-tauri/src/main.rs",
+      "description": "Prevents additional console window on Windows in release, DO NOT REMOVE!!"
+    },
+    {
+      "path": "src-tauri/src/marks.rs",
+      "description": "marks.rs"
+    },
+    {
+      "path": "src-tauri/src/media_permission.rs",
+      "description": "media_permission.rs"
+    },
+    {
+      "path": "src-tauri/src/recorder.rs",
+      "description": "recorder.rs"
+    },
+    {
+      "path": "src-tauri/src/tuner.rs",
+      "description": "tuner.rs"
+    },
+    {
+      "path": "src-tauri/src/waveform.rs",
+      "description": "waveform.rs"
+    }
+  ],
+  "file_count": 7,
+  "subdirectories": [],
+  "code_analysis": {
+    "lib.rs": {
+      "language": "rust",
+      "lines": 209,
+      "pub_fns": [
+        "run"
+      ],
+      "structs": [],
+      "tauri_commands": 2,
+      "uses_unsafe": false
+    },
+    "main.rs": {
+      "language": "rust",
+      "lines": 7,
+      "pub_fns": [],
+      "structs": [],
+      "tauri_commands": 0,
+      "uses_unsafe": false
+    },
+    "marks.rs": {
+      "language": "rust",
+      "lines": 257,
+      "pub_fns": [
+        "read_take_marks",
+        "append_take_marks",
+        "takes_with_marks"
+      ],
+      "structs": [],
+      "tauri_commands": 3,
+      "uses_unsafe": false
+    },
+    "media_permission.rs": {
+      "language": "rust",
+      "lines": 102,
+      "pub_fns": [
+        "init",
+        "mic_check",
+        "mic_request"
+      ],
+      "structs": [
+        "MediaPermission",
+        "PermissionResponse"
+      ],
+      "tauri_commands": 0,
+      "uses_unsafe": true
+    },
+    "recorder.rs": {
+      "language": "rust",
+      "lines": 498,
+      "pub_fns": [
+        "takes_dir",
+        "list_input_devices",
+        "start_recording",
+        "pause_recording",
+        "resume_recording",
+        "recording_status",
+        "stop_recording",
+        "list_takes",
+        "take_path_guarded",
+        "export_take"
+      ],
+      "structs": [
+        "RecorderState",
+        "InputDeviceInfo",
+        "RecordingStatus",
+        "TakeInfo"
+      ],
+      "tauri_commands": 8,
+      "uses_unsafe": false
+    },
+    "tuner.rs": {
+      "language": "rust",
+      "lines": 401,
+      "pub_fns": [
+        "start_tuner",
+        "stop_tuner",
+        "tuner_reading"
+      ],
+      "structs": [
+        "Heard",
+        "ListenInfo",
+        "ListenSession",
+        "TunerState",
+        "TunerStatus"
+      ],
+      "tauri_commands": 3,
+      "uses_unsafe": false
+    },
+    "waveform.rs": {
+      "language": "rust",
+      "lines": 156,
+      "pub_fns": [
+        "take_shape",
+        "read_take_bytes"
+      ],
+      "structs": [
+        "TakeShape"
+      ],
+      "tauri_commands": 2,
+      "uses_unsafe": false
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.923146 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

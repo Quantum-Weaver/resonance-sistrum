@@ -1,0 +1,158 @@
+{
+  "tier": "folder",
+  "folder_name": "components",
+  "folder_path": "src/lib/components",
+  "self": "sistrum/src/lib/components/fbp.ai.json",
+  "parent": "sistrum/src/lib/obp.ai.json",
+  "description": "9 files, 1 subfolders",
+  "files": [
+    {
+      "path": "src/lib/components/ComfortBar.svelte",
+      "description": "surface, 5,146 bytes"
+    },
+    {
+      "path": "src/lib/components/FeelingHere.svelte",
+      "description": "surface, 14,344 bytes"
+    },
+    {
+      "path": "src/lib/components/GradientPulse.svelte",
+      "description": "surface, 1,005 bytes"
+    },
+    {
+      "path": "src/lib/components/MarksRail.svelte",
+      "description": "surface, 23,865 bytes"
+    },
+    {
+      "path": "src/lib/components/Sidebar.svelte",
+      "description": "surface, 10,399 bytes"
+    },
+    {
+      "path": "src/lib/components/TakePlayer.svelte",
+      "description": "surface, 10,615 bytes"
+    },
+    {
+      "path": "src/lib/components/TimerVisualization.svelte",
+      "description": "surface, 18,223 bytes"
+    },
+    {
+      "path": "src/lib/components/Waveform.svelte",
+      "description": "surface, 6,777 bytes"
+    },
+    {
+      "path": "src/lib/components/WorkPicker.svelte",
+      "description": "surface, 5,016 bytes"
+    }
+  ],
+  "file_count": 9,
+  "subdirectories": [
+    "src/lib/components/icons"
+  ],
+  "code_analysis": {
+    "ComfortBar.svelte": {
+      "language": "svelte",
+      "lines": 208,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "FeelingHere.svelte": {
+      "language": "svelte",
+      "lines": 568,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "GradientPulse.svelte": {
+      "language": "svelte",
+      "lines": 55,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "MarksRail.svelte": {
+      "language": "svelte",
+      "lines": 876,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "Sidebar.svelte": {
+      "language": "svelte",
+      "lines": 373,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "TakePlayer.svelte": {
+      "language": "svelte",
+      "lines": 383,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "TimerVisualization.svelte": {
+      "language": "svelte",
+      "lines": 599,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "Waveform.svelte": {
+      "language": "svelte",
+      "lines": 241,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "WorkPicker.svelte": {
+      "language": "svelte",
+      "lines": 233,
+      "uses_runes": [
+        "$derived",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.720893 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

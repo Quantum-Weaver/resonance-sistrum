@@ -1,0 +1,67 @@
+{
+  "tier": "domain",
+  "domain_name": "src-tauri",
+  "domain_path": "src-tauri",
+  "self": "sistrum/src-tauri/dbp.ai.json",
+  "parent": "sistrum/pbp.ai.json",
+  "description": "5 files, 6 subfolders",
+  "objects": [
+    {
+      "blueprint": "sistrum/src-tauri/.cargo/obp.ai.json",
+      "object_path": "src-tauri/.cargo",
+      "description": "1 files, 0 subfolders",
+      "folder_count": 1,
+      "total_files": 1
+    },
+    {
+      "blueprint": "sistrum/src-tauri/android-extras/obp.ai.json",
+      "object_path": "src-tauri/android-extras",
+      "description": "1 files, 0 subfolders",
+      "folder_count": 1,
+      "total_files": 1
+    },
+    {
+      "blueprint": "sistrum/src-tauri/capabilities/obp.ai.json",
+      "object_path": "src-tauri/capabilities",
+      "description": "1 files, 0 subfolders",
+      "folder_count": 1,
+      "total_files": 1
+    },
+    {
+      "blueprint": "sistrum/src-tauri/gen/obp.ai.json",
+      "object_path": "src-tauri/gen",
+      "description": "0 files, 1 subfolders",
+      "folder_count": 41,
+      "total_files": 56
+    },
+    {
+      "blueprint": "sistrum/src-tauri/icons/obp.ai.json",
+      "object_path": "src-tauri/icons",
+      "description": "18 files, 2 subfolders",
+      "folder_count": 10,
+      "total_files": 53
+    },
+    {
+      "blueprint": "sistrum/src-tauri/src/obp.ai.json",
+      "object_path": "src-tauri/src",
+      "description": "7 files, 0 subfolders",
+      "folder_count": 1,
+      "total_files": 7
+    }
+  ],
+  "object_count": 6,
+  "folders_reporting_directly": [
+    {
+      "blueprint": "sistrum/src-tauri/fbp.ai.json",
+      "folder_path": "src-tauri",
+      "description": "5 files, 6 subfolders",
+      "file_count": 5,
+      "subdirectory_count": 6
+    }
+  ],
+  "total_folders": 56,
+  "total_files": 124,
+  "integration_timestamp": "2026-08-21T15:20:01.951520 | in sovereign time",
+  "maintaining_agent": "DomainAgent",
+  "note": "Links only. Every object's details live at its own address."
+}

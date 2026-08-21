@@ -1,0 +1,18 @@
+{
+  "tier": "folder",
+  "folder_name": ".kotlin",
+  "folder_path": "src-tauri/gen/android/buildSrc/.kotlin",
+  "self": "sistrum/src-tauri/gen/android/buildSrc/.kotlin/fbp.ai.json",
+  "parent": "sistrum/src-tauri/gen/obp.ai.json",
+  "description": "0 files, 1 subfolders",
+  "files": [],
+  "file_count": 0,
+  "subdirectories": [
+    "src-tauri/gen/android/buildSrc/.kotlin/sessions"
+  ],
+  "code_analysis": {},
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.874206 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

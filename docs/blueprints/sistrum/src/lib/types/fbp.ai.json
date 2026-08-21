@@ -1,0 +1,41 @@
+{
+  "tier": "folder",
+  "folder_name": "types",
+  "folder_path": "src/lib/types",
+  "self": "sistrum/src/lib/types/fbp.ai.json",
+  "parent": "sistrum/src/lib/obp.ai.json",
+  "description": "1 files, 0 subfolders",
+  "files": [
+    {
+      "path": "src/lib/types/types.ts",
+      "description": "Theme customization"
+    }
+  ],
+  "file_count": 1,
+  "subdirectories": [],
+  "code_analysis": {
+    "types.ts": {
+      "language": "typescript",
+      "lines": 107,
+      "exported_functions": [],
+      "exported_consts": [],
+      "interfaces": [
+        "ThemeConfig",
+        "Work",
+        "Take",
+        "Feeling",
+        "Sense",
+        "Subcategory"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.775717 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

@@ -1,0 +1,289 @@
+{
+  "tier": "folder",
+  "folder_name": "stores",
+  "folder_path": "src/lib/stores",
+  "self": "sistrum/src/lib/stores/fbp.ai.json",
+  "parent": "sistrum/src/lib/obp.ai.json",
+  "description": "14 files, 0 subfolders",
+  "files": [
+    {
+      "path": "src/lib/stores/db.ts",
+      "description": "typescript, 1,666 bytes"
+    },
+    {
+      "path": "src/lib/stores/feeling.svelte.ts",
+      "description": "typescript, 9,650 bytes"
+    },
+    {
+      "path": "src/lib/stores/markPrefs.svelte.ts",
+      "description": "typescript, 1,700 bytes"
+    },
+    {
+      "path": "src/lib/stores/marks.svelte.ts",
+      "description": "typescript, 8,357 bytes"
+    },
+    {
+      "path": "src/lib/stores/metronome.svelte.ts",
+      "description": "typescript, 8,588 bytes"
+    },
+    {
+      "path": "src/lib/stores/playback.svelte.ts",
+      "description": "typescript, 7,752 bytes"
+    },
+    {
+      "path": "src/lib/stores/recorder.svelte.ts",
+      "description": "typescript, 8,300 bytes"
+    },
+    {
+      "path": "src/lib/stores/recordPrefs.svelte.ts",
+      "description": "The record room's one preference"
+    },
+    {
+      "path": "src/lib/stores/take.svelte.ts",
+      "description": "typescript, 5,338 bytes"
+    },
+    {
+      "path": "src/lib/stores/theme.svelte.ts",
+      "description": "typescript, 1,051 bytes"
+    },
+    {
+      "path": "src/lib/stores/timer.svelte.ts",
+      "description": "typescript, 7,644 bytes"
+    },
+    {
+      "path": "src/lib/stores/tuner.svelte.ts",
+      "description": "typescript, 5,450 bytes"
+    },
+    {
+      "path": "src/lib/stores/ui.svelte.ts",
+      "description": "Cross-component UI signals that don't belong to any domain store"
+    },
+    {
+      "path": "src/lib/stores/work.svelte.ts",
+      "description": "typescript, 3,050 bytes"
+    }
+  ],
+  "file_count": 14,
+  "subdirectories": [],
+  "code_analysis": {
+    "db.ts": {
+      "language": "typescript",
+      "lines": 48,
+      "exported_functions": [
+        "getDb",
+        "dbLoadError",
+        "generateId"
+      ],
+      "exported_consts": [],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "feeling.svelte.ts": {
+      "language": "typescript",
+      "lines": 312,
+      "exported_functions": [],
+      "exported_consts": [
+        "feelingStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "markPrefs.svelte.ts": {
+      "language": "typescript",
+      "lines": 43,
+      "exported_functions": [],
+      "exported_consts": [
+        "markPrefs"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "marks.svelte.ts": {
+      "language": "typescript",
+      "lines": 247,
+      "exported_functions": [],
+      "exported_consts": [
+        "marksStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "metronome.svelte.ts": {
+      "language": "typescript",
+      "lines": 280,
+      "exported_functions": [],
+      "exported_consts": [
+        "SUBDIVISIONS",
+        "metronomeStore"
+      ],
+      "interfaces": [],
+      "types": [
+        "Subdivision"
+      ],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "playback.svelte.ts": {
+      "language": "typescript",
+      "lines": 271,
+      "exported_functions": [],
+      "exported_consts": [
+        "playbackStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "recorder.svelte.ts": {
+      "language": "typescript",
+      "lines": 287,
+      "exported_functions": [],
+      "exported_consts": [
+        "recorderStore"
+      ],
+      "interfaces": [
+        "InputDevice",
+        "TakeFile"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "recordPrefs.svelte.ts": {
+      "language": "typescript",
+      "lines": 77,
+      "exported_functions": [
+        "fmtMax"
+      ],
+      "exported_consts": [
+        "MAX_CHOICES",
+        "recordPrefs"
+      ],
+      "interfaces": [],
+      "types": [
+        "HoldMode"
+      ],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "take.svelte.ts": {
+      "language": "typescript",
+      "lines": 159,
+      "exported_functions": [],
+      "exported_consts": [
+        "takeStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "theme.svelte.ts": {
+      "language": "typescript",
+      "lines": 43,
+      "exported_functions": [],
+      "exported_consts": [
+        "themeStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "timer.svelte.ts": {
+      "language": "typescript",
+      "lines": 239,
+      "exported_functions": [],
+      "exported_consts": [
+        "prefersReducedMotion",
+        "timerStore"
+      ],
+      "interfaces": [],
+      "types": [
+        "TimerMode",
+        "ChimeId"
+      ],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "tuner.svelte.ts": {
+      "language": "typescript",
+      "lines": 197,
+      "exported_functions": [],
+      "exported_consts": [
+        "tunerStore"
+      ],
+      "interfaces": [
+        "TunerReading"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "ui.svelte.ts": {
+      "language": "typescript",
+      "lines": 12,
+      "exported_functions": [],
+      "exported_consts": [
+        "uiStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "work.svelte.ts": {
+      "language": "typescript",
+      "lines": 105,
+      "exported_functions": [],
+      "exported_consts": [
+        "workStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-08-21T15:20:01.758519 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}
