@@ -19,6 +19,7 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 // The metronome is the third water of this wave and it has no Rust at all —
 // it is a beat clock and a Web Audio scheduler, and both belong in the window.
 mod marks;
+mod media_permission;
 mod recorder;
 mod tuner;
 mod waveform;
@@ -33,23 +34,24 @@ fn greet(name: &str) -> String {
 /// Desktop has no runtime permission model for a local input — the platform
 /// asks on its own if it asks at all, so the honest answer is yes.
 ///
-/// ANDROID IS NOT WIRED HERE YET, AND IT REFUSES RATHER THAN PRETENDS. The
-/// Compass holds that infrastructure (`media_permission.rs` plus an app-local
-/// Kotlin plugin synced into `gen/` at build time, and the ndk-context init
-/// that cpal's oboe backend reads through JNI). Without the JNI context cpal
+/// ANDROID IS WIRED HERE since the microphone wave of 2026-08-20: the record
+/// room and the tuner both ask this door before opening a stream, and on
+/// Android it now asks the vessel through `media_permission.rs` — the
+/// app-local Kotlin plugin synced into `gen/` at build time, whose init block
+/// also hands cpal the JNI context its oboe backend needs (without which cpal
 /// does not return an error on Android — it PANICS, which takes the app down
-/// with it. A plain refusal that names what is missing is the kinder failure,
-/// and it keeps a musician's running app standing. Wiring it is its own wave.
+/// with it). Compass walked this road first; the infrastructure crossed whole.
 #[tauri::command]
 async fn request_mic_permission(app_handle: tauri::AppHandle) -> Result<bool, String> {
     #[cfg(target_os = "android")]
     {
-        let _ = app_handle;
-        return Err(
-            "the microphone is not wired on Android in Sistrum yet — the permission bridge \
-             and the JNI context cpal needs are their own wave. Recording stands on desktop."
-                .into(),
-        );
+        // run_mobile_plugin blocks until the vessel answers the system dialog —
+        // keep that wait off the async runtime's core threads.
+        return tauri::async_runtime::spawn_blocking(move || {
+            media_permission::mic_request(&app_handle)
+        })
+        .await
+        .map_err(|e| e.to_string())?;
     }
     #[cfg(not(target_os = "android"))]
     {
@@ -149,7 +151,7 @@ pub fn run() {
     // drop it — whatever a hand puts here rides whole. It is a held place, and
     // it comes to life when ready.
 
-    tauri::Builder::default()
+    let builder = tauri::Builder::default()
         .plugin(
             tauri_plugin_sql::Builder::default()
                 .add_migrations("sqlite:sistrum.db", migrations)
@@ -164,7 +166,15 @@ pub fn run() {
         // The tuner's managed state. One ear, one listening — and like the
         // recorder's, the state itself is what refuses a second start over a
         // live one, so a double tap cannot orphan a stream holding the mic.
-        .manage(tuner::TunerState::default())
+        .manage(tuner::TunerState::default());
+
+    // The microphone-permission bridge — Android only. Its Kotlin half hands
+    // cpal the JNI context on construction; desktop has no such door and
+    // never registers one (the microphone wave, 2026-08-20).
+    #[cfg(target_os = "android")]
+    let builder = builder.plugin(media_permission::init());
+
+    builder
         .invoke_handler(tauri::generate_handler![
             greet,
             request_mic_permission,

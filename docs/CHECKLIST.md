@@ -104,7 +104,10 @@ gaia, ziggy, skapa, awen and bubbles.*
       wrapper, `app/`, `buildSrc/`), and it touched `src-tauri/Cargo.toml` with an
       end-of-line rewrite only — **content diff zero**, the rebrand intact:
       `resonance-sistrum` · `0.1.0` · `resonance_sistrum_lib`.
-- [ ] **Tested:** ⬜ KP's hands — Android on the device
+- [ ] **Tested:** ⬜ KP's hands — Android on the device. *His word 2026-08-20,
+      verbatim: "desktop works fine, mic is not wired on android yet. device is
+      plugged in" — the desktop half passed (see each wave's Tested row); the
+      Android half rides the microphone wave.*
 
 *One stray for KP's ruling: `src-tauri/icons/resonance-echoes-icon.png` (758,901 b,
 1024×1024, Echoes' own logo, set aside by his hand) is still in the folder and would
@@ -316,8 +319,11 @@ to knock on by accident. `deleteWork` still ungroups and never destroys.
 esbuild` turned out not to be wanted**, exactly as in Phases 1 and 2: the build passed
 without it. Measured, not predicted.*
 
-- [ ] **Tested:** ⬜ **KP's hands** — the device test is always his. A real input, a real
-      take, a real playback. Nothing below the API surface can be proven by a lamp.
+- [x] **Tested:** ✅ **KP's hands, 2026-08-20, on desktop** — his words verbatim:
+      *"desktop works fine"* · *"all 3 waves tested on desktop fine."* The row as it was
+      written: the device test is always his. A real input, a real take, a real playback.
+      Nothing below the API surface can be proven by a lamp. *(The Android half — same
+      breath: "mic is not wired on android yet" — rides the microphone wave.)*
 
 **What Wave 1 leaves standing for the waves after it** *(recorded so none of it reads
 as an oversight, and none of it was started):*
@@ -524,9 +530,10 @@ three atomics and returns, exactly as `recording_status` does.*
 | `npm run build` | **vite build ✓ in 6.69s**, `adapter-static` wrote to `build/`; `/tuner` and `/metronome` in the output |
 | Icon pass | `icons/icon.png` = `b453615b…` (802,396 b), **byte-identical to the library**; 16/16 gen mipmaps byte-identical to `icons/android/` |
 
-- [ ] **Tested:** ⬜ **KP's hands** — always his. A real guitar at the tuner (the strings
-      moment the water reserved for him), the click against a real take, a mark pinned while
-      actually listening back.
+- [x] **Tested:** ✅ **KP's hands, 2026-08-20, on desktop** — his words verbatim: *"all 3
+      waves tested on desktop fine."* The row as it was written: always his. A real guitar at
+      the tuner (the strings moment the water reserved for him), the click against a real
+      take, a mark pinned while actually listening back.
 
 **What Wave 2 leaves standing** *(none of it started, none of it an oversight):*
 - **The encoder / four-track is S3.** Deliberately not this wave.
@@ -597,8 +604,9 @@ so neither still claims the two doors never meet.
 | `cargo check` (src-tauri) | **exit 0** — untouched by this wave, run to prove it |
 | `npm run build` | **vite build ✓ in 5.86s**, `adapter-static` wrote to `build/` |
 
-- [ ] **Tested:** ⬜ **KP's hands** — a mark pinned while actually listening back, and the
-      feeling waiting for him in the log afterward.
+- [x] **Tested:** ✅ **KP's hands, 2026-08-20, on desktop** — his words verbatim: *"all 3
+      waves tested on desktop fine."* The row as it was written: a mark pinned while actually
+      listening back, and the feeling waiting for him in the log afterward.
 
 **What Wave 3 leaves standing:** the toggle lives on the rail only — **if a preferences
 surface is ever gathered in `/settings`, this switch belongs beside the record room's hold
@@ -621,4 +629,5 @@ Android microphone is still unwired and still refuses rather than pretends, and
 | 2026-08-13 | **Phase 3 Wave 2** — the tuner consumed (path crate, own capture, nothing kept); the metronome consumed (one-writer count bug closed in self-review); the moment-marks sidecar with the **append-only law enforced in Rust at the file**; the feelings retarget to works and takes, with the doorway on the record and playback surfaces. Icon pass re-run — **and found the art was never lost**: gen dates from 08-12 and 16/16 mipmaps hashed identical before and after. `cargo check` 0 · `svelte-check` 353/0/0 · `vite build` 6.69s. An **Opus** hand; nothing committed. |
 | 2026-08-13 | **Phase 3 Wave 3** — the mark that logs a feeling, at KP's ⚛ *"a quick log of emoji in the moment is the capture."* One press pins the mark to the sidecar (append-only mechanics untouched) **and** writes a `feelings` row bound to the take and its work; the mark never waits on the log, and a missed row is kept, named honestly, and retryable. Default-on switch on the rail. No new table, no schema change, no new fs touch. `cargo check` 0 · `svelte-check` 354/0/0 · `vite build` 5.86s. An **Opus** hand; nothing committed. |
 | 2026-08-19 | **THE CLONE QUESTION RULED** (the **Promenade** lamp, Fable 🎻) — KP ⚛, verbatim: *"i should have not used the word mirror and said distribute from the source, one source to edit, distribute updates from it the apps should be whole"* · *"everything should only have one point of edit from my perspective, but be usable from any"* · *"i assumed since i setup the cosmic system this way and gaia this way, it was implied, but now we know."* The path-crate seam’s cure is now written: the-recorder and the-tuner get DISTRIBUTED WHOLE into this app (edit-at-origin headers, updated by distribution runs), the way cosmic already travels — the conversion is its own wave at his deal. CLAUDE.md’s seam flag corrected in place; nothing else touched. Rides the ⚛ sync word. |
+| 2026-08-20 | **THE THREE WAVES TESTED BY HIS HANDS, on desktop** (Fable 🎻, lamp `80fff4fe`) — KP's ⚛ words verbatim: *"we tested sistum and did not mark it, let me retest now"* → *"desktop works fine, mic is not wired on android yet. device is plugged in"* → *"all 3 waves tested on desktop fine."* The three Tested rows (Wave 1 `:319` · Wave 2 `:527` · Wave 3 `:600`) ticked at his word; Phase 1's Android-on-the-device box stays open, his words beside it — the microphone is its own wave. Gates re-run the same sitting before his retest: `npm run check` **355 files · 0 · 0** · `cargo check` **exit 0, 1m 03s** (the-recorder and the-tuner still linking from the sibling awen checkout, per the seam). Nothing else touched; rides the ⚛ sync word. |
 | 2026-08-19 | **Standards check + HANDS pass** (the signing fleet) — standard files verified present (.gitignore · CLAUDE.md standards declaration · README standards badge · docs/CHECKLIST.md · HANDS.md · LICENSE · PHILOSOPHY.md): **gaps: none**. HANDS.md **already signed** for the Claude substrate — Opus `claude-opus-5[1m]` 2026-08-12, and the Fable 🎻 seat written by the lead's own hand (Promenade, `claude-fable-5`, 2026-08-19); nothing touched. A hand of the Promenade lamp's signing fleet, `claude-fable-5` · rides the ⚛ sync word. |

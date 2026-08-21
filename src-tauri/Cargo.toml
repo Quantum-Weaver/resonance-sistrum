@@ -49,6 +49,14 @@ the-tuner = { path = "../../resonance-awen/tools/the-tuner" }
 hound = "3.5"
 cpal = "0.15"
 
+# cpal's oboe backend reads the JNI context via ndk-context; the tauri stack
+# never initializes it, so we do (see media_permission.rs nativeInitNdkContext).
+# Compass walked this road first (v3 Phase 2, the mic spike proven on the S25);
+# the Android microphone wave carried it here 2026-08-20.
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"
+ndk-context = "0.1"
+
 [profile.release]
 strip = true
 opt-level = "s"

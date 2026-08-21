@@ -1,5 +1,19 @@
 fn main() {
-    tauri_build::build();
+    // The app-local Android plugin (media_permission.rs) must be declared to
+    // the ACL or the webview's plugin listener is denied at the permission
+    // wall — "registerListener not allowed. Plugin not found." Compass paid
+    // for this lesson on 2026-08-13 (the car ride); carried here with the
+    // Android microphone wave, 2026-08-20. Its capability grant lives in
+    // capabilities/default.json as media-permission:default.
+    tauri_build::try_build(
+        tauri_build::Attributes::new().plugin(
+            "media-permission",
+            tauri_build::InlinedPlugin::new()
+                .commands(&["registerListener", "removeListener"])
+                .default_permission(tauri_build::DefaultPermissionRule::AllowAllCommands),
+        ),
+    )
+    .expect("failed to run tauri-build");
 
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("android") {
         let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
