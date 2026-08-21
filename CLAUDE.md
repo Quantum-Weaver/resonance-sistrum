@@ -58,7 +58,7 @@ same sitting as the work it records.
 
 ## Structure
 
-The forge's map: `docs/blueprints/pbp.ai.json` — regenerate, never hand-draw a
+The forge's map: `docs/blueprints/sistrum/pbp.ai.json` — regenerate, never hand-draw a
 tree here.
 
 ## Tools
