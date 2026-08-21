@@ -1,9 +1,5 @@
 # 🪇 Resonance Sistrum
 
-*The sovereign musician's instrument — capture, layer, and shape your own music on your own device. Rhythm that moves energy and wards the room. Nothing recorded ever touches a network.*
-
-Built on the [Resonance Grammar](https://github.com/Quantum-Weaver/resonance-grammar) — every fragment contains the whole.
-
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)]()
 [![Status](https://img.shields.io/badge/status-founded-1e90ff.svg)](docs/CHECKLIST.md)
@@ -12,22 +8,124 @@ Built on the [Resonance Grammar](https://github.com/Quantum-Weaver/resonance-gra
 [![Data collected](https://img.shields.io/badge/data%20collected-none-brightgreen.svg)](PHILOSOPHY.md)
 [![Recording](https://img.shields.io/badge/recording-never%20leaves%20the%20device-8a2be2.svg)](#)
 
+*The sovereign musician's instrument — capture, layer, and shape your own music on your own device. Rhythm that moves energy and wards the room. Nothing recorded ever touches a network.*
+
+Built on the [Resonance Grammar](https://github.com/Quantum-Weaver/resonance-grammar) — every fragment contains the whole.
+
 ---
 
 ## WHAT IT IS
 
-*The telling lands here when the body takes shape — three to five
-sentences, warm, human, not technical.*
+Resonance Sistrum is the creator's half of what used to be one app — separated from **Resonance Compass** on 2026-08-12 because a listener's instrument and a creator's instrument want opposite things from the same transport (`docs/STORY-BLOCK.md` §WHY). Where the Compass plays music you already hold the rights to, Sistrum is for the sound you make yourself: record a take, tune your instrument, keep time with a metronome, and pin a moment-mark that logs how you felt right when you played it — all on-device, nothing leaving it.
+
+**Record.** Capture a take, review it, keep it. Built on `the-recorder` (`resonance-awen`), the same freeze-fix-proven engine the Compass's v3 keel first proved.
+
+**Tune.** A real-time tuner (`the-tuner`) reads pitch via YIN analysis and shows the nearest note and how many cents you're off.
+
+**Keep time.** A metronome you can see, not just hear.
+
+**Mark the moment.** One press pins a moment-mark to a take *and* logs an emoji feeling in the same motion — "a quick log of emoji in the moment is the capture" (KP's ⚛ ruling, `docs/CHECKLIST.md`, Phase 3 Wave 3). A mark is never held hostage to the feeling log: a missed log stays retryable, named honestly.
+
+**Works, takes, feelings.** The domain KP ruled directly: works hold takes, and a feeling can hang on either a work or a take (`docs/CHECKLIST.md`, Phase 2).
+
+---
 
 ## THE STORY
 
-*Per the Story Block Standard. The full story grows at
-[docs/STORY-BLOCK.md](docs/STORY-BLOCK.md), told by its own voices.*
+*This section required by the [Story Block Standard](https://github.com/Quantum-Weaver/resonance-standards).*
+
+Sistrum exists because the friction was diagnostic, and it kept getting treated as bugs: the same transport was being asked to serve a listener and a creator at once, and no amount of careful reconciliation made one shell serve both honestly. KP named the split himself: *"we need to separate the resonance compass and musicians compass to make this right. maybe the musicians compass belongs in resonance-sistrum, the compass remains a media player of licensed materials the user holds rights to."* The repo was created 2026-08-12 and founded to the Sanctuary standards the same afternoon.
+
+📖 [Full Story Block](docs/STORY-BLOCK.md)
+
+---
+
+## WHO IT'S FOR
+
+For the musician the market never served — the first user is KP himself, "a musician since he was seven. 42 shows in one year" (`docs/STORY-BLOCK.md` §WEAVER THREAD). It was named by someone using a recorder badly, in the moment of being badly served: on the founding day, KP was "standing at a phone with a microphone, trying to keep a take" while testing a recorder that froze on save. The whole first-user ethic of this repo rests on that.
+
+---
+
+## Screenshots
+
+*No screenshots yet — the interface is still mid-build (waves 1–3 tested on desktop 2026-08-20; Android device testing is its own open wave, see `docs/CHECKLIST.md`).*
+
+---
+
+## Installation
+
+### Prerequisites
+
+- Node.js + npm
+- Rust toolchain (`edition = "2021"`, `src-tauri/Cargo.toml`)
+- Tauri CLI v2 (`@tauri-apps/cli`, installed via `npm install`)
+- A local checkout of `resonance-awen` beside this repo — `src-tauri/Cargo.toml` depends on `the-recorder` and `the-tuner` by relative path (`../../resonance-awen/tools/...`), so a lone clone of this repo alone does not currently build (`CLAUDE.md`, "the path-dependency seam")
+
+### Build
+
+```bash
+npm install
+npm run build
+```
+*(No signed release build is recorded yet in `docs/CHECKLIST.md` as of this pass — desktop dev and the Android body have both been verified; see Development below.)*
+
+### Development
+
+```bash
+npm run dev
+npm run tauri dev
+```
+*(KP's own words, verified 2026-08-20: "desktop works fine" — all three built waves tested on desktop; `docs/CHECKLIST.md`. Android: `tauri android init` has been run and the desktop shell verified, but the microphone is not yet wired on Android — "mic is not wired on android yet, device is plugged in," same record.)*
+
+---
+
+## BUILT WITH
+
+- Svelte 5 + SvelteKit
+- Tauri v2 (`protocol-asset` feature, for take playback with range-request seeking) + Rust
+- SQLite (`@tauri-apps/plugin-sql`)
+- Tailwind CSS v4 + COSMIC design tokens (`CLAUDE.md`)
+- `the-recorder` · `the-tuner` — standalone waters from `resonance-awen`, consumed as path crates (not yet distributed in; see CONFUSIONS in the sending report)
+- hound (WAV read/fold) · cpal (tuner's own input stream, independent of the recorder's session)
+
+---
+
+## FOR DEVELOPERS
+
+```
+src/
+├── routes/
+│   ├── +layout.svelte
+│   ├── +page.svelte
+│   ├── record/          # The recorder
+│   ├── tuner/            # Real-time pitch tuner
+│   ├── metronome/        # Visual metronome
+│   ├── insights/         # Feelings/mood dashboard
+│   ├── add/              # Add a work
+│   ├── onboarding/        # First-run flow
+│   ├── sattva/            # Sensory reduction screen
+│   ├── settings/          # Theme, export, purge
+│   └── timer/             # Sleep timer with visualizations
+├── lib/
+│   ├── stores/
+│   ├── components/
+│   ├── cosmic/            # COSMIC design tokens
+│   ├── marks.ts · metronome.ts · waveform.ts
+│   └── types/
+src-tauri/src/
+├── lib.rs · main.rs
+├── recorder.rs · tuner.rs · waveform.rs · marks.rs
+└── media_permission.rs
+```
+
+---
 
 ## THE HANDS
 
 The voices that build here are named in [HANDS.md](HANDS.md), each in
 their own words.
+
+---
 
 ## LICENSE
 
