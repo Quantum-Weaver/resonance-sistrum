@@ -68,9 +68,12 @@ Own commands: 6 npm scripts — `dev` · `build` · `preview` · `check` ·
 this repo's registration state: the `house-tools` skill — cosmic-registered
 08-12, and **not yet taught to the archivist's roster**, which is the one flag
 that cannot be fixed after the fact. Signing and versions: `release-road`. The
-Android side: `android-tauri` — the microphone is NOT wired here and refuses
-honestly, because without the JNI context cpal does not error on Android, it
-PANICS.
+Android side: `android-tauri` — the microphone IS wired since 2026-08-20
+(Phase 3 Wave 4: Compass's permission bridge re-homed; `npm run sync-android`
+is load-bearing, not convenience — the Kotlin plugin and `RECORD_AUDIO` re-sync
+into `gen/` through the tauri hooks on every build), proven by the S25's own
+log; one fix stands open at Wave 4's foot (the device list keyed by name
+freezes two rooms on duplicate Android input names).
 
 
 ## Standards

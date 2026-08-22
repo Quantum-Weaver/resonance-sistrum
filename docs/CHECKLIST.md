@@ -616,9 +616,75 @@ Android microphone is still unwired and still refuses rather than pretends, and
 
 ---
 
+#### WAVE 4 — the Android microphone ⚠️ *(built and proven 2026-08-20; one fix short)*
+*Walked 2026-08-20 by the **Sostenuto** lamp (Fable 🎻, `80fff4fe`) at KP's go — his
+device plugged in after the desktop retest. Zone: this repo only; `resonance-compass`
+read as the road already walked (the v3 Phase 2 mic spike, proven on the S25) and
+never edited. **Nothing committed** — rides KP's ⚛ sync word.*
+
+- [x] **The bridge, five pieces, every one Compass's shape re-homed:** `Cargo.toml`
+      gains `jni` + `ndk-context` (Android-only) · `src-tauri/src/media_permission.rs`
+      (the `media-permission` inline plugin; **mic alias only** — this body scans no
+      library; the `nativeInitNdkContext` hand-over that turns cpal's Android PANIC into
+      a working oboe stream) · `src-tauri/android-extras/MediaPermissionPlugin.kt`
+      (committed source of truth, RECORD_AUDIO alias + the ndk-context init in its
+      `init` block) · `scripts/sync-android-extras.mjs` (Kotlin into `gen/`,
+      `RECORD_AUDIO` into the manifest, idempotent; `npm run sync-android`; wired into
+      `beforeDevCommand` / `beforeBuildCommand` — the house law: manifest extras belong
+      to a script, not a hand) · `build.rs` declares the plugin to the ACL and
+      `capabilities/default.json` grants `media-permission:default` (Compass's car-ride
+      lesson, paid once) · `lib.rs`: `request_mic_permission` is the real call behind
+      `spawn_blocking`; the builder registers the plugin on Android only.
+      **No front-end change** — `recorder.svelte.ts:145` and `tuner.svelte.ts:112`
+      already asked this door.
+- [x] **Proven by instrument before the phone:** `cargo check` (desktop) **exit 0** ·
+      `npm run check` **355 · 0 · 0** · `npx tauri android build --debug --apk --target
+      aarch64` **clean** (jni, oboe, and the Kotlin compiled; only Tauri's own generated
+      deprecation warnings) · `aapt2 dump permissions`: `RECORD_AUDIO` in the merged
+      manifest.
+- [x] **Installed at KP's word.** The first `adb install -r` was refused —
+      `INSTALL_FAILED_UPDATE_INCOMPATIBLE` — because **KP had cut and signed 0.1.0
+      himself at 18:30 that evening** (`release/resonance-sistrum-v0.1.0.{apk,aab,idsig}`,
+      cert `497888ba…bac18766`, the keystore's) and the phone held it. Asked, not
+      assumed: he chose uninstall + debug APK over the release road; the 18:30 build
+      left the phone at his word; the mic build installed 18:56 (`R5GL13CZDKW`, S25).
+- [x] **PROVEN ON THE DEVICE, by the phone's own log** — the thing that used to panic:
+      `18:57:21 Tauri plugin: media-permission, command: requestMicPermission` → Android's
+      `GrantPermissionsActivity` rose → `18:57:22 AAudioStreamBuilder_openStream()
+      returns AAUDIO_OK` (capture, s#1) → `18:57:26 [the-recorder] seal: joined, 304640
+      samples, writing wav` → `wav written ok=true`. **A real take exists on the S25.**
+      His report, verbatim: *"tuner and record will not open after a recording took
+      place, and on save it did not load a fresh track it sayd, no track is recording
+      and then things fronze. i can still go to home and sattva and metronome and timer
+      and insights."*
+- [ ] 🔴 **THE FREEZE — cause found in the log, fix not yet applied.** `Uncaught Error:
+      https://svelte.dev/e/each_key_duplicate` at 18:57:20.331 (the instant the device
+      list arrived) and after every tap since. Both rooms key the input-device list by
+      name — `src/routes/record/+page.svelte:207` and `src/routes/tuner/+page.svelte:172`,
+      `{#each recorderStore.devices as d (d.name)}` — and **the S25 lists several inputs
+      with identical names**, so Svelte 5 refuses, the room's render dies (*"froze"*,
+      *"no fresh track"*), and neither room mounts again. Home · sattva · metronome ·
+      timer · insights never render that list, which is exactly why they still work.
+      Desktop never hit it: its device names are unique. **The fix:** key by index —
+      `{#each recorderStore.devices as d, i (i)}` — in both rooms, rebuild the debug APK,
+      `adb install -r` (same debug key now; data kept), his press again. *Beside it,
+      noted for the-recorder's own record: its `list_inputs()` returns duplicate names
+      verbatim on Android — a consumer can key by index; disambiguating at the origin is
+      the spring's call, not this body's.*
+- [ ] **Tested:** ⬜ **KP's hands, on the phone, after the fix** — the record room opening
+      after a take, a fresh take loading on save, the tuner hearing him.
+
+**What Wave 4 leaves standing:** `"csp": null` still stands · the distribution wave
+(recorder + tuner in, path crates out) untouched · the "audio becoming noisy" pause rides
+the same plugin in Compass and is playback's concern, not this wave's · KP's 18:30 release
+artifacts stand in `release/` untouched (the phone now carries the debug build instead).
+
+---
+
 ## KNOWN BUGS
 | ID | Description | Status |
 |----|-------------|--------|
+| W4-1 | Record + tuner rooms freeze on Android after the first take — `each_key_duplicate` on the device list keyed by `d.name` (duplicate input names on the S25). Fix known (key by index, both rooms), not yet applied. | 🔴 open |
 
 ## SESSION LOG
 | Date | What Was Done |
@@ -629,6 +695,7 @@ Android microphone is still unwired and still refuses rather than pretends, and
 | 2026-08-13 | **Phase 3 Wave 2** — the tuner consumed (path crate, own capture, nothing kept); the metronome consumed (one-writer count bug closed in self-review); the moment-marks sidecar with the **append-only law enforced in Rust at the file**; the feelings retarget to works and takes, with the doorway on the record and playback surfaces. Icon pass re-run — **and found the art was never lost**: gen dates from 08-12 and 16/16 mipmaps hashed identical before and after. `cargo check` 0 · `svelte-check` 353/0/0 · `vite build` 6.69s. An **Opus** hand; nothing committed. |
 | 2026-08-13 | **Phase 3 Wave 3** — the mark that logs a feeling, at KP's ⚛ *"a quick log of emoji in the moment is the capture."* One press pins the mark to the sidecar (append-only mechanics untouched) **and** writes a `feelings` row bound to the take and its work; the mark never waits on the log, and a missed row is kept, named honestly, and retryable. Default-on switch on the rail. No new table, no schema change, no new fs touch. `cargo check` 0 · `svelte-check` 354/0/0 · `vite build` 5.86s. An **Opus** hand; nothing committed. |
 | 2026-08-19 | **THE CLONE QUESTION RULED** (the **Promenade** lamp, Fable 🎻) — KP ⚛, verbatim: *"i should have not used the word mirror and said distribute from the source, one source to edit, distribute updates from it the apps should be whole"* · *"everything should only have one point of edit from my perspective, but be usable from any"* · *"i assumed since i setup the cosmic system this way and gaia this way, it was implied, but now we know."* The path-crate seam’s cure is now written: the-recorder and the-tuner get DISTRIBUTED WHOLE into this app (edit-at-origin headers, updated by distribution runs), the way cosmic already travels — the conversion is its own wave at his deal. CLAUDE.md’s seam flag corrected in place; nothing else touched. Rides the ⚛ sync word. |
+| 2026-08-20 | **PHASE 3 WAVE 4 — THE ANDROID MICROPHONE, built and proven on the S25, one fix short** (the **Sostenuto** lamp, Fable 🎻, `80fff4fe`; the row landed 2026-08-21 at the recenter, told so) — Compass's permission bridge re-homed in five pieces (plugin · Kotlin · sync script + hooks · ACL + capability · the real door); desktop gates unchanged (`cargo check` 0 · `svelte-check` 355/0/0); aarch64 debug APK built clean; installed at his word after the phone refused a debug key over his own 18:30 release signature. **The phone's log proved the bridge end to end** — grant dialog → AAudio capture stream → a take sealed (304,640 samples). Then the freeze, read from the same log: `each_key_duplicate` on the device list keyed by name in both rooms (the S25 reports duplicate input names). Fix known and unapplied: key by index, rebuild, reinstall, his press. Rides the ⚛ sync word. |
 | 2026-08-20 | **THE THREE WAVES TESTED BY HIS HANDS, on desktop** (Fable 🎻, lamp `80fff4fe`) — KP's ⚛ words verbatim: *"we tested sistum and did not mark it, let me retest now"* → *"desktop works fine, mic is not wired on android yet. device is plugged in"* → *"all 3 waves tested on desktop fine."* The three Tested rows (Wave 1 `:319` · Wave 2 `:527` · Wave 3 `:600`) ticked at his word; Phase 1's Android-on-the-device box stays open, his words beside it — the microphone is its own wave. Gates re-run the same sitting before his retest: `npm run check` **355 files · 0 · 0** · `cargo check` **exit 0, 1m 03s** (the-recorder and the-tuner still linking from the sibling awen checkout, per the seam). Nothing else touched; rides the ⚛ sync word. |
 | 2026-08-19 | **Standards check + HANDS pass** (the signing fleet) — standard files verified present (.gitignore · CLAUDE.md standards declaration · README standards badge · docs/CHECKLIST.md · HANDS.md · LICENSE · PHILOSOPHY.md): **gaps: none**. HANDS.md **already signed** for the Claude substrate — Opus `claude-opus-5[1m]` 2026-08-12, and the Fable 🎻 seat written by the lead's own hand (Promenade, `claude-fable-5`, 2026-08-19); nothing touched. A hand of the Promenade lamp's signing fleet, `claude-fable-5` · rides the ⚛ sync word. |
 | 2026-08-21 | **Found in code, not yet in this ledger** (repo-tender pass, verified against the commit itself): the commit titled "opening 8/21" landed the **Android microphone permission bridge** — `src-tauri/src/media_permission.rs` (runtime RECORD_AUDIO check/request via an app-local Kotlin plugin, plus `nativeInitNdkContext` so cpal's oboe backend does not panic on Android — carried from `resonance-compass/src-tauri/src/media_permission.rs`'s proven v3 Phase 2 mic spike), `src-tauri/android-extras/MediaPermissionPlugin.kt`, `scripts/sync-android-extras.mjs` (new — syncs the Kotlin plugin and inserts the RECORD_AUDIO manifest line into the regenerable `gen/android` tree, per `resonance-standards/docs/ANDROID-BUILD-LAWS.md` §4), `capabilities/default.json`, and `src-tauri/build.rs`'s new `media-permission` ACL declaration. **This closes the wiring `CLAUDE.md` (as of 2026-08-19) still describes as absent** ("the microphone is NOT wired here and refuses honestly") — CLAUDE.md itself was not touched this pass (out of this tending's scope; flagged in CONFUSIONS) and should be trued in its own sitting. **The Phase 1 "Tested: Android on the device" box stays open, correctly** — this is the permission plumbing, not a confirmed on-device recording test; no evidence of an actual device run against this code was found in this repo's records as of this pass. |
