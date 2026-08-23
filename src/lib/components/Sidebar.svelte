@@ -18,8 +18,9 @@
 		.catch(() => {});
 
 	// Default-collapsed on every platform (Compass pattern): the content is the
-	// destination, the nav is a drawer — even on desktop.
-	let open = $state(false);
+	// destination, the nav is a drawer — even on desktop. The open flag lives in
+	// uiStore because the control that toggles it is in the ComfortBar (2026-08-21).
+	const open = $derived(uiStore.navOpen);
 
 	// THE SHRINE — the sidebar consumes the-cumdach (the spring's navigation
 	// shell; Compass proved it, Bubbles walked this road first and Echoes
@@ -69,7 +70,9 @@
 		emojis: ['📖', '✨', '🌿', '🌀'],
 	};
 	// The ComfortBar (48px, fixed, z-index 110) is a declared edge, honored by
-	// arithmetic — an INPUT, never a CSS-only mend.
+	// arithmetic — an INPUT, never a CSS-only mend. It is the ONLY edge again:
+	// the floating hamburger that used to claim bottom 56–101px moved inside the
+	// bar on 2026-08-22 (the Echoes remedy of 2026-08-21), so nothing else paints over the sidebar's foot.
 	const RESERVED = 48;
 
 	let land = $state({ height: 900, reserved: RESERVED });
@@ -103,7 +106,7 @@
 
 	// The vessel opened the ComfortBar panel — they want to see it, not the nav.
 	$effect(() => {
-		if (uiStore.comfortBarExpanded) open = false;
+		if (uiStore.comfortBarExpanded) uiStore.setNavOpen(false);
 	});
 
 	onMount(() => {
@@ -114,32 +117,25 @@
 
 	function navigate(href: string) {
 		goto(href);
-		open = false;
-	}
-
-	function toggle() {
-		open = !open;
+		uiStore.setNavOpen(false);
 	}
 </script>
 
-<!-- Hamburger (always visible) -->
-<button
-	class="hamburger"
-	onclick={toggle}
-	aria-label={open ? 'Close navigation' : 'Open navigation'}
-	aria-expanded={open}
->
-	{open ? '✕' : '☰'}
-</button>
+<!-- The toggle lives in the ComfortBar (see ComfortBar.svelte). It used to
+     float here at bottom:56px/left:1rem, z-index 120 — the same band and the
+     same column as this drawer's own Settings foot AND the expanded bar's
+     stats line, with .quick-log-fab holding the opposite corner. Three layers,
+     one column; removing the floating button was the only mend that freed all
+     three (the Echoes remedy, 2026-08-21; carried here 2026-08-22). -->
 
 <!-- Backdrop — dismisses the sidebar on outside interaction whenever it's open,
-     desktop or mobile, since the hamburger toggle is always visible on both. -->
+     desktop or mobile, since the ComfortBar toggle is always visible on both. -->
 {#if open}
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
 		class="backdrop"
-		onclick={() => (open = false)}
-		onkeydown={(e) => { if (e.key === 'Escape') open = false; }}
+		onclick={() => uiStore.setNavOpen(false)}
+		onkeydown={(e) => { if (e.key === 'Escape') uiStore.setNavOpen(false); }}
 		role="presentation"
 	></div>
 {/if}
@@ -207,25 +203,6 @@
 </nav>
 
 <style>
-	.hamburger {
-		position: fixed;
-		bottom: calc(56px + env(safe-area-inset-bottom, 0px));
-		left: 1rem;
-		z-index: 120;
-		background-color: var(--bg-surface);
-		border: 1px solid var(--border-color);
-		color: var(--text);
-		width: 2.5rem;
-		height: 2.5rem;
-		border-radius: 8px;
-		font-size: 1.1rem;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-	}
-
 	.backdrop {
 		position: fixed;
 		inset: 0;
@@ -253,7 +230,9 @@
 		overflow-y: auto;
 		/* The ComfortBar (48px, fixed, z-index 110) always paints over the
 		   sidebar (50) — the foot must clear it or Settings is buried
-		   (Compass's desktop-walk lesson, inherited with the shrine). */
+		   (Compass's desktop-walk lesson, inherited with the shrine). Must stay
+		   equal to RESERVED in the script above: one edge, declared once,
+		   honored twice. */
 		padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
 	}
 

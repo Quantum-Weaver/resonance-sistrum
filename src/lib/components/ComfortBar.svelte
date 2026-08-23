@@ -67,6 +67,17 @@
 		</div>
 	{:else}
 		<div class="comfort-bar__minimized">
+			<!-- The navigation toggle. It lives in the bar rather than floating above
+			     it, because a floating button in this corner buried three things at
+			     once (Echoes, 2026-08-21; carried here 2026-08-22). Inside the bar it shares the bar's own layer and
+			     can cover nothing. -->
+			<button
+				class="comfort-bar__nav"
+				onclick={() => uiStore.toggleNav()}
+				aria-label={uiStore.navOpen ? 'Close navigation' : 'Open navigation'}
+				aria-expanded={uiStore.navOpen}
+			>{uiStore.navOpen ? '✕' : '☰'}</button>
+
 			<button class="comfort-bar__greeting-btn" onclick={toggleExpanded}>
 				{greeting}
 			</button>
@@ -103,7 +114,36 @@
 		padding: 0 1rem;
 	}
 
+	.comfort-bar__nav {
+		flex-shrink: 0;
+		width: 36px;
+		height: 36px;
+		margin-right: 0.75rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: none;
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		color: var(--text);
+		font-size: 1.05rem;
+		line-height: 1;
+		cursor: pointer;
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+
+	.comfort-bar__nav:hover {
+		border-color: var(--accent);
+	}
+
 	.comfort-bar__greeting-btn {
+		/* Takes the slack so the nav button and the + keep their corners, and
+		   a long greeting truncates instead of shoving them. */
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 		background: none;
 		border: none;
 		color: var(--text-secondary);

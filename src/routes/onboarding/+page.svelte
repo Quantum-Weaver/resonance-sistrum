@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { getName } from '@tauri-apps/api/app';
 	import { themeStore } from '$lib/stores/theme.svelte';
-	import { PRESET_THEMES } from '$lib/theme/theme';
+	import { PRESET_THEMES, presetSwatch } from '$lib/theme/theme';
 	import GradientPulse from '$lib/components/GradientPulse.svelte';
 	import {
 		beginWalk,
@@ -47,8 +47,9 @@
 	const themeOffers = Object.entries(PRESET_THEMES).map(([key, t]) => ({
 		key,
 		name: t.presetName,
-		icon: PRESET_ICONS[key] ?? '✨',
-		accent: t.accentColor
+		icon: PRESET_ICONS[key] ?? t.icon ?? '✨',
+		accent: t.accentColor,
+		swatch: presetSwatch(t)
 	}));
 
 	const STEPS: StepDef[] = [
@@ -219,7 +220,7 @@
 						>
 							<span class="theme-icon">{opt.icon}</span>
 							<span class="theme-name">{opt.name}</span>
-							<div class="theme-swatch" style="background: {opt.accent};"></div>
+							<div class="theme-swatch" style="background: {opt.swatch};"></div>
 						</button>
 					{/each}
 				</div>

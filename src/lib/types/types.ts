@@ -1,9 +1,16 @@
 // Theme customization
+export type TintLevel = 'off' | 'subtle' | 'full';
+
 export interface ThemeConfig {
   mode: 'dark' | 'light' | 'amoled';
   accentColor: string;
   presetName?: string;
   fontSize: 'small' | 'medium' | 'large';
+  /** How far the accent bleeds into the background. The reader's choice, not
+   *  the app's - added 2026-08-21 at KP's word, "which i like, but others may
+   *  not." A config saved before this field existed is merged over the default
+   *  and reads as 'subtle', which is what its owner was already seeing. */
+  tint: TintLevel;
 }
 
 // ── The domain (KP's ⚛ ruling, 2026-08-12: "yes, works, takes, feelings,
