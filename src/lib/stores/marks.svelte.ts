@@ -12,31 +12,8 @@ import {
 	type MarksDoc
 } from '$lib/marks';
 
-// The marks store — Phase 3 Wave 2 (2026-08-13, an **Opus** hand).
-// `the-moment-marks` worn by takes.
-//
-// WHERE THEY LIVE: a `.marks.json` SIDECAR beside the take's WAV, NEVER this
-// app's database. Phase 2's domain table ruled it in its own row and the words
-// are kept verbatim there. There is no marks table and there will not be one.
-//
-// HOW THE APPEND-ONLY LAW IS KEPT ACROSS THE WIRE, which is the whole design
-// of this file. The water's functions are PURE — `addMark(doc, input)` returns
-// a NEW document with one more entry and never touches the one it was given.
-// So this store:
-//
-//   1. runs the water's own function over the document it holds;
-//   2. takes ONLY THE ENTRIES THAT ARE NEW — the tail past the length it
-//      already had — and sends just those to Rust;
-//   3. replaces its copy with whatever Rust says is now on disk.
-//
-// The whole document is never sent. There is no command that could accept
-// one: `append_take_marks` appends and refuses, and there is no write door and
-// no delete door at all. A window that sent a truncated history would simply
-// have nothing to send it to. That is a law with a floor under it rather than
-// an etiquette.
-//
-// AN EDIT REVISES. A REMOVAL RETRACTS. Both are additions, both keep the whole
-// history, and the current view is DERIVED on every read and never stored.
+// Marks live in a `.marks.json` sidecar beside the take's WAV, never in this app's database.
+// Only the NEW tail entries are sent to Rust — `append_take_marks` appends and refuses; the whole document is never sent.
 
 /** The hand that makes the marks here. The water's law 4 — "only your own" —
  *  is about ownership across shared documents; on this device there is one
@@ -76,12 +53,7 @@ function mediaFor(takeName: string, seconds: number | undefined) {
 	};
 }
 
-// THE STALE-REPLY GUARD, and it is the recorder store's lesson rather than a
-// new one. A read is a round trip; closing one take and opening another before
-// the first reply lands would let take A's history arrive and sit under take
-// B's name. The record room paid for this shape once already on an S25 — a
-// reply that outlived its own subject — and it does not get to happen twice in
-// one app just because the subject changed from a take to a history.
+// Stale-reply guard: a read is a round trip, and take A's history must not land under take B's name.
 let openGen = 0;
 
 /** Open a take's history. An absent sidecar is not an error — a take nobody
@@ -100,10 +72,7 @@ async function open(takeFileName: string) {
 	} catch (e) {
 		if (gen !== openGen) return;
 		error = e instanceof Error ? e.message : String(e);
-		// A history that will not parse is NEVER replaced with an empty one —
-		// Rust refuses to write in that state, and this store refuses to
-		// pretend the marks are gone. An empty doc here is only ever a doc
-		// that was genuinely empty, or one whose read failed and said so.
+		// A history that will not parse is never replaced with an empty one.
 		doc = newDoc();
 	} finally {
 		if (gen === openGen) loading = false;
@@ -135,10 +104,7 @@ async function appendTail(next: MarksDoc, seconds: number | undefined): Promise<
 			media: mediaFor(name, seconds),
 			entries
 		});
-		// The marks LANDED whatever happened here — Rust already wrote them.
-		// If the room moved on to another take while we were writing, the only
-		// correct thing is to leave that take's document alone; this one is on
-		// disk and the next open will read it.
+		// The marks already landed on disk; if the room moved on, leave the other take's document alone.
 		if (gen !== openGen) return true;
 		doc = landed;
 		if (!marked.includes(name)) marked = [...marked, name];
@@ -146,8 +112,6 @@ async function appendTail(next: MarksDoc, seconds: number | undefined): Promise<
 	} catch (e) {
 		if (gen !== openGen) return false;
 		error = e instanceof Error ? e.message : String(e);
-		// The document in hand is left exactly as it was. Nothing local is
-		// advanced past what actually landed on disk.
 		return false;
 	} finally {
 		if (gen === openGen) saving = false;
@@ -196,8 +160,6 @@ async function loadMarked() {
 	try {
 		marked = await invoke<string[]>('takes_with_marks');
 	} catch {
-		// Not knowing which takes are marked is a cosmetic loss, never a
-		// reason to break the shelf.
 	}
 }
 

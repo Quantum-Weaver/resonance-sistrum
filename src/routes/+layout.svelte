@@ -11,7 +11,6 @@
 
 	let { children } = $props();
 
-	// Hide chrome during the immersive onboarding flow
 	const isOnboarding = $derived(page.url.pathname === '/onboarding');
 
 	onMount(async () => {
@@ -71,9 +70,7 @@
 
 	.main-content {
 		flex: 1;
-		/* min-width: 0 is the load-bearing guard: flex children default to
-		   min-width auto, so any wide descendant would stretch the shell
-		   past the viewport instead of being contained. */
+		/* min-width: 0 — flex children default to min-width auto, so a wide descendant would stretch the shell past the viewport. */
 		min-width: 0;
 		max-width: 100%;
 		overflow-y: auto;

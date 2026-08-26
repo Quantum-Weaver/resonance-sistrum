@@ -1,17 +1,6 @@
 <script lang="ts">
 	import { workStore } from '$lib/stores/work.svelte';
 
-	// Which work is this attempt an attempt AT? Asked, never guessed.
-	//
-	// THE LAW THIS COMPONENT EXISTS TO KEEP — resonance-khoros' own, carried
-	// into the takes table and now onto the screen: "ambiguous pairs return to
-	// the artist." Nothing infers a take's work. Not the file name, not the
-	// time, not the take before it. A hand says so, or nobody does.
-	//
-	// AND "LATER" IS A LAWFUL ANSWER. There is no gate here, no nag, no badge
-	// counting unassigned takes. A take that belongs to nothing yet is honest
-	// rather than untidy — the domain says so in its own comment, and a picker
-	// that pressures is a picker that guesses on the artist's behalf.
 
 	let {
 		workId = null,
@@ -38,9 +27,6 @@
 		}
 	}
 
-	// The first work has to be born somewhere, and this is the only room that
-	// stands so far. Naming one here assigns the take to it in the same breath,
-	// because that is why the hand opened this.
 	async function nameNewWork() {
 		const title = newTitle.trim();
 		if (!title || busy) return;
@@ -167,7 +153,6 @@
 		gap: 0.4rem;
 	}
 
-	/* 44px floor, and every face wears its word — no icon-only choices here. */
 	.pick {
 		min-height: 44px;
 		padding: 0.5rem 0.9rem;

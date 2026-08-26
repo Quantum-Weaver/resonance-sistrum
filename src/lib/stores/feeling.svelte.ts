@@ -2,33 +2,7 @@ import { browser } from '$app/environment';
 import { getDb, generateId } from '$lib/stores/db';
 import type { Feeling } from '$lib/types/types';
 
-// The feeling log — retargeted from the Echoes journal this body was mirrored
-// from, and it is NOT a leftover feature. KP's ⚛ words the day it landed:
-//
-//   "logging how we feel during a moment is the base of all we do, self
-//    understanding and understanding oportunities abound"
-//   "it is how we discover our values and internal core interests, which help
-//    us align with ourselves"
-//   "humans and tech need this as money becomes irrelevent"
-//
-// A feeling hangs on a work, on a take, or on neither — his ruling, "yes both",
-// plus the honest third case: a feeling in the room belongs to nobody and is
-// still worth keeping.
-//
-// A POSITION inside a take is not this store's to keep: that is
-// `the-moment-marks`, append-only by its own law, living in a `.marks.json`
-// sidecar rather than in this database.
-//
-// The two are JOINED BY A GESTURE and not by a table (Phase 3 Wave 3,
-// 2026-08-13, an **Opus** hand), at KP's ⚛ ruling: "moment marks should be able
-// to trigger a new mood event when a mark is created. a quick log of emoji in
-// the moment is the capture." The marks rail calls `addFeeling` here with the
-// face the artist just pinned. Nothing about this store changed to allow it —
-// the row it writes is an ordinary feeling on a take, and the moment it came
-// from stays where moments live, in the sidecar.
 
-// Personal emoji definitions — the folksonomy layer of the Resonance Grammar.
-// Same key convention as Compass and Echoes so the pattern is defined once.
 const PERSONAL_DEF_PREFIX = 'emoji_def_';
 
 const COLS =
@@ -171,10 +145,7 @@ async function updateFeeling(id: string, updates: Partial<Omit<Feeling, 'id' | '
 }
 
 async function getAllFeelings(): Promise<Feeling[]> {
-	// Export must NEVER serialise the loaded page — `feelings` only ever holds
-	// one page (LIMIT 200) while Settings shows the true COUNT(*). This walks
-	// the database itself, unbounded. Throws rather than returning []: a silent
-	// partial export is the exact wound this closes. (Inherited fix, kept.)
+	// Walks the database unbounded and throws on failure — `feelings` only holds one page (LIMIT 200), so serialising it would export a partial.
 	const db = await getDb();
 	if (!db) throw new Error('Database not ready — nothing was exported');
 	const rows = await db.select<Record<string, unknown>[]>(
@@ -184,8 +155,7 @@ async function getAllFeelings(): Promise<Feeling[]> {
 }
 
 async function importFeelings(incoming: Feeling[]): Promise<{ added: number; skipped: number }> {
-	// NON-DESTRUCTIVE by law — INSERT OR IGNORE keyed on id, so importing on
-	// top of live data can only ever add; nothing existing is touched.
+	// NON-DESTRUCTIVE: INSERT OR IGNORE keyed on id — importing on top of live data can only add.
 	const db = await getDb();
 	if (!db) throw new Error('Database not ready — nothing was imported');
 	let added = 0;
@@ -234,8 +204,6 @@ async function getFeelingsByEmoji(emoji: string): Promise<Feeling[]> {
 	return rows.map(rowToFeeling);
 }
 
-// The two doors the instrument itself will use: what was felt about a work,
-// and what was felt about one attempt at it.
 async function getFeelingsForWork(workId: string): Promise<Feeling[]> {
 	const db = await getDb();
 	if (!db) return [];
@@ -268,8 +236,7 @@ async function searchFeelings(query: string, limit = 50): Promise<Feeling[]> {
 }
 
 async function purgeAll() {
-	// Throws instead of returning silently so the purge surface can tell the
-	// vessel when nothing was actually deleted.
+	// Throws rather than returning silently so the purge surface can report when nothing was deleted.
 	const db = await getDb();
 	if (!db) throw new Error('Database not ready — nothing was purged');
 	await db.execute('DELETE FROM feelings');

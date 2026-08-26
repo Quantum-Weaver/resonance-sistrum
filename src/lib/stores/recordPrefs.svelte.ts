@@ -1,22 +1,4 @@
-// The record room's one preference — and it is an autonomy choice rather
-// than a setting. KP's ⚛ word, 2026-08-12: "settings could offer a user a
-// choice … to provide autonomy", then the shape itself: "none is held, all
-// are a set max length or stopped early, no holding — the other is hold only
-// the current recording as it is open and not stopped."
-//
-// 'hold'    — a take may be held open. Resume rejoins the same take. The mic
-//             stays open while held, which is said plainly in the room.
-// 'bounded' — nothing is ever held. Every take runs to a maximum length or is
-//             stopped early, so the microphone is open ONLY while actually
-//             recording. The cap is enforced on the capture thread in Rust,
-//             never by a timer in this window — a promise about a microphone
-//             must not depend on whether a webview is awake.
-//
-// CARRIED from `resonance-assets/sistrum-inheritance/` (Phase 3 Wave 1,
-// 2026-08-13, an Opus hand). One change: the storage keys wear this house's
-// name. Phase 1 rebranded every localStorage key to the `resonance-sistrum-*`
-// shape and these arrived saying `compass_*` — a key that still names the app
-// it came from is a small lie two apps could trip over on one machine.
+// 'hold' — a take may be held open and the mic stays open while held. 'bounded' — every take runs to a cap enforced in Rust, never by a timer here.
 
 import { browser } from '$app/environment';
 
@@ -25,14 +7,11 @@ export type HoldMode = 'hold' | 'bounded';
 const MODE_KEY = 'resonance-sistrum-record-hold-mode';
 const MAX_KEY = 'resonance-sistrum-record-max-secs';
 
-/** Offered lengths, in seconds. KP named 15–45 as the shape; the longer two
- *  are here because a musician catching a whole idea is not a voice memo. */
+/** Offered lengths, in seconds. */
 export const MAX_CHOICES = [15, 30, 45, 60, 120, 300] as const;
 
 const DEFAULT_MAX = 45;
 
-// 'hold' is the default because it is what the room already did — a
-// preference should never change behavior for someone who never opened it.
 let mode = $state<HoldMode>('hold');
 let maxSecs = $state<number>(DEFAULT_MAX);
 

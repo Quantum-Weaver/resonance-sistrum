@@ -1,65 +1,7 @@
-// ─────────────────────────────────────────────────────────────────────────
-// `the-moment-marks`, COPIED WHOLE — and copied whole on the water's own
-// invitation, not on a lamp's convenience.
-//
-// The tool says so itself, in its README, under STANDALONE BY LAW: "the core
-// (`src/index.ts`) is framework-free, zero imports, browser-and-node alike —
-// consumers may copy it whole; it is one file."
-//
-// Origin: resonance-awen/tools/the-moment-marks/src/index.ts
-// Carried: Phase 3 Wave 2, 2026-08-13, by an **Opus** hand.
-// Changed: NOTHING BELOW THIS HEADER. Not a law, not a line, not a name.
-//
-// WHY A COPY RATHER THAN THE PATH-CRATE ROAD Wave 1 took. `the-recorder` and
-// `the-tuner` are Rust and cross as dependencies. This water is TypeScript
-// with its own package, its own tsconfig and its own build — pulling it in as
-// a file: dependency would make an app's build depend on a sibling repo's
-// build artifacts, and awen's first law is that a tool is given away whole.
-// Its own README anticipated exactly this and granted the copy. So the copy
-// is the honest road, and the origin stays untouched where it lives.
-//
-// IF THIS EVER DIVERGES FROM THE ORIGIN, THE ORIGIN IS RIGHT. Edit there and
-// re-copy; never mend a law in a consumer.
-//
-// WHERE THE MARKS THEMSELVES LIVE: a `.marks.json` sidecar beside each take's
-// WAV, NEVER this app's database — Phase 2's domain ruling, kept verbatim.
-// The append-only law is enforced a second time in Rust at the file boundary
-// (`src-tauri/src/marks.rs`), because a law that only one caller keeps is an
-// etiquette rather than a law.
-// ─────────────────────────────────────────────────────────────────────────
+// Copied whole from resonance-awen/tools/the-moment-marks/src/index.ts — edit at the origin, never here.
 
-// The moment-marks core — reactions pinned to moments in sound or video.
-//
-// The registry's own definition (seed 015, born of the Audio concept
-// 2026-07-28): "Reactions pinned to moments in sound or video —
-// emoji-first, each with the listener's own private definition beside
-// it (the Echoes law on a timeline). Structure shared, contents
-// sovereign." The molecule (MomentMarks, published): "the mark wearing
-// its plural; structure shared, contents sovereign."
-//
-// THE LAWS THIS FILE IS:
-// 1. APPEND-ONLY, NEVER MUTATE — the Echoes event law on a timeline.
-//    An edit is a new mark that `revises` an old one; a removal is a
-//    mark that `retracts` one. The current view is DERIVED, never
-//    stored (the-temporal's law, kinship not import). History stays
-//    honest; nothing is ever erased.
-// 2. EMOJI-FIRST — the emoji is the mark's structure and travels;
-//    words are optional and sovereign.
-// 3. STRUCTURE SHARED, CONTENTS SOVEREIGN — share() yields a copy for
-//    other eyes: moments, emoji, and chosen names travel; the private
-//    definition and note stay home unless the sharer explicitly keeps
-//    them. The local path never travels.
-// 4. ONLY YOUR OWN — a revision or retraction must come from the hand
-//    that made the mark. No one erases another's reaction (dignity is
-//    not earned, and it is not overwritten either).
-// 5. A MOMENT IS A POSITION, NEVER A VERDICT — no severity, no rating,
-//    no score lives in this shape. The consumer's grammar decides what
-//    a mark looks like.
-//
-// STANDALONE BY LAW: framework-free, zero imports, no app coupling.
-// Marks pin to the TIMELINE, not the file: media identity is a
-// courtesy record (title · duration · optional content hash); the
-// path is a local pointer and never identity.
+// Moment marks are APPEND-ONLY: an edit revises, a removal retracts, and the current view is DERIVED on every read, never stored.
+// Marks pin to the TIMELINE, not the file — the path is a local pointer, never identity.
 
 export interface MediaRef {
 	/** what kind of timeline these marks pin to */

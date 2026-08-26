@@ -1,21 +1,4 @@
 <script lang="ts">
-	// SATTVA — the regulation door.
-	//
-	// The MATH is carried verbatim from `the-breath`
-	// (resonance-awen/tools/the-breath), the re-homed engine whose curves
-	// were verified live to three decimals: the four-count rise, the count
-	// opacity 0.04 → 0.21 by t=0.75 falling home after, the border's sine
-	// pulse, warm amber in and deep violet out.
-	//
-	// The DOOR is Compass's Sattva door — full screen, tap or Enter or
-	// Space or Escape to leave, the canvas glow behind, reduced motion
-	// honoured by opening without moving.
-	//
-	// Inline rather than imported, exactly as Compass carries its own.
-	// KP's law, 2026-07-30: "the rehoming should not mean extracting."
-	// Compass's dressing room (theme, volume, the EQ and playlist
-	// snapshots) stays app-side and is not copied — it belongs to a music
-	// player. This app's room is quieter: the door simply opens.
 	import { onDestroy, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
@@ -36,7 +19,6 @@
 			const d = raw ? JSON.parse(raw)?.breathDuration : null;
 			if (d && d in BREATH_DURATIONS) return d as BreathDuration;
 		} catch {
-			/* a broken preference is not a reason to refuse the door */
 		}
 		// 4-6: the longer exhale, which is the one that settles a nervous system.
 		return '4-6';
@@ -46,9 +28,6 @@
 		const durations = BREATH_DURATIONS[duration] ?? BREATH_DURATIONS['4-4'];
 		let phaseIdx: 0 | 1 = 0;
 		let phaseStartTime = 0;
-		// The origin marked "unstarted" with phaseStartTime === 0, safe under
-		// performance.now(). The re-homed engine gave it an explicit flag; that
-		// mend is carried here too.
 		let started = false;
 		return {
 			sample(nowMs: number) {
@@ -158,9 +137,7 @@
 		if (rafId) cancelAnimationFrame(rafId);
 		rafId = 0;
 		visible = false;
-		// A beat for the fade, then back where they were. history.back() would
-		// bounce anyone who arrived here by link, so the nav's home is the
-		// honest destination.
+		// history.back() would bounce anyone who arrived by link, so the nav's home is the destination.
 		setTimeout(() => goto('/'), prefersReduced ? 0 : 260);
 	}
 

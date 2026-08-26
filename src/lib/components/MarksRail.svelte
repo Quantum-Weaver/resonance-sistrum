@@ -5,61 +5,6 @@
 	import { fmtTime, type Mark } from '$lib/marks';
 	import { EMOJI_DEFS } from '$lib/data/emojis';
 
-	// THE MOMENT MARKS, worn on a take's own rail.
-	//
-	// Phase 3 Wave 2 (2026-08-13, an **Opus** hand). `the-moment-marks`
-	// consumed: the core is copied whole at `$lib/marks.ts` on the water's own
-	// invitation, the sidecar lives beside the take's WAV and NEVER in this
-	// app's database (Phase 2's ruling), and the append-only law is enforced a
-	// second time in Rust at the file itself.
-	//
-	// WHAT THAT LAW LOOKS LIKE ON A SCREEN, which is the whole of this
-	// component's design:
-	//
-	//   · An edit REVISES. The old entry is still in the history; the rail
-	//     shows the current state, and the history is one tap away.
-	//   · A removal RETRACTS. The mark leaves the VIEW. It does not leave the
-	//     file, and this app has no door that would take it out.
-	//   · So the button says "Retract", not "Delete" — because retract is what
-	//     actually happens, and a button that names the wrong act is a button
-	//     that lies about the law underneath it.
-	//
-	// EMOJI-FIRST, AND THE WORD IS ALWAYS THERE. The water's law 2 makes the
-	// emoji the structure. This house's law makes every face wear its word: the
-	// pin on the rail is the emoji, and the word rides underneath in the list
-	// below it — and in the pin's own accessible name, so the rail reads aloud
-	// as "Calm at 0:12.4" rather than as a shrug.
-	//
-	// A MOMENT IS A POSITION, NEVER A VERDICT (law 5). There is no severity
-	// here, no rating, no score, and no counting of how many marks a take
-	// "should" have.
-	//
-	// ───────────────────────────────────────────────────────────────────────
-	// PHASE 3 WAVE 3 (2026-08-13, an **Opus** hand) — THE QUICK LOG.
-	//
-	// KP's ⚛ ruling, verbatim: "moment marks should be able to trigger a new
-	// mood event when a mark is created. a quick log of emoji in the moment is
-	// the capture."
-	//
-	// So pinning a mark ALSO logs a feeling, in the same press. ONE GESTURE,
-	// TWO RECORDS, each landing by its own law:
-	//
-	//   · THE MARK goes to the `.marks.json` sidecar beside the WAV, through
-	//     the append-only door and nowhere else. Its mechanics are untouched by
-	//     this wave — not a line of the water, not a line of the Rust.
-	//   · THE FEELING goes to the `feelings` table through the store that
-	//     already exists, bound to this take by `take_file_name` and to its
-	//     work by `work_id` when the artist has said which work it is. Both
-	//     columns have been there since Phase 2, at KP's ⚛ "yes both".
-	//
-	// THE QUICK LOG IS THE CAPTURE: no second form, no extra dialog, nothing
-	// asked twice. The face already chosen and the word already typed are what
-	// the log receives.
-	//
-	// AND THE MARK IS NEVER HELD HOSTAGE TO THE SECOND RECORD. The mark lands
-	// first and stands on its own; if the log refuses the row, the rail says so
-	// plainly and offers to carry it again — it never swallows the miss, and it
-	// never un-lands a mark over it.
 
 	let {
 		fileName,
@@ -104,9 +49,6 @@
 		madeAt: number;
 	};
 
-	// The quick log's own small news. The mark and the feeling are two records
-	// under two laws, so they get two voices: `marksStore.error` speaks for the
-	// sidecar, and these speak for the log.
 	let logged = $state<string | null>(null);
 	let logMiss = $state<string | null>(null);
 	/** What the log still owes. Kept rather than dropped, so a miss never costs
@@ -114,25 +56,17 @@
 	 *  scale it happens at. */
 	let unlogged = $state<QuickLog[]>([]);
 
-	// The rail's one preference, read when the rail appears.
 	$effect(() => {
 		markPrefs.load();
 	});
 
-	// The doc follows whichever take is open. The store holds one at a time,
-	// which is exactly how many takes the player shows at a time.
 	$effect(() => {
 		const name = fileName;
-		// A confirmation about the take you just left would be a lie about the
-		// one in front of you. Any UNLANDED log survives the change instead —
-		// each pending entry carries its own take.
 		logged = null;
 		void marksStore.open(name);
 		return () => marksStore.close();
 	});
 
-	// DERIVED ON EVERY READ, never stored — the water requires it and the
-	// reason is that a stored view can disagree with its own history.
 	const view = $derived.by<Mark[]>(() => {
 		// Touch the history so this recomputes whenever an entry lands.
 		void marksStore.historyCount;
@@ -160,27 +94,13 @@
 	async function sendLog(q: QuickLog): Promise<boolean> {
 		try {
 			await feelingStore.addFeeling({
-				// What makes a feeling findable later. The face's own word and the
-				// moment it was pinned at — machine-written, so the artist's words
-				// (below) are never edited into a title.
 				name: phraseFor(q),
-				// 'heard' is the honest sense for a feeling about sound being made
-				// or played back — the same default the feeling doorway uses, so
-				// one app does not hold two opinions about the same act.
 				sense: 'heard',
 				subcategory: 'music',
 				emoji: q.emoji,
-				// The artist's own word about the moment, carried across VERBATIM.
-				// The mark keeps it too; neither copy is a paraphrase of the other.
 				note: q.note,
-				// The strength question is NOT asked here. Asking it would be the
-				// second form this ruling exists to remove. 3 is the middle the
-				// full form itself opens at: a strength left unstated, never a
-				// rating this rail invented on the artist's behalf.
 				intensity: 3,
 				timestamp: q.madeAt,
-				// Bound to the take, and to its work when there is one — the two
-				// nullable columns Phase 2 put there at KP's ⚛ "yes both".
 				takeFileName: q.takeFileName,
 				workId: q.workId ?? undefined
 			});
@@ -193,8 +113,6 @@
 
 	async function addHere() {
 		if (!draftEmoji) return;
-		// Held before anything is cleared: the log carries EXACTLY what the mark
-		// carried, out of the same one gesture.
 		const q: QuickLog = {
 			takeFileName: fileName,
 			workId,
@@ -207,15 +125,11 @@
 			{
 				at: q.at,
 				emoji: q.emoji,
-				// The vessel's own meaning for that face travels with the mark —
-				// the folksonomy layer, and the water's "contents sovereign".
 				definition: feelingStore.getPersonalDefinition(q.emoji) || undefined,
 				note: q.note
 			},
 			duration
 		);
-		// The mark did not land, so there is no moment for a feeling to be about.
-		// The drafts stay exactly where the artist left them.
 		if (!ok) return;
 
 		draftEmoji = '';
@@ -223,8 +137,6 @@
 		marking = false;
 		logged = null;
 
-		// THE SECOND RECORD, from the same press. The mark above is already on
-		// disk and nothing below this line can reach it.
 		if (!markPrefs.logsFeeling) return;
 		logMiss = null;
 		if (await sendLog(q)) logged = phraseFor(q);
@@ -266,8 +178,6 @@
 </script>
 
 <div class="marks">
-	<!-- THE RAIL. It sits under the waveform and shares its horizontal scale,
-	     so a pin is directly beneath the sound it is about. -->
 	<div class="rail" role="group" aria-label="Marks on this take">
 		{#each view as m (m.id)}
 			<button
@@ -292,10 +202,6 @@
 		<p class="marks-error" role="alert">{marksStore.error}</p>
 	{/if}
 
-	<!-- THE SECOND RECORD SPEAKS FOR ITSELF. A quick log that landed says so
-	     quietly; one that missed says so plainly, and says in the same breath
-	     that the mark is safe — because it is, and a musician should not have to
-	     wonder. -->
 	{#if logged}
 		<p class="log-kept" role="status">
 			Kept as a feeling too: {logged}.
@@ -333,7 +239,6 @@
 	{#if marking}
 		<div class="marker">
 			<p class="marker-at">Landing at {fmtTime(position)} — the playhead's own position.</p>
-			<!-- Emoji-first, and every face wears its word. -->
 			<div class="faces" role="group" aria-label="Choose a mark">
 				{#each EMOJI_DEFS as def (def.emoji)}
 					<button
@@ -351,9 +256,6 @@
 				<span class="field-word">A word about this moment (optional)</span>
 				<input type="text" class="text-input" bind:value={draftNote} maxlength="200" />
 			</label>
-			<!-- THE QUICK LOG, shown rather than hidden. KP's ⚛ ruling — "a quick
-			     log of emoji in the moment is the capture" — so this is ON, and the
-			     switch is here so a second record is never written invisibly. -->
 			<button
 				class="link"
 				aria-pressed={markPrefs.logsFeeling}
@@ -381,8 +283,6 @@
 	{/if}
 
 	{#if view.length > 0}
-		<!-- THE WORD UNDERNEATH. The rail is emoji; this is where each one says
-		     what it is, at what moment, in what words. -->
 		<ul class="mark-list">
 			{#each view as m (m.id)}
 				<li class="mark-row" class:selected={selected === m.id}>
@@ -406,7 +306,6 @@
 							<button class="plain small" onclick={() => (revising = null)}>Cancel</button>
 						{:else}
 							<button class="plain small" onclick={() => startRevising(m)}>Revise</button>
-							<!-- RETRACT, not delete. The entry stays in the file. -->
 							<button class="plain small" onclick={() => retract(m.id)}>Retract</button>
 						{/if}
 					</span>
@@ -474,9 +373,6 @@
 		pointer-events: none;
 	}
 
-	/* A pin is small on the rail and large enough to hit: the tap target
-	   overhangs the dot, which is how a 44px floor and a fine timeline live
-	   together. */
 	.pin {
 		position: absolute;
 		top: 50%;
@@ -511,8 +407,6 @@
 		line-height: 1.45;
 	}
 
-	/* The quick log's own two lines. The kept one is quiet on purpose — a
-	   confirmation, never a congratulation. */
 	.log-kept {
 		font-size: 0.78rem;
 		color: var(--text-muted);
@@ -537,8 +431,6 @@
 		line-height: 1.5;
 	}
 
-	/* THE LINK BETWEEN THE TWO RECORDS, wearing its word like every other face
-	   in this house. */
 	.link {
 		display: flex;
 		align-items: flex-start;

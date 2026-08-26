@@ -2,8 +2,6 @@
 	import { timerStore, prefersReducedMotion, type TimerMode, type ChimeId } from '$lib/stores/timer.svelte';
 	import TimerVisualization from '$lib/components/TimerVisualization.svelte';
 
-	// General-purpose presets (Compass's are sleep-lengths; Echoes is a
-	// day-companion — shorter spans serve rests, focus stretches, and tea).
 	const PRESETS = [5, 10, 15, 25, 45, 60];
 	const CHIME_OPTIONS: Array<{ id: ChimeId; label: string; icon: string }> = [
 		{ id: 'rise', label: 'Rise', icon: '🎐' },
@@ -235,7 +233,6 @@
 		font-size: 0.9rem;
 	}
 
-	/* Completed */
 	.done-state {
 		display: flex;
 		flex-direction: column;
@@ -274,7 +271,6 @@
 		background-color: var(--accent);
 	}
 
-	/* Active timer */
 	.active-timer {
 		display: flex;
 		flex-direction: column;
@@ -349,7 +345,6 @@
 		background-color: var(--color-warning);
 	}
 
-	/* Chime options */
 	.chime-section {
 		display: flex;
 		flex-direction: column;
@@ -405,7 +400,6 @@
 		text-align: right;
 	}
 
-	/* Presets */
 	.presets {
 		display: flex;
 		flex-wrap: wrap;
@@ -428,7 +422,6 @@
 		background-color: color-mix(in srgb, var(--accent) 15%, var(--bg-surface));
 	}
 
-	/* Custom duration */
 	.custom-row {
 		display: flex;
 		gap: 0.5rem;
@@ -467,7 +460,6 @@
 		cursor: not-allowed;
 	}
 
-	/* Sound toggle */
 	.sound-row {
 		display: flex;
 		justify-content: space-between;

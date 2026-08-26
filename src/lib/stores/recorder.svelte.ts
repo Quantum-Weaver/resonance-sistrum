@@ -1,27 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 
-// The record room's store — CARRIED, NOT REBUILT (Phase 3 Wave 1, 2026-08-13,
-// an Opus hand). This comes from `resonance-assets/sistrum-inheritance/`, the
-// recorder as it stood when it left the Compass, with the S25 freeze fix and
-// the poll-generation guard already in it.
-//
-// The record verb is the spring's (`the-recorder`, via recorder.rs); this store
-// is the room's window: reactive status, the takes shelf, and the sovereign-
-// export door (KP's ⚛ storage ruling: storage in app, exports by the user's own
-// hand). Opt-in by nature — nothing here fires except from the user's own tap,
-// and nothing recorded ever touches a network.
-//
-// TWO DIFFERENCES from the inherited store, both deliberate:
-//
-//   1. `deleteTake` DID NOT COME. Lose-nothing: nothing in this wave deletes a
-//      take's audio. The command does not exist in Rust either, so there is no
-//      door to knock on by accident.
-//
-//   2. The wire type is `TakeFile`, not `Take`. In this body `Take` is the
-//      DOMAIN row — the meaning around a take, which lives in the takes table.
-//      This is the FILE, which the recorder owns and which is the truth. Two
-//      different things, and naming them the same thing is how they get
-//      confused for each other.
+// The wire type is `TakeFile` (the file the recorder owns), not `Take` (the domain row in the takes table).
 
 export interface InputDevice {
 	name: string;
@@ -61,13 +40,9 @@ interface RecordingStatus {
 }
 
 let recording = $state(false);
-// Held, not ended. A paused take is still open and still ours; resume appends
-// to it. (KP's ⚛ shape, 2026-08-12: "like a voice recorder works" — record,
-// pause, resume, save.)
+// Held, not ended: a paused take is still open, and resume appends to it.
 let paused = $state(false);
-// The take reached its maximum length: Rust already released the device on the
-// capture thread. The samples wait here to be saved. Only ever true in the
-// no-holding mode, which is the only mode that starts a take with a cap.
+// The take hit its cap: Rust already released the device; the samples wait here to be saved.
 let capped = $state(false);
 let device = $state<string | null>(null);
 let sampleRate = $state<number | null>(null);
@@ -81,16 +56,7 @@ let error = $state<string | null>(null);
 
 let pollTimer: ReturnType<typeof setInterval> | null = null;
 
-// Every run of the meter carries a generation. Clearing the timer stops new
-// polls but CANNOT unsend one already in flight — and a status reply that
-// lands after its take has ended belongs to a take that no longer exists.
-// Desktop never felt this: the seal is sub-millisecond there and no reply
-// ever outlived its take. On Android `recording_status` shares the main thread
-// with a WebView drawing every 8ms, so the reply arrives AFTER stop() has reset
-// the room and writes `recording = true` back over it — the room keeps saying
-// ● Listening and the Record button never returns. (Found on the S25 by KP's
-// hands, 2026-08-12; the phone's own log showed AAudioStream_close returning 0,
-// which is what cleared Rust.)
+// Generation guard: clearing the timer cannot unsend a poll already in flight, and a late `recording_status` reply would write `recording = true` back over a stopped room.
 let pollGen = 0;
 
 function stopPolling() {
@@ -111,8 +77,6 @@ function startPolling() {
 			capped = s.capped;
 			elapsedSecs = s.elapsed_secs;
 			clipped = s.clipped;
-			// The meter reads the recent peak and lets it fall gently — a
-			// level you can watch, never a value that jumps at you.
 			peak = Math.max(s.peak, peak * 0.75);
 			if (!s.recording) stopPolling();
 		} catch {
@@ -137,8 +101,7 @@ async function refreshTakes() {
 	}
 }
 
-// `maxSecs` caps the take. null = no cap, the take runs until stop is said.
-// The cap is honored in Rust on the capture thread, never by a timer here.
+// `maxSecs` caps the take (null = no cap); the cap is honored in Rust on the capture thread, never by a timer here.
 async function start(deviceHint: string | null, maxSecs: number | null = null) {
 	error = null;
 	try {
@@ -189,9 +152,7 @@ async function stop(keep: boolean, name: string | null): Promise<TakeFile | null
 	}
 }
 
-// Hold the take without ending it — the device stays ours and resume appends
-// to the same file. The room never asks keep-or-discard: a saved take lands on
-// the shelf, and it stays there.
+// Hold the take without ending it — the device stays ours and resume appends to the same file.
 async function pause() {
 	try {
 		await invoke('pause_recording');
@@ -210,9 +171,7 @@ async function resume() {
 	}
 }
 
-// The sovereign export: the user's own dialog chooses where the copy lands;
-// the shelf keeps its original. This is the only way a recording leaves this
-// device, and it takes a hand to do it.
+// The only way a recording leaves this device, and it takes a hand to do it.
 async function exportTake(fileName: string): Promise<string | null> {
 	try {
 		const { save } = await import('@tauri-apps/plugin-dialog');

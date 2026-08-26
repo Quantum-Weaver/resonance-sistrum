@@ -2,12 +2,6 @@
 	import { invoke } from '@tauri-apps/api/core';
 	import { drawWaveform, positionToSeconds } from '$lib/waveform';
 
-	// The take's shape, drawn and scrubbable. `the-waveform` consumed (Phase 3
-	// Wave 1, 2026-08-13, an Opus hand): the fold is Rust's, the drawing and the
-	// scrub mapping are the spring's own math.
-	//
-	// THE SCRUB IS A POSITION, NEVER A VERDICT — the-player's law, worn here.
-	// Nothing on this canvas judges the sound; it only says where you are in it.
 
 	interface TakeShape {
 		min: number[];
@@ -43,8 +37,7 @@
 	let cssWidth = $state(0);
 	let scrubbing = $state(false);
 
-	// The shape is asked for once per take per width. Re-reading a WAV because
-	// a window moved would be the freeze all over again in a smaller coat.
+	// Asked once per take per width — re-reading the WAV on every resize is the freeze all over again.
 	let asked = '';
 
 	async function loadShape(name: string, columns: number) {
@@ -63,8 +56,6 @@
 		}
 	}
 
-	// One fold per pixel column, at the device's own pixel ratio so the drawing
-	// is as fine as the screen actually is.
 	const dpr = $derived(typeof window !== 'undefined' ? Math.min(3, window.devicePixelRatio || 1) : 1);
 	const columns = $derived(Math.max(1, Math.round(cssWidth * dpr)));
 
@@ -75,8 +66,6 @@
 		void loadShape(name, c);
 	});
 
-	// Repaint whenever the shape, the size, or the position moves. The canvas
-	// is cheap to repaint whole — the spring says so and it is true here.
 	$effect(() => {
 		const el = canvas;
 		const s = shape;
@@ -94,8 +83,6 @@
 		const playhead = styles.getPropertyValue('--wave-playhead').trim() || '#fff';
 
 		if (!s) {
-			// No shape yet — clear rather than draw a shape that is not the
-			// take's. An empty canvas is honest; an invented one is not.
 			const ctx = el.getContext('2d');
 			ctx?.clearRect(0, 0, el.width, el.height);
 			return;
@@ -105,8 +92,6 @@
 			played,
 			unplayed,
 			playhead,
-			// The hairline lives here: silence is still drawn, scaled to the
-			// device's pixels so it does not vanish on a dense screen.
 			floorPx: Math.max(1, dpr),
 			verticalFill: 0.9
 		});
@@ -148,8 +133,6 @@
 		(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 	}
 
-	// The keyboard road to the same place. Arrows nudge, Home and End go to the
-	// ends — the-player's own key manners.
 	function onKeyDown(e: KeyboardEvent) {
 		if (!onscrub || duration <= 0) return;
 		const here = progress * duration;
@@ -208,7 +191,6 @@
 		overflow: hidden;
 		cursor: pointer;
 		touch-action: none;
-		/* The waveform's three colors, read off the canvas by the drawing. */
 		--wave-played: var(--accent);
 		--wave-unplayed: color-mix(in srgb, var(--text-muted) 55%, transparent);
 		--wave-playhead: var(--text);
@@ -223,8 +205,6 @@
 		display: block;
 	}
 
-	/* Every face wears its word — a canvas that has nothing to show yet says
-	   what it is doing instead of sitting blank. */
 	.wave-word {
 		position: absolute;
 		inset: 0;

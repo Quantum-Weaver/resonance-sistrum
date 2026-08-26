@@ -4,7 +4,6 @@
 	import { SENSES } from '$lib/data/senses';
 	import { readSky } from '$lib/sky';
 
-	// --- Filter state ---
 	let searchInput = $state('');
 	let searchQuery = $state('');
 	let activeSense = $state('');
@@ -46,9 +45,7 @@
 		displayCount = 50;
 	}
 
-	// --- Derived ---
 
-	// Top 8 most-used emojis across all feelings
 	const topEmojis = $derived.by(() => {
 		const counts: Record<string, number> = {};
 		for (const feeling of feelingStore.feelings) {
@@ -85,7 +82,6 @@
 	const hasMore = $derived(filteredFeelings.length > displayCount);
 	const hasFilters = $derived(!!(activeSense || activeEmoji || searchQuery.trim()));
 
-	// Human-readable description of active filters
 	const filterLabel = $derived.by(() => {
 		const parts: string[] = [];
 		if (activeSense) {
@@ -97,7 +93,6 @@
 		return parts.join(' · ');
 	});
 
-	// Empty-state emoji — reflects what's being filtered
 	const emptyIcon = $derived(
 		activeSense
 			? (SENSES.find((s) => s.id === activeSense)?.emoji ?? '✨')
@@ -109,7 +104,6 @@
 		return SENSES.find((s) => s.id === senseId) ?? { name: senseId, emoji: '✨' };
 	}
 
-	// --- Quick Log ---
 	let quickLogging = $state(false);
 	let quickLogSuccess = $state(false);
 
@@ -136,11 +130,7 @@
 		}
 	}
 
-	// The moment's sky — DERIVED from the feeling's own timestamp, never
-	// stored (KP's ruling at the Hearth's communications sitting: "this is
-	// echoes, tied into the sky facts"). Facts only, compute-only by law —
-	// what a moment's sky means is the vessel's own. Retroactive for every
-	// feeling ever logged; cached per day so a long timeline stays light.
+	// Derived from the feeling's own timestamp, never stored; cached per day so a long timeline stays light.
 	const skyCache = new Map<string, string>();
 	function skyLine(timestamp: number): string {
 		const key = new Date(timestamp).toDateString();
@@ -179,7 +169,6 @@
 
 	{#if feelingStore.feelings.length > 0}
 		<div class="browse">
-			<!-- Search -->
 			<div class="search-wrap">
 				<span class="search-icon" aria-hidden="true">🔍</span>
 				<input
@@ -198,7 +187,6 @@
 				{/if}
 			</div>
 
-			<!-- Sense chips -->
 			<div class="chip-scroll" role="group" aria-label="Filter by sense">
 				<button
 					class="chip"
@@ -214,7 +202,6 @@
 				{/each}
 			</div>
 
-			<!-- Emoji chips (only when feelings have emojis) -->
 			{#if topEmojis.length > 0}
 				<div class="chip-scroll" role="group" aria-label="Filter by feeling">
 					<button
@@ -234,7 +221,6 @@
 				</div>
 			{/if}
 
-			<!-- Sort -->
 			<div class="sort-row" role="group" aria-label="Sort order">
 				<button class="sort-btn" class:active={sortOrder === 'newest'} onclick={() => setSort('newest')}>
 					Newest
@@ -247,7 +233,6 @@
 				</button>
 			</div>
 
-			<!-- Filter status -->
 			{#if hasFilters}
 				<div class="filter-status">
 					<span>{filteredFeelings.length} {filteredFeelings.length === 1 ? 'feeling' : 'feelings'}{filterLabel ? ` in ${filterLabel}` : ''}</span>
@@ -257,7 +242,6 @@
 		</div>
 	{/if}
 
-	<!-- Quick Log FAB -->
 	{#if quickLogSuccess}
 		<p class="quick-log-hint">Tap the feeling to edit</p>
 	{/if}
@@ -269,7 +253,6 @@
 		aria-label={quickLogSuccess ? 'Logged!' : 'Quick log'}
 	>{quickLogSuccess ? '✓' : '⚡'}</button>
 
-	<!-- Content -->
 	{#if filteredFeelings.length === 0}
 		<div class="empty-state">
 			<div class="empty-icon">{emptyIcon}</div>
@@ -325,7 +308,6 @@
 		min-height: 100%;
 	}
 
-	/* Header */
 	.home-header {
 		display: flex;
 		align-items: center;
@@ -350,7 +332,6 @@
 		font-weight: 600;
 	}
 
-	/* Browse controls */
 	.browse {
 		padding: 0.75rem 1rem 0;
 		display: flex;
@@ -358,7 +339,6 @@
 		gap: 0.6rem;
 	}
 
-	/* Search */
 	.search-wrap {
 		position: relative;
 		display: flex;
@@ -403,7 +383,6 @@
 	}
 	.search-clear:hover { color: var(--text); }
 
-	/* Chip rows */
 	.chip-scroll {
 		display: flex;
 		gap: 0.4rem;
@@ -437,7 +416,6 @@
 		padding: 0.2rem 0.5rem;
 	}
 
-	/* Sort */
 	.sort-row {
 		display: flex;
 		gap: 0.4rem;
@@ -461,7 +439,6 @@
 	}
 	.sort-btn:not(.active):hover { border-color: var(--text-muted); }
 
-	/* Filter status */
 	.filter-status {
 		display: flex;
 		align-items: center;
@@ -480,7 +457,6 @@
 		padding: 0;
 	}
 
-	/* Empty state */
 	.empty-state {
 		display: flex;
 		flex-direction: column;
@@ -504,7 +480,6 @@
 		text-decoration: underline;
 	}
 
-	/* Feeling list */
 	.feeling-list {
 		padding: 0.75rem 1rem;
 		display: flex;
@@ -512,7 +487,6 @@
 		gap: 0.5rem;
 	}
 
-	/* Feeling card */
 	.feeling-card {
 		display: flex;
 		gap: 0.875rem;
@@ -614,7 +588,6 @@
 		overflow: hidden;
 	}
 
-	/* Quick log hint */
 	.quick-log-hint {
 		position: fixed;
 		bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 3.75rem);
@@ -634,7 +607,6 @@
 		to   { opacity: 1; transform: translateY(0); }
 	}
 
-	/* Quick Log FAB */
 	.quick-log-fab {
 		position: fixed;
 		bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 0.75rem);
@@ -662,7 +634,6 @@
 	}
 	.quick-log-fab:disabled { opacity: 0.7; cursor: default; }
 
-	/* Load more */
 	.load-more {
 		width: 100%;
 		margin-top: 0.5rem;

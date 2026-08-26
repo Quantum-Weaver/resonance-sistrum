@@ -1,33 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 
-// The tuner room's store — Phase 3 Wave 2 (2026-08-13, an **Opus** hand).
-// `the-tuner` consumed; the YIN math runs in Rust from the path crate and this
-// store is only the window onto it.
-//
-// THE LAWS, kept in this file as much as in the Rust:
-//
-//   · OPT-IN ALWAYS. Nothing listens until `start()` is called, and `start()`
-//     is only ever called from a press. Leaving the room stops the listening —
-//     an ear that follows you out of a room you left is an ear nobody asked
-//     for, and it is the same reasoning the player uses to stop sound on exit.
-//
-//   · NOTHING RECORDED, NOTHING KEPT. There is no take here, no file, no
-//     history, and no row. What was heard a second ago is gone; only what is
-//     being heard now exists. The tuner cannot create a take even by accident,
-//     because it holds no path to one.
-//
-//   · A POSITION, NEVER A VERDICT. This store reports `note`, `octave` and
-//     signed `cents`. It has no `inTune` boolean and it will not grow one:
-//     the moment a store answers yes-or-no, the screen has been handed a
-//     verdict to draw. Distance is information; the room decides how to show
-//     it, and the room does not judge either.
-//
-// THE POLL-GENERATION GUARD, carried from the recorder store rather than
-// re-learned. Clearing an interval stops new polls but cannot unsend one
-// already in flight, and a reply that lands after the listening has stopped
-// would write `listening = true` back over a stopped room. That exact wound
-// cost the record room its Record button on an S25. It does not get to happen
-// twice in one app.
+// Poll-generation guard: clearing an interval cannot unsend a poll already in flight, and a late reply would write `listening = true` back over a stopped room.
 
 export interface TunerReading {
 	listening: boolean;

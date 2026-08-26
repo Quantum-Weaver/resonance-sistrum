@@ -7,19 +7,6 @@
 	import { SENSES, type Sense } from '$lib/data/senses';
 	import { EMOJI_DEFS } from '$lib/data/emojis';
 
-	// WAVE 2 (2026-08-13, an **Opus** hand): this form can now HANG A FEELING
-	// ON A CREATION. It arrives carrying `?take=` or `?work=` from the quick
-	// doorway beside the work, so pressing "More options…" never makes anybody
-	// say the same thing twice.
-	//
-	// The columns have been here since Phase 2, at KP's ⚛ "yes both" — a
-	// feeling about the song, a feeling about THIS attempt at it, or a feeling
-	// belonging to nothing at all. This page simply stopped leaving the first
-	// two permanently empty.
-	//
-	// "Belongs to nothing" stays the default and stays lawful: the log's whole
-	// reason — "how we discover our values and internal core interests" — does
-	// not require a subject.
 
 	function toLocalISO(date: Date): string {
 		const offset = date.getTimezoneOffset() * 60000;
@@ -44,7 +31,6 @@
 	const isEditMode = $derived(editId !== null);
 	let prefilled = false; // plain var prevents re-fill on subsequent feelings updates
 
-	// What this feeling hangs on, carried in from the doorway that opened it.
 	let targetWorkId = $state<string | null>(null);
 	let targetTakeFileName = $state<string | null>(null);
 	const targetWorkTitle = $derived(
@@ -54,8 +40,6 @@
 	onMount(() => {
 		const params = page.url.searchParams;
 
-		// The quick doorway's handoff. A take name or a work id arrives here
-		// exactly as it was chosen there; nothing is inferred from either one.
 		const take = params.get('take');
 		if (take) targetTakeFileName = take;
 		const work = params.get('work');
@@ -65,8 +49,6 @@
 		}
 		const carriedEmoji = params.get('emoji');
 		if (carriedEmoji) selectedEmoji = carriedEmoji;
-		// A feeling about sound being made has an honest default sense, and it
-		// is still one tap from any other.
 		if (take || work) {
 			selectedSense = 'heard';
 			selectedSubcategory = 'music';
@@ -93,9 +75,6 @@
 		intensity = feeling.intensity;
 		useCustomTime = true;
 		customTimestamp = toLocalISO(new Date(feeling.timestamp));
-		// What it already hangs on comes with it. An edit that quietly
-		// unhooked a feeling from its take would be losing something a hand
-		// put there.
 		targetWorkId = feeling.workId ?? null;
 		targetTakeFileName = feeling.takeFileName ?? null;
 		if (targetWorkId) void workStore.loadWorks();
@@ -198,16 +177,12 @@
 	</header>
 
 	<div class="form">
-		<!-- DB error banner -->
 		{#if feelingStore.dbError}
 			<div class="db-error-banner">
 				⚠️ Database not ready: {feelingStore.dbError}
 			</div>
 		{/if}
 
-		<!-- WHAT IT HANGS ON. Shown only when there is something — a feeling
-		     belonging to nothing needs no row explaining that it belongs to
-		     nothing. Unhooking is one plain tap and is never discouraged. -->
 		{#if targetTakeFileName || targetWorkId}
 			<section class="form-section">
 				<div class="section-label">Hangs on</div>
@@ -236,7 +211,6 @@
 			</section>
 		{/if}
 
-		<!-- Name -->
 		<section class="form-section">
 			<input
 				type="text"
@@ -247,7 +221,6 @@
 			/>
 		</section>
 
-		<!-- Sense picker -->
 		<section class="form-section">
 			<div class="section-label">What sense?</div>
 			<div class="sense-scroll">
@@ -272,7 +245,6 @@
 			</div>
 		</section>
 
-		<!-- Subcategory chips -->
 		{#if !isSimplified && currentSense && currentSense.subcategories.length > 0}
 			<section class="form-section">
 				<div class="section-label">Subcategory</div>
@@ -299,7 +271,6 @@
 			</section>
 		{/if}
 
-		<!-- Emoji grid -->
 		<section class="form-section">
 			<div class="section-label">Feeling</div>
 			<div class="emoji-grid" role="group" aria-label="Select a feeling">
@@ -330,7 +301,6 @@
 			{#if selectedEmoji && selectedEmoji !== '❓'}
 				{@const def = EMOJI_DEFS.find((d) => d.emoji === selectedEmoji)}
 				{#if def}
-					<!-- The vessel's own definition outranks the Sanctuary's (folksonomy). -->
 					<p class="emoji-def">{feelingStore.getPersonalDefinition(def.emoji) || def.definition}</p>
 				{/if}
 			{/if}
@@ -363,13 +333,11 @@
 		{/if}
 
 		{#if !isSimplified}
-		<!-- Note -->
 		<section class="form-section">
 			<div class="section-label">Anything else? <span class="optional">(optional)</span></div>
 			<textarea bind:value={note} placeholder="..." class="note-input" rows="3" maxlength="500"></textarea>
 		</section>
 
-		<!-- Intensity -->
 		<section class="form-section">
 			<div class="section-label">How intense? <span class="intensity-val">{intensity}/5</span></div>
 			<div class="intensity-row" role="group" aria-label="Intensity level">
@@ -385,7 +353,6 @@
 			</div>
 		</section>
 
-		<!-- Timestamp -->
 		<section class="form-section">
 			<div class="section-label">When?</div>
 			<div class="time-toggle">
@@ -402,7 +369,6 @@
 		</section>
 		{/if}
 
-		<!-- Actions -->
 		<section class="form-section actions">
 			<button class="cancel-btn" onclick={() => goto('/')}>Cancel</button>
 			<button
@@ -500,7 +466,6 @@
 		color: var(--accent);
 	}
 
-	/* What it hangs on */
 	.hangs-row {
 		display: flex;
 		flex-wrap: wrap;
@@ -537,7 +502,6 @@
 		background: color-mix(in srgb, var(--text-muted) 18%, transparent);
 	}
 
-	/* Name input */
 	.name-input {
 		width: 100%;
 		background: var(--bg-surface);
@@ -553,7 +517,6 @@
 	.name-input:focus { border-color: var(--accent); }
 	.name-input::placeholder { color: var(--text-muted); }
 
-	/* Sense scroll */
 	.sense-scroll {
 		display: flex;
 		gap: 0.5rem;
@@ -586,7 +549,6 @@
 	.sense-emoji { font-size: 1.4rem; line-height: 1; }
 	.sense-name { font-size: 0.65rem; font-weight: 600; }
 
-	/* Chips */
 	.chip-row {
 		display: flex;
 		flex-wrap: wrap;
@@ -624,7 +586,6 @@
 	.custom-sub-input:focus { border-color: var(--accent); }
 	.custom-sub-input::placeholder { color: var(--text-muted); }
 
-	/* Emoji grid */
 	.emoji-grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
@@ -649,7 +610,6 @@
 	}
 	.emoji-btn:active { transform: scale(0.96); }
 
-	/* Note */
 	.note-input {
 		width: 100%;
 		background: var(--bg-surface);
@@ -667,7 +627,6 @@
 	.note-input:focus { border-color: var(--accent); }
 	.note-input::placeholder { color: var(--text-muted); }
 
-	/* Intensity */
 	.intensity-row {
 		display: flex;
 		gap: 0.75rem;
@@ -689,7 +648,6 @@
 	}
 	.intensity-dot:active { transform: scale(0.9); }
 
-	/* Timestamp */
 	.time-toggle {
 		display: flex;
 		gap: 0.5rem;
@@ -725,7 +683,6 @@
 	}
 	.datetime-input:focus { border-color: var(--accent); }
 
-	/* Actions */
 	.actions {
 		display: flex;
 		gap: 0.75rem;
@@ -767,11 +724,9 @@
 		opacity: 1;
 	}
 
-	/* Not Sure sense button */
 	.not-sure-btn { border-style: dashed; }
 	.not-sure-btn.selected { border-style: solid; }
 
-	/* Progressive disclosure hint */
 	.disclosure-hint {
 		display: flex;
 		align-items: center;
@@ -798,7 +753,6 @@
 		white-space: nowrap;
 	}
 
-	/* Emoji skip row */
 	.emoji-skip-row {
 		display: flex;
 		align-items: center;
@@ -827,7 +781,6 @@
 		animation: fade-in 0.4s ease;
 	}
 
-	/* Disambiguation prompt */
 	.disambig {
 		margin-top: 0.6rem;
 		padding: 0.6rem 0.75rem;

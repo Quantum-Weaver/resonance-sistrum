@@ -1,16 +1,9 @@
 import Database from '@tauri-apps/plugin-sql';
 import { browser } from '$app/environment';
 
-// One connection for the whole instrument. Three stores share this domain
-// (works, takes, feelings) and opening a handle per store would open three
-// connections onto one file for no reason.
-//
-// The database is `sistrum.db`. It is NOT the Echoes file: this body was
-// mirrored from resonance-echoes, and that app's three migrations belong to
-// its history, not ours. They were not carried.
+// One connection for the whole app — works, takes and feelings share this handle.
 
-// Plain module state, deliberately: runes only exist in `.svelte.ts` files,
-// and each store keeps its own reactive `dbError` for the surfaces to read.
+// Plain module state: runes only exist in `.svelte.ts` files.
 let db: Database | null = null;
 let loadError: string | null = null;
 
@@ -32,8 +25,7 @@ export function dbLoadError(): string | null {
 	return loadError;
 }
 
-// Stable ids. Works keep theirs forever — resonance-khoros will reference a
-// work by this id when it groups one into a release, so an id is a promise.
+// Work ids are permanent — resonance-khoros references a work by this id.
 export function generateId(): string {
 	if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
 		return crypto.randomUUID();

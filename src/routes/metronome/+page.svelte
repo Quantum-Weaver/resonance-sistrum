@@ -2,24 +2,6 @@
 	import { onMount } from 'svelte';
 	import { metronomeStore, SUBDIVISIONS, type Subdivision } from '$lib/stores/metronome.svelte';
 
-	// THE METRONOME ROOM — Phase 3 Wave 2 (2026-08-13, an **Opus** hand).
-	// `the-metronome` consumed: the beat clock, the tap tempo (median of the
-	// phrase) and the lookahead click scheduler booked on the AUDIO clock.
-	//
-	// THE LAWS ON THIS PAGE, none of them softened:
-	//
-	//   · NEVER A BUZZER. A soft sine tap, gentle attack, round decay, at every
-	//     tempo. The downbeat sits a fifth above the beat — a landmark, not an
-	//     alarm.
-	//   · SILENCE IS A CHOICE WITH THE PULSE STILL RUNNING. Volume zero books
-	//     no sound and stops nothing else; the room says so in words rather
-	//     than leaving a musician wondering whether it broke.
-	//   · NO URGENCY ANYWHERE. No countdown, no "get ready", no flash at speed,
-	//     no red, nothing that hurries anyone. A metronome states the time.
-	//   · REDUCED MOTION IS HONORED ON THE PULSE — and honored by removing the
-	//     MOTION, never the information: the beat count and the bar keep
-	//     advancing, drawn as a steady state rather than a swell.
-	//   · Every face wears its word, and 44px is the floor.
 
 	const running = $derived(metronomeStore.running);
 	const beatsPerBar = $derived(metronomeStore.beatsPerBar);
@@ -28,8 +10,6 @@
 	const prefersReduced =
 		typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	// The pulse swells at the top of each beat and settles across it. With
-	// reduced motion it does not swell at all — the lit beat is simply lit.
 	const pulseScale = $derived.by(() => {
 		if (!running || prefersReduced) return 1;
 		const p = metronomeStore.phase;
@@ -50,8 +30,6 @@
 	onMount(() => {
 		metronomeStore.load();
 		return () => {
-			// Leaving stops the pulse. Sound that follows you out of a room you
-			// left is sound nobody asked for — the player's own reasoning.
 			metronomeStore.stop();
 		};
 	});
@@ -69,9 +47,6 @@
 		<p class="met-error" role="alert">{metronomeStore.error}</p>
 	{/if}
 
-	<!-- THE PULSE. It runs whenever the metronome runs, whatever the volume is
-	     — that is the law, and it is why the visual is here and not merely a
-	     decoration on the sound. -->
 	<div class="pulse-area">
 		<div
 			class="pulse"
@@ -85,7 +60,6 @@
 		</p>
 	</div>
 
-	<!-- The bar, as beads. A place in the bar, drawn plainly. -->
 	<div class="beads" role="img" aria-label="Beat {running ? beatInBar + 1 : 0} of {beatsPerBar}">
 		{#each Array(beatsPerBar) as _, i (i)}
 			<span class="bead" class:lit={running && i === beatInBar} class:first={i === 0}></span>
@@ -253,8 +227,7 @@
 		border-radius: 50%;
 		background: color-mix(in srgb, var(--accent) 22%, transparent);
 		border: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
-		/* No transition: the swell is sampled per frame from the beat clock, so
-		   a CSS transition would fight the arithmetic rather than help it. */
+		/* No transition: the swell is sampled per frame from the beat clock, and a CSS transition would fight it. */
 	}
 
 	.pulse.downbeat {

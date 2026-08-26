@@ -1,20 +1,4 @@
-// waveform.ts — sound made visible, and the scrub that reads it.
-//
-// ADAPTED FROM THE SPRING (`the-waveform`, resonance-awen), Phase 3 Wave 1,
-// 2026-08-13, an Opus hand. The tool stays where it lives and was not touched;
-// what crossed is its shape. Two changes, both because this is an app on a
-// filesystem rather than a page with a decoded buffer:
-//
-//   · `computePeaks` did not come — the fold happens in Rust (see
-//     src-tauri/src/waveform.rs), streaming off the main thread, because the
-//     samples are a file here and a five-minute take is ~57 MB of them. What
-//     arrives is the finished fold: two parallel Float arrays, min and max.
-//
-//   · `drawWaveform` takes those two arrays instead of an array of pair
-//     objects. The drawing is otherwise the spring's own, floor and all.
-//
-// The pure mappings below are the spring's exactly, character for character in
-// behavior: they round-trip, and they clamp.
+// The fold happens in Rust (src-tauri/src/waveform.rs); what arrives here is two parallel Float arrays, min and max.
 
 /** A pointer x on a width-wide view → seconds into a duration. Clamped. */
 export function positionToSeconds(x: number, width: number, durationSecs: number): number {

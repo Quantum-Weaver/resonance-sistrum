@@ -4,30 +4,6 @@
 	import { recorderStore } from '$lib/stores/recorder.svelte';
 	import { QUANTUM_COLORS } from '$lib/cosmic';
 
-	// THE TUNER ROOM — Phase 3 Wave 2 (2026-08-13, an **Opus** hand).
-	// `the-tuner` consumed: the YIN math runs in Rust from the path crate, and
-	// this room is only where the reading is shown.
-	//
-	// THE ROOM'S ONE RULE, and everything below is built to keep it: A PITCH IS
-	// A POSITION, NEVER A VERDICT. So —
-	//
-	//   · The scale is a PLACE, not a target. The marker sits where the note
-	//     actually is. Nothing on this page says right or wrong.
-	//   · NO RED. Not for flat, not for sharp, not ever. Out of tune is a
-	//     location, not an alarm — the water says exactly that and it is not
-	//     softened here.
-	//   · NO PRIZE FOR PERFECT. Landing on centre does not flash, chime,
-	//     bounce, congratulate or count. It just says "in tune", in the same
-	//     voice it says everything else.
-	//   · The colours are KP's ⚛ ruling from the water, verbatim: "we do want
-	//     the color to change for when it is close and when it is tuned and
-	//     completely out of tune. visual cues are helpful when holding a guitar
-	//     and tuning it." So: cues, not judgment — sanctuary green within ±5
-	//     cents, hearth gold within ±15, quantum purple beyond. Never red.
-	//   · Every face wears its word. The colour never carries meaning alone.
-	//
-	// AND: NOTHING IS RECORDED, NOTHING IS KEPT. There is no take here, no
-	// file, no row, no history. The ear closes when you leave the room.
 
 	let selectedDevice = $state<string | null>(null);
 
@@ -38,10 +14,6 @@
 	const prefersReduced =
 		typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	// The water's own three bands, with the water's own words. "far" is shown
-	// as the water's own fuller phrasing — its source pairs them: "quantum
-	// purple beyond (far — keep turning)" — because a single word "far" reads
-	// like a mark out of ten and the phrase reads like a direction.
 	const band = $derived.by(() => {
 		if (cents === null) return null;
 		const a = Math.abs(cents);
@@ -50,12 +22,9 @@
 		return { word: 'keep turning', color: QUANTUM_COLORS['quantum.purple'] };
 	});
 
-	// Where the marker sits on the rail: 0% is −50 cents, 50% is centre, 100%
-	// is +50. Clamped, because a position outside the scale is not a position.
+	// 0% is -50 cents, 50% is centre, 100% is +50. Clamped.
 	const markerPct = $derived(cents === null ? 50 : Math.min(100, Math.max(0, (cents / 50) * 50 + 50)));
 
-	// How much sound is arriving at all. Shown so that "nothing heard" can be
-	// read as "nothing is reaching the mic" rather than as a broken tuner.
 	const levelPct = $derived(Math.min(100, tunerStore.rms * 400));
 
 	function fmtCents(c: number): string {
@@ -68,12 +37,9 @@
 	}
 
 	onMount(() => {
-		// The device list only; nothing opens an ear on mount. Entering a room
-		// is not consent to be listened to.
 		recorderStore.loadDevices();
 		return () => {
-			// Leaving closes the ear. An open microphone must never outlive the
-			// room that asked for it.
+			// Leaving closes the ear — an open microphone must never outlive the room that asked for it.
 			void tunerStore.stop();
 		};
 	});
@@ -105,8 +71,6 @@
 			<p class="cents" style="color: {band.color}">
 				{fmtCents(cents)} cents
 			</p>
-			<!-- The word always rides with the colour. A cue that only exists as
-			     a hue is a cue half the room cannot read. -->
 			<p class="reading-word" style="color: {band.color}">{band.word}</p>
 		{:else}
 			<p class="note-blank">—</p>
@@ -114,8 +78,6 @@
 		{/if}
 	</div>
 
-	<!-- THE SCALE. A place, not a target: the ticks are evenly spaced across
-	     the whole range and centre is marked no more loudly than the rest. -->
 	<div
 		class="scale"
 		role="img"
@@ -290,8 +252,6 @@
 		transform: translateX(-50%);
 	}
 
-	/* Centre is a landmark, not a goal — a shade clearer than its neighbours
-	   and nothing more. */
 	.tick.centre {
 		top: 6px;
 		bottom: 6px;
@@ -367,7 +327,6 @@
 		margin: 1.5rem 0 0.75rem;
 	}
 
-	/* Every face wears its word, and the 44px floor holds. */
 	.press {
 		min-height: 44px;
 		min-width: 10rem;

@@ -3,47 +3,6 @@
 	import { feelingStore } from '$lib/stores/feeling.svelte';
 	import { EMOJI_DEFS } from '$lib/data/emojis';
 
-	// HOW THIS FELT — the emotion log, hung on a creation.
-	//
-	// Phase 3 Wave 2 (2026-08-13, an **Opus** hand), the third movement's
-	// second half: the sattva room and the timer STAY (KP's ⚛ ruling for this
-	// phase), and the emotion log is RETARGETED to creations rather than
-	// standing off on its own.
-	//
-	// WHY IT IS HERE AT ALL, in KP's own words, which are the reason this is a
-	// foundation and not a feature:
-	//
-	//   "logging how we feel during a moment is the base of all we do, self
-	//    understanding and understanding oportunities abound"
-	//   "it is how we discover our values and internal core interests, which
-	//    help us align with ourselves"
-	//   "humans and tech need this as money becomes irrelevent"
-	//
-	//   — and, plainest of all: "the emotion log is not an inherited feature.
-	//     It is the base."
-	//
-	// So it does not live three taps away behind a nav drawer. It stands where
-	// the making happens: in the record room, and on a take while you are
-	// listening back to it.
-	//
-	// WHAT IT HANGS ON. The feelings table has carried `work_id` AND
-	// `take_file_name` since Phase 2, at KP's ⚛ "yes both" — a feeling about
-	// the song, a feeling about THIS attempt at it, or a feeling belonging to
-	// nothing at all. All three are honest, and "belongs to nothing" is a
-	// lawful answer offered plainly rather than hidden.
-	//
-	// A FACE WEARS ITS WORD. The emoji grid here is never emoji-only: every
-	// face carries its name underneath. The full form at /add has its own
-	// grid; this one is the quick door beside the work.
-	//
-	// A FEELING IS NOT A MARK. A feeling is about the take; a MARK is pinned
-	// to a moment INSIDE it, lives in a `.marks.json` sidecar, and is
-	// append-only by its own law. Two records, two laws — and since Wave 3 the
-	// marks rail also logs a feeling in the same press it pins a mark (KP's ⚛
-	// "a quick log of emoji in the moment is the capture"). That is one gesture
-	// reaching two records, never one record with two homes. THIS door stays
-	// exactly what it was: the plain way to say how a whole take felt, with the
-	// strength and the naming this rail deliberately does not stop to ask for.
 
 	let {
 		workId = null,
@@ -68,10 +27,6 @@
 	let saved = $state(false);
 	let saveError = $state<string | null>(null);
 
-	// The most specific thing available is where a feeling logged HERE most
-	// likely belongs — this door was opened from a take or from a work, and
-	// answering with the thing in front of you is not the same as guessing.
-	// It is still only a default, and all three answers are one tap away.
 	let target = $state<Target>('nothing');
 	let targetTouched = $state(false);
 	$effect(() => {
@@ -80,8 +35,6 @@
 	});
 
 	const chosenDef = $derived(EMOJI_DEFS.find((d) => d.emoji === emoji));
-	// The name is what makes a feeling findable later. If a hand names nothing,
-	// the face's own word stands in — never a blank row, and never a nag.
 	const effectiveName = $derived(nameDraft.trim() || chosenDef?.label || 'A feeling');
 
 	function targetLabel(t: Target): string {
@@ -97,9 +50,6 @@
 		try {
 			await feelingStore.addFeeling({
 				name: effectiveName,
-				// 'heard' is the honest sense for a feeling about sound being
-				// made or played back. It is a default and the full form can
-				// say otherwise.
 				sense: 'heard',
 				subcategory: 'music',
 				emoji,
@@ -125,7 +75,6 @@
 		}
 	}
 
-	// The full form, carrying what this door already knows. Nothing is retyped.
 	function openFullForm() {
 		const params = new URLSearchParams();
 		if (target === 'take' && takeFileName) params.set('take', takeFileName);
@@ -156,7 +105,6 @@
 				<p class="panel-error" role="alert">The log is not ready: {feelingStore.dbError}</p>
 			{/if}
 
-			<!-- THE FACES. Never emoji-only: every face wears its word. -->
 			<div class="faces" role="group" aria-label="Choose a feeling">
 				{#each EMOJI_DEFS as def (def.emoji)}
 					<button
@@ -172,15 +120,11 @@
 			</div>
 
 			{#if chosenDef}
-				<!-- The vessel's own definition outranks the Sanctuary's — the
-				     folksonomy law, the same one the full form keeps. -->
 				<p class="face-def">
 					{feelingStore.getPersonalDefinition(chosenDef.emoji) || chosenDef.definition}
 				</p>
 			{/if}
 
-			<!-- WHAT IT BELONGS TO. Asked calmly, never inferred, and "nothing"
-			     is a real answer sitting in the row with the others. -->
 			<div class="belongs">
 				<span class="belongs-word">Hang it on</span>
 				<div class="belongs-row" role="group" aria-label="What this feeling belongs to">
@@ -359,7 +303,6 @@
 		line-height: 1.45;
 	}
 
-	/* THE FACES — emoji above, word below, always. */
 	.faces {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(5.2rem, 1fr));

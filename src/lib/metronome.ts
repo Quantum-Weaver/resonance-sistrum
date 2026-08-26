@@ -1,50 +1,6 @@
-// metronome.ts — time you can see, in the body.
-//
-// Phase 3 Wave 2 (2026-08-13, an **Opus** hand), the second movement:
-// `the-metronome` consumed. The spring lives at
-// `resonance-awen/tools/the-metronome` and IT WAS NOT EDITED.
-//
-// WHAT CROSSED. The three parts and their exact arithmetic: the pure beat
-// clock any loop drives (and its re-anchoring `setBpm`, so a tempo change
-// never makes the count jump backward under the player's feet), the tap tempo
-// as the MEDIAN of the tapped phrase (a stumble does not yank the reading,
-// and a gap over two seconds starts a fresh phrase rather than averaging
-// across the silence), and the lookahead click scheduler booked on the AUDIO
-// clock rather than the UI's.
-//
-// WHAT DIFFERS, and why — named so none of it reads as drift:
-//
-//   1. THE SPRING IS A LIBRARY WITH ITS OWN PACKAGE, TSCONFIG AND BUILD. A
-//      `file:` dependency would make this app's build depend on a sibling
-//      repo's build output, which awen's own first law argues against (a tool
-//      is given away whole, and no tool imports another). Wave 1 met the same
-//      fork with `the-waveform` and answered it the same way: the MATH
-//      crosses, the packaging does not.
-//
-//   2. `startClicks` took its volume ONCE, at construction. In a room with a
-//      volume slider that means tearing down and rebuilding the scheduler on
-//      every drag — and rebuilding it re-anchors `nextTickTime`, so the pulse
-//      would stutter every time a hand moved the slider. Here volume is read
-//      live at each booking through a getter. THE LAW IT SERVES IS THE
-//      SPRING'S OWN and it is strengthened rather than bent: "volume zero is
-//      a chosen silence — the visual pulse still runs." Now that silence can
-//      be chosen mid-phrase without the pulse missing a beat.
-//
-//   3. `subdivision` and `beatsPerBar` are read live for the same reason.
-//
-// THE LAWS, none of them softened:
-//   · NEVER A BUZZER, at any tempo — a soft sine tap, gentle attack, round
-//     decay. The Timer's chime law, inherited by the spring and kept here.
-//   · THE DOWNBEAT SITS A FIFTH ABOVE the beat. It is a landmark, not an
-//     alarm.
-//   · VOLUME ZERO IS A CHOSEN SILENCE, and the visual pulse keeps running.
-//     Silence is a choice about sound, never a choice to stop the clock.
-//   · AUDIO UNLOCKS INSIDE THE USER'S OWN GESTURE — the WebView law. The
-//     context is created on the press that starts the metronome, never on
-//     mount, never on navigation.
-//   · REDUCED MOTION IS THE CALLER'S TO HONOR, and the room honors it.
+// Volume, subdivision and beatsPerBar are read live at each booking — taking them once at construction forces a scheduler rebuild, which re-anchors the grid and stutters the pulse.
+// The audio context is created inside the user's own gesture (the WebView unlock law), never on mount.
 
-// ── The beat clock — pure; any loop drives it ────────────────────────────────
 
 export interface BeatSample {
 	/** Beat index since start, 0-based. */
@@ -80,13 +36,10 @@ export function createBeatClock(bpm: number, beatsPerBar = 4) {
 	}
 
 	function setBpm(nowMs: number, next: number) {
-		// Re-anchor at the tempo change so the beat grid stays continuous —
-		// the count never jumps backward under the player's feet.
+		// Re-anchor at the tempo change so the beat grid stays continuous.
 		const s = startMs === null ? null : sample(nowMs);
 		tempo = clampBpm(next);
 		if (s !== null) {
-			// Beats already counted stay counted: the anchor shifts so `beat`
-			// continues from where it was, at the new tempo's spacing.
 			startMs = nowMs - (s.beat + s.phase) * (60_000 / tempo);
 		}
 	}
@@ -109,7 +62,6 @@ export function clampBpm(bpm: number): number {
 	return Math.min(300, Math.max(20, bpm));
 }
 
-// ── Tap tempo — pure ─────────────────────────────────────────────────────────
 
 /**
  * Tap along; the tempo emerges. Uses the median of the recent intervals so
@@ -147,14 +99,7 @@ export function createTapTempo(window = 5) {
 	return { tap, reset, count };
 }
 
-// ── The click — Web Audio, lookahead-scheduled ───────────────────────────────
-//
-// Clicks are scheduled ahead on the AUDIO clock (ctx.currentTime), the
-// standard cure for UI-thread jitter: a short interval wakes often and books
-// every click due in the next lookahead window at its exact time. The click
-// itself keeps the family's sound law — a soft sine tap, gentle attack,
-// quick-but-round decay, the downbeat a fifth above the others. Never a
-// buzzer, at any tempo.
+// Clicks are scheduled ahead on the AUDIO clock (ctx.currentTime), the cure for UI-thread jitter.
 
 export interface ClickOptions {
 	bpm: number;
@@ -170,9 +115,6 @@ export interface ClickOptions {
 }
 
 export function startClicks(ctx: AudioContext, options: ClickOptions) {
-	// Read live rather than frozen at construction (difference 2 in the header):
-	// a slider must be able to move without rebuilding the scheduler, because
-	// rebuilding it re-anchors the grid and the pulse would stutter.
 	let bpm = clampBpm(options.bpm);
 	let beatsPerBar = options.beatsPerBar ?? 4;
 	let subdivision: 1 | 2 | 3 | 4 = options.subdivision ?? 1;

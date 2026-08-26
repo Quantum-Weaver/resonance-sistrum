@@ -1,13 +1,7 @@
 import { getDb, generateId } from '$lib/stores/db';
 import type { Work } from '$lib/types/types';
 
-// Works — the things being made. `the-release-model`'s own noun: "a release
-// references works, never absorbs them."
-//
-// A work's id is a PROMISE. resonance-khoros is where a release lives (KP's ⚛
-// word: "resonance-khoros will likely be where the release goes easily"), and
-// it reaches back to a work by this id. So ids are generated once and never
-// regenerated.
+// A work's id is a promise — resonance-khoros reaches back to a work by this id, so ids are generated once and never regenerated.
 
 let works = $state<Work[]>([]);
 let loading = $state(false);
@@ -69,10 +63,7 @@ async function updateWork(id: string, updates: { title?: string; note?: string }
 	await loadWorks();
 }
 
-// Ungrouping, not destruction. Lose-nothing: deleting a work releases its
-// takes and its feelings rather than taking them with it. The take FILES are
-// never touched by this — the recorder owns the shelf, and deleting audio is a
-// separate, explicit act by the hand that made it.
+// Ungrouping, not destruction: deleting a work releases its takes and feelings; the take FILES are never touched.
 async function deleteWork(id: string) {
 	const db = await getDb();
 	if (!db) throw new Error('Database not ready — nothing was changed');

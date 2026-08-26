@@ -7,26 +7,7 @@ import {
 	type BeatSample
 } from '$lib/metronome';
 
-// The metronome room's store — Phase 3 Wave 2 (2026-08-13, an **Opus** hand).
-// `the-metronome` consumed: the beat clock, the tap tempo and the lookahead
-// click scheduler all live in `$lib/metronome.ts`; this store is the room's
-// running state and the vessel's kept choices.
-//
-// THE TWO CLOCKS, and why there are two. The CLICK is booked on the audio
-// clock (`ctx.currentTime`) — that is the spring's whole point, and it is why
-// a click never drifts with a busy UI thread. The PULSE is sampled from the
-// beat clock on animation frames, because a visual is a visual. They are
-// anchored together at start and they agree; if a frame is late the pulse is
-// late and the sound is not, which is the correct way round.
-//
-// SILENCE IS A CHOICE WITH THE PULSE STILL RUNNING. Volume zero books no
-// sound and stops nothing else: the beat count keeps counting, the pulse keeps
-// pulsing, the bar keeps turning. This is the spring's own law and it is the
-// one thing in this file that must never be "fixed".
-//
-// NO URGENCY ANYWHERE. There is no countdown, no "get ready", no flashing at
-// tempo, no red. A metronome states the time; it does not chase anybody
-// through it.
+// Volume zero books no sound and stops nothing else — the count, the pulse and the bar keep running.
 
 const BPM_KEY = 'resonance-sistrum-metronome-bpm';
 const BAR_KEY = 'resonance-sistrum-metronome-beats-per-bar';
@@ -75,22 +56,7 @@ function stopFollowing() {
 	frame = null;
 }
 
-// ONE WRITER PER FACT, which is the whole reason this loop is so short.
-//
-// The COUNT (beat · bar · beatInBar) comes from the scheduler's `onBeat` and
-// from nowhere else: the click is booked on the audio clock, so the sound is
-// what decides which beat it is, and the picture should follow the sound
-// rather than run a second opinion beside it. The frame loop supplies ONLY
-// the phase, which is a smoothness, not a fact.
-//
-// It matters more than it looks. When both wrote the count, changing the bar
-// length mid-run left the beat clock and the scheduler disagreeing about which
-// beat was current, and the number under the pulse flickered between two
-// answers. With one writer there is nothing to disagree.
-//
-// With reduced motion there is no frame loop at all — the count still
-// advances, because its writer is the scheduler. Reduced motion removes the
-// MOTION, never the information.
+// ONE WRITER PER FACT: the scheduler owns the count (beat · bar · beatInBar); the frame loop supplies only the phase.
 function startFollowing() {
 	if (!browser || reducedMotion()) return;
 	stopFollowing();
@@ -112,8 +78,7 @@ async function start() {
 	error = null;
 	try {
 		if (!ctx) ctx = new AudioContext();
-		// A context that was suspended (tab hidden, an earlier stop) resumes
-		// inside this same gesture.
+		// A context that was suspended (tab hidden, an earlier stop) resumes inside this same gesture.
 		if (ctx.state === 'suspended') await ctx.resume();
 
 		clock = createBeatClock(bpm, beatsPerBar);
@@ -161,8 +126,7 @@ function toggle() {
 
 function setBpm(next: number) {
 	bpm = clampBpm(next);
-	// Re-anchored rather than restarted: the count continues at the new
-	// spacing instead of jumping backward under the player's feet.
+	// Re-anchored rather than restarted so the count continues at the new spacing.
 	if (clock) clock.setBpm(performance.now(), bpm);
 	clicks?.setBpm(bpm);
 	if (browser) localStorage.setItem(BPM_KEY, String(bpm));
@@ -170,10 +134,7 @@ function setBpm(next: number) {
 
 function setBeatsPerBar(next: number) {
 	beatsPerBar = Math.min(12, Math.max(1, Math.round(next)));
-	// Only the scheduler is told: it owns the count, and the beat clock here
-	// is only asked for phase, which the bar's length does not touch. The
-	// pulse does not stutter and the tempo does not move — changing how you
-	// are counting should not interrupt what you are playing.
+	// Only the scheduler is told: it owns the count; the beat clock here is asked only for phase.
 	clicks?.setBeatsPerBar(beatsPerBar);
 	if (browser) localStorage.setItem(BAR_KEY, String(beatsPerBar));
 }
@@ -184,8 +145,7 @@ function setSubdivision(next: Subdivision) {
 	if (browser) localStorage.setItem(SUB_KEY, String(next));
 }
 
-/** Zero is a chosen silence: no sound is booked, and everything else keeps
- *  running. The choice persists, because a choice is kept. */
+/** Zero is a chosen silence: no sound is booked, everything else keeps running. */
 function setVolume(next: number) {
 	volume = Math.min(1, Math.max(0, next));
 	clicks?.setVolume(volume);
@@ -219,9 +179,7 @@ function load() {
 	const savedSub = Number(localStorage.getItem(SUB_KEY));
 	if (savedSub === 1 || savedSub === 2 || savedSub === 3 || savedSub === 4) subdivision = savedSub;
 	const savedVol = Number(localStorage.getItem(VOL_KEY));
-	// Zero is a real saved value and must survive the load — `savedVol > 0`
-	// would silently un-choose somebody's silence every time they opened the
-	// room.
+	// Zero is a real saved value — `savedVol > 0` would un-choose somebody's silence.
 	if (Number.isFinite(savedVol) && savedVol >= 0 && savedVol <= 1) volume = savedVol;
 }
 

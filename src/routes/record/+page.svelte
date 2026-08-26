@@ -9,24 +9,6 @@
 	import TakePlayer from '$lib/components/TakePlayer.svelte';
 	import FeelingHere from '$lib/components/FeelingHere.svelte';
 
-	// THE RECORD ROOM — Phase 3 Wave 1 (2026-08-13, an Opus hand). The room is
-	// carried from `resonance-assets/sistrum-inheritance/` and then wired into
-	// THIS body's domain: a sealed take's row lands in the takes table, keyed by
-	// its file name, and its work is assigned by the artist's own hand or not
-	// at all.
-	//
-	// The two findings of the Summons ride here from the inheritance: the room
-	// ARMS INSTANTLY (nothing heavy on mount — the idea must not die while the
-	// app loads), and Bluetooth's monitoring delay is said plainly rather than
-	// pretended away.
-	//
-	// THE LAWS ON THIS PAGE, none of them softened:
-	//   · Nothing records until a hand presses Record. Opt-in by nature.
-	//   · Nothing recorded touches a network. Ever. The only door out is the
-	//     export, and it opens onto this device's own file dialog.
-	//   · Lose-nothing: there is no delete here. A take that exists keeps
-	//     existing.
-	//   · Nothing infers a take's work.
 
 	let selectedDevice = $state<string | null>(null);
 	let takeName = $state('');
@@ -36,8 +18,6 @@
 	const recording = $derived(recorderStore.recording);
 	const paused = $derived(recorderStore.paused);
 	const capped = $derived(recorderStore.capped);
-	// Holding is a choice made below — an autonomy call about when the
-	// microphone may be open at all, not a tuning knob.
 	const canHold = $derived(recordPrefs.mode === 'hold');
 	const peak = $derived(recorderStore.peak);
 	const clipped = $derived(recorderStore.clipped);
@@ -77,14 +57,7 @@
 		await recorderStore.start(selectedDevice, recordPrefs.capSecs);
 	}
 
-	// The room works like a voice recorder (KP's ⚛ shape, 2026-08-12): record,
-	// hold, resume, save. There is no keep-or-discard moment at the end of a
-	// take — a saved take simply lands on the shelf and stays there.
-	//
-	// THE ROW LANDS WITH THE FILE. The file on disk is the truth; this row is
-	// the meaning around it, and it is written here so that a take is
-	// assignable, noteable and findable from the moment it exists. It carries
-	// NO work: `work_id` stays null until a hand says otherwise.
+	// The row lands with the file and carries NO work: `work_id` stays null until a hand says otherwise.
 	async function saveTake() {
 		const sealed = await recorderStore.stop(true, takeName.trim() ? takeName.trim() : null);
 		takeName = '';
@@ -100,18 +73,11 @@
 				createdAt: sealed.created_at * 1000
 			});
 		} catch (e) {
-			// The audio is sealed and safe on disk whatever happens here — the
-			// row is meaning, and meaning can be written again. Said plainly
-			// rather than swallowed.
 			console.error('[record] the take is safe; its row did not write:', e);
 		}
 	}
 
-	// A capped take has ALREADY released the device, on the capture thread in
-	// Rust — the samples are simply waiting. Seal them at once: the no-holding
-	// mode's whole promise is that a take ends by itself at its maximum with
-	// nothing left for anyone to do. The flag is a plain let, not $state, so
-	// sealing cannot re-trigger the effect that started it.
+	// A capped take has already released the device in Rust; the samples wait. `sealingCap` is a plain let, not $state, so sealing cannot re-trigger the effect that started it.
 	let sealingCap = false;
 	$effect(() => {
 		if (capped && !sealingCap) {
@@ -122,10 +88,7 @@
 		}
 	});
 
-	// Every file on the shelf gets a row, so that a take recorded by an older
-	// build is as assignable as one recorded a minute ago. This registers what
-	// ALREADY EXISTS — it records nothing, it infers no work, and it never
-	// overwrites meaning a hand has already put on a take.
+	// Registers what already exists — records nothing, infers no work, and never overwrites meaning a hand has put on a take.
 	async function registerOrphans() {
 		for (const t of recorderStore.takes) {
 			if (takeStore.byFileName(t.file_name)) continue;
@@ -138,8 +101,6 @@
 					createdAt: t.created_at * 1000
 				});
 			} catch {
-				// A row that will not write is not a reason to stop reading the
-				// shelf. The file is still there and still playable.
 			}
 		}
 	}
@@ -150,8 +111,6 @@
 	}
 
 	onMount(() => {
-		// Fast-arm: the record button is live immediately (a null device hint
-		// means the platform default); everything else fills in behind it.
 		recordPrefs.load();
 		playbackStore.loadVolume();
 		recorderStore.loadDevices();
@@ -160,18 +119,12 @@
 				recorderStore.refreshTakes(),
 				takeStore.loadTakes(),
 				workStore.loadWorks(),
-				// One directory read — which takes carry a sidecar at all. No
-				// history is opened to find out, so the shelf stays cheap.
 				marksStore.loadMarked()
 			]);
 			await registerOrphans();
 		})();
 
 		return () => {
-			// Leaving the room never stops a running take silently — the take
-			// keeps recording and the room shows it honestly on return. The
-			// PLAYBACK does stop, because sound following you out of a room you
-			// left is sound nobody asked for.
 			playbackStore.close();
 		};
 	});
@@ -264,9 +217,6 @@
 				</p>
 			{/if}
 
-			<!-- The doorway stands here too, before a note has been played:
-			     what a musician feels walking UP to a take is worth as much as
-			     what they feel after it, and "belongs to nothing" is lawful. -->
 			<div class="arm-feeling">
 				<FeelingHere />
 			</div>
@@ -320,9 +270,6 @@
 	{/if}
 
 	{#if lastSealed}
-		<!-- THE TAKE REPORT, said plainly. The real length measured from the
-		     samples, the device's own rate, the true peak — and silence
-		     reported as silence rather than as a very small number. -->
 		<p class="sealed-note">
 			Sealed: {fmtSeconds(lastSealed.seconds)} at {lastSealed.sample_rate} Hz ·
 			{#if lastSealed.peak_dbfs !== null}
@@ -333,11 +280,6 @@
 				· clipped ×{lastSealed.clipped}{/if}. It is on the shelf.
 		</p>
 
-		<!-- THE EMOTION LOG AT THE MAKING SURFACE (Wave 2). It stands right
-		     after the take seals, because that is the moment KP's own reason
-		     is about: "logging how we feel during a moment is the base of all
-		     we do." It asks nothing and blocks nothing — a take that is never
-		     felt at is a complete take. -->
 		<div class="sealed-feeling">
 			<FeelingHere
 				takeFileName={lastSealed.file_name}
@@ -550,9 +492,6 @@
 		margin: 0;
 	}
 
-	/* Held is a resting state, not an alarm: the word goes quiet rather than
-	   red, and the meter falls to nothing on its own because a held take
-	   feeds the level no samples. */
 	.listening.held {
 		color: var(--text-secondary);
 	}
@@ -624,10 +563,6 @@
 	.hold-btn {
 		padding: 0.7rem 1.4rem;
 		border-radius: 22px;
-		/* Full-strength text and a visible edge. The button this replaced was
-		   never disabled, but a muted color on transparent read as greyed-out
-		   to its first user (KP, S25, 2026-08-12). A live action must look
-		   live — the sensory law cuts both ways. */
 		border: 1px solid var(--text-secondary);
 		background: transparent;
 		color: var(--text);

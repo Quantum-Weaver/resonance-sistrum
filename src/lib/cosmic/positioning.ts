@@ -1,11 +1,3 @@
-// ============================================================================
-/* resonance-ziggy/modules/cosmic/constants/positioning.ts */
-// QUANTUM POSITIONING SYSTEM - COORDINATE GRAPHING FOR IMMERSIVE EXPERIENCES
-// Single source of truth for viewport anchors, parallax layers, zoom targets,
-// beam origins, camera positions, and coordinate utilities.
-// Derived from dimensions.ts and environment keys.
-// ============================================================================
-
 import { BASE_UNIT, SCREEN_CATEGORIES } from './dimensions';
 
 /**
@@ -17,9 +9,6 @@ import { BASE_UNIT, SCREEN_CATEGORIES } from './dimensions';
  */
 export type EnvironmentKey = string;
 
-// ============================================================================
-// 1. VIEWPORT ANCHORS & QUADRANTS
-// ============================================================================
 
 export const VIEWPORT_ANCHORS = {
   // Standard positions (percentage-based)
@@ -48,9 +37,6 @@ export const VIEWPORT_ANCHORS = {
 
 export type ViewportAnchor = keyof typeof VIEWPORT_ANCHORS;
 
-// ============================================================================
-// 2. PARALLAX LAYERS - Depth factors for immersive scrolling
-// ============================================================================
 
 export const PARALLAX_LAYERS = {
   /** Deepest background - stars, nebulae, cosmic backdrop */
@@ -85,9 +71,6 @@ export function getParallaxTransform(
   return `translate(${x * factor}px, ${y * factor}px)`;
 }
 
-// ============================================================================
-// 3. ZOOM TARGETS - Coordinates for panorama zooming
-// ============================================================================
 
 export interface ZoomTarget {
   /** X coordinate in panorama (0-100%) */
@@ -329,9 +312,6 @@ export function getZoomTarget(environment: EnvironmentKey): ZoomTarget {
   };
 }
 
-// ============================================================================
-// 4. BEAM ORIGINS & PATHS - For Continuity Beam
-// ============================================================================
 
 export interface BeamPath {
   /** Starting point (percentage of screen width) */
@@ -368,9 +348,6 @@ export function getBeamPath(origin: BeamOrigin = 'topLeft'): BeamPath {
   return BEAM_ORIGINS[origin];
 }
 
-// ============================================================================
-// 5. CAMERA POSITIONS - For 3D panorama navigation
-// ============================================================================
 
 export interface CameraPosition {
   /** X coordinate in 3D space */
@@ -409,9 +386,6 @@ export function getCameraPosition(preset: CameraPreset = 'default'): CameraPosit
   return CAMERA_POSITIONS[preset];
 }
 
-// ============================================================================
-// 6. ORBIT CONTROLS - For interactive panorama navigation
-// ============================================================================
 
 export interface OrbitConfig {
   /** Enable auto-rotation */
@@ -481,9 +455,6 @@ export const ORBIT_CONFIGS = {
 
 export type OrbitMode = keyof typeof ORBIT_CONFIGS;
 
-// ============================================================================
-// 7. COORDINATE UTILITIES
-// ============================================================================
 
 /** Convert percentage to pixel value */
 export function percentToPixels(percent: number, viewportSize: number): number {
@@ -540,9 +511,6 @@ export function coordinateAngle(
   return (Math.atan2(dy, dx) * 180) / Math.PI;
 }
 
-// ============================================================================
-// 8. RESPONSIVE COORDINATES - Adjusts for screen category
-// ============================================================================
 
 export interface ResponsiveCoordinate {
   mobile: number;
@@ -562,16 +530,6 @@ export function getResponsiveCoordinate(
   return coord.immersive;
 }
 
-// ============================================================================
-// 9. SCENE PRIMITIVES FOR THE STAGE — camera moves + timeline
-// ============================================================================
-// O-6 · Intention #2 (create our own animated content) + this file's own
-// "immersive experiences" header + G-2 staging — scene primitives for the
-// Stage. CAMERA_POSITIONS exist, but there was no *move* between them and no
-// *timeline* to compose them. CAMERA_MOVES are timed, eased transitions between
-// two existing CAMERA_POSITIONS (near-clone of the zoom-targets precedent);
-// SCENE_SEQUENCES are ordered beats (camera move and/or environment zoom, each
-// held for a duration) — a scriptable scene. CSS face: generate_scene.ts.
 
 export interface CameraMove {
   /** Starting camera preset */
@@ -662,19 +620,7 @@ export function sceneTotalDuration(sequence: SceneSequence): number {
   }, 0);
 }
 
-// ============================================================================
-// 11. DIMENSIONAL PROJECTION — the house's first 3D, 2026-08-17
-// ============================================================================
-//
-// Added at KP's ⚛ word ("this will be the house's first 3d experience") beside
-// the camera and parallax work this file already owns, because a projection is
-// a camera with its sleeves rolled up. Shapes come from `solids.ts`; this
-// section turns them into something a screen can draw.
-//
-// THE SPACE, STATED ONCE SO NOTHING HAS TO GUESS: x runs right, y runs DOWN
-// (screen convention, not textbook), z runs TOWARD the viewer. Rotations are
-// applied X, then Y, then Z — v′ = Rz·Ry·Rx·v — and every function below
-// assumes that order.
+// Space convention: x runs right, y runs DOWN, z runs TOWARD the viewer; rotations apply X, then Y, then Z (v' = Rz·Ry·Rx·v).
 
 /** Where the house's light stands: upper-left and slightly in front, which is
  *  the same corner plate-forge lights from (`sheen()` sweeps upper-left, and
@@ -765,9 +711,6 @@ export function diffuse(
  *
  *     ĥ    = normalize(l̂ + v̂)          the half vector, viewer at +z
  *     spec = max(0, n̂·ĥ) ^ shininess
- *
- * Kept beside `diffuse` rather than in an app, because a house whose two
- * surfaces disagree about where the light is has two lights.
  */
 export function specular(
   normal: readonly [number, number, number],
@@ -783,19 +726,7 @@ export function specular(
   return Math.pow(Math.max(0, dot), shininess);
 }
 
-// ----------------------------------------------------------------------------
-// THE FIRST-PERSON TABLE — a surface seen from where someone sits
-// ----------------------------------------------------------------------------
-//
-// Added 2026-08-17 at KP's ⚛ word: "the table top tarot experience should be
-// data driven, but i would like the 3d first person view effect if possible",
-// and "a sense of glancing in a direction toward a card as it is being
-// interacted with."
-//
-// THIS IS A DIFFERENT 3D FROM THE SOLIDS ABOVE, deliberately. A die is a shape
-// we generate, so we project it ourselves. A card is a photograph, and the
-// browser's own perspective engine is better at photographs than we are. These
-// constants are for a CSS 3D plane; `rotate3`/`project` are for our own.
+// The first-person table is a CSS 3D plane; rotate3/project above are for our own projection.
 
 export const FIRST_PERSON_TABLE = {
   /** How far the eye sits from the surface, in CSS pixels. */
@@ -850,9 +781,6 @@ export function orientationFacing(
   return { rx, ry };
 }
 
-// ============================================================================
-// 10. TYPE EXPORTS
-// ============================================================================
 
 export type {
   ZoomTarget as ZoomTargetType,

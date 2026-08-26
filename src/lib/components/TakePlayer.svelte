@@ -8,32 +8,7 @@
 	import MarksRail from '$lib/components/MarksRail.svelte';
 	import FeelingHere from '$lib/components/FeelingHere.svelte';
 
-	// Hearing one take back. `the-player` and `the-waveform` consumed together,
-	// which is how they were always meant to stand: the shape shows where you
-	// are, the rail is the shape, and the sound only ever starts at a press.
-	//
-	// NO AUTOPLAY. Opening this panel loads the take and stops there. The panel
-	// appearing is not consent to make noise.
-	//
-	// WAVE 2 ADDS TWO DOORS HERE (2026-08-13, an **Opus** hand), and they are
-	// deliberately different doors:
-	//
-	//   · THE MARKS RAIL — `the-moment-marks`, pinned to POSITIONS inside the
-	//     take, living in a `.marks.json` sidecar beside the WAV and never in
-	//     the database. Append-only by law: an edit revises, a removal
-	//     retracts, and the history stays whole.
-	//   · THE FEELING DOORWAY — the emotion log, about the take AS A WHOLE (or
-	//     about its work, or about nothing). KP's ⚛ word: "the emotion log is
-	//     not an inherited feature. It is the base." So it stands here, where
-	//     the listening happens, rather than three taps away behind the nav.
-	//
-	// WAVE 3 JOINS THEM WITHOUT MERGING THEM (2026-08-13, an **Opus** hand), at
-	// KP's ⚛ ruling: "moment marks should be able to trigger a new mood event
-	// when a mark is created. a quick log of emoji in the moment is the
-	// capture." Pinning a mark now logs a feeling in the SAME press — two
-	// records, two laws, one gesture. The doorway below stays exactly where it
-	// was: a feeling about the whole take still has its own plain door, and one
-	// logged from the rail is about the moment the mark is pinned at.
+	// No autoplay: opening this panel loads the take and stops there.
 
 	let { take, onclose }: { take: TakeFile; onclose: () => void } = $props();
 
@@ -46,20 +21,14 @@
 	const playing = $derived(isOpen && playbackStore.playing);
 	const duration = $derived(isOpen && playbackStore.duration > 0 ? playbackStore.duration : take.seconds);
 	const progress = $derived(isOpen ? playbackStore.progress : 0);
-	// Where a new mark would land: the playhead's own seconds, which is the
-	// only honest place to pin "this moment".
 	const playhead = $derived(isOpen ? playbackStore.position : 0);
 	const workTitle = $derived(row?.workId ? (workStore.byId(row.workId)?.title ?? null) : null);
 
-	// Loading the take is not playing it, so it is safe to do on open — the
-	// element sits ready and silent until a hand presses Play.
 	$effect(() => {
 		const t = take;
 		void playbackStore.open(t);
 	});
 
-	// The note follows whichever take is open, and never overwrites what a hand
-	// is in the middle of typing for a different one.
 	let noteFor = $state<string | null>(null);
 	$effect(() => {
 		const name = take.file_name;
@@ -77,10 +46,6 @@
 		return `${m}:${String(s).padStart(2, '0')}`;
 	}
 
-	// The row is written on save, so it is normally already here. If a take was
-	// sealed by an older build — or the file arrived on the shelf some other
-	// way — the row is made now, carrying only the audio facts. It never
-	// carries a work: that is the artist's word and nothing else's.
 	async function ensureRow() {
 		if (row) return;
 		await takeStore.upsertTake({
@@ -157,13 +122,7 @@
 		</label>
 	</div>
 
-	<!-- The marks rail sits directly under the shape, sharing its scale, so a
-	     pin is beneath the sound it is about.
 
-	     `workId` is handed down for the QUICK LOG (Wave 3): a feeling logged by
-	     pinning a mark hangs on this take AND on its work when the artist has
-	     said which work it is. Handed, never inferred — the picker below is the
-	     only thing that decides a take's work. -->
 	<MarksRail
 		fileName={take.file_name}
 		{duration}
@@ -174,7 +133,6 @@
 
 	<WorkPicker workId={row?.workId ?? null} onassign={assignWork} />
 
-	<!-- The emotion log, at the surface where the sound is heard. -->
 	<FeelingHere
 		takeFileName={take.file_name}
 		takeTitle={take.file_name.replace(/\.wav$/, '')}
@@ -263,8 +221,6 @@
 		flex-wrap: wrap;
 	}
 
-	/* Every face wears its word: the transport says Play and Pause, never a
-	   naked triangle. The glyph rides along with the word, not instead of it. */
 	.press {
 		min-height: 44px;
 		min-width: 6.5rem;

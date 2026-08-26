@@ -2,23 +2,7 @@ import { browser } from '$app/environment';
 import { convertFileSrc, invoke } from '@tauri-apps/api/core';
 import type { TakeFile } from '$lib/stores/recorder.svelte';
 
-// Hearing a take back — `the-player` consumed (Phase 3 Wave 1, 2026-08-13, an
-// Opus hand). The spring's tool is a custom element for any web page; this body
-// is a Svelte app with one audio surface, so what crossed is the element's LAWS
-// rather than its tag. They are the tool's own words, and they are kept:
-//
-//   · NO AUTOPLAY, EVER — sound is the vessel's chosen moment; nothing plays
-//     until the user's own press, and a refused play is reported plainly,
-//     never pushed. Opening a take LOADS it. It does not start it.
-//   · Volume zero is a chosen silence — never corrected, never "helpfully"
-//     raised, and it persists.
-//   · A position, never a verdict — the rail is where you are in the sound.
-//     Nothing here judges.
-//   · Nothing leaves the page — the only source this store will ever load is a
-//     take on this device's own shelf.
-//
-// HEADPHONE-SAFE BY DEFAULT: a take opens at 0.7, not at 1.0. The first sound a
-// musician hears from their own app should never be the loudest one it can make.
+// No autoplay: opening a take LOADS it, never starts it. A take opens at 0.7 volume, headphone-safe.
 
 const VOLUME_KEY = 'resonance-sistrum-playback-volume';
 const DEFAULT_VOLUME = 0.7;
@@ -40,10 +24,7 @@ let error = $state<string | null>(null);
 const reducedMotion = () =>
 	browser && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// The playhead follows the sound. With reduced motion the element's own
-// `timeupdate` carries it (a few times a second, no animation frame at all);
-// otherwise a frame loop keeps it smooth while playing and stops the moment
-// it is not. Either way it is the same position — only the refresh differs.
+// With reduced motion the element's own `timeupdate` carries the playhead; otherwise a frame loop keeps it smooth.
 function startFollowing() {
 	if (!browser || reducedMotion()) return;
 	stopFollowing();
@@ -72,9 +53,7 @@ function ensureElement(): HTMLAudioElement {
 	el.preload = 'metadata';
 	el.volume = volume;
 	el.addEventListener('loadedmetadata', () => {
-		// A WAV's duration is known from its header; if the element cannot say
-		// (it happens with some streamed sources), the take's own reported
-		// length stands instead — set by open() below.
+		// If the element cannot report duration, the take's own reported length stands (set by open()).
 		if (Number.isFinite(el.duration) && el.duration > 0) duration = el.duration;
 	});
 	el.addEventListener('timeupdate', () => {
@@ -92,8 +71,6 @@ function ensureElement(): HTMLAudioElement {
 	el.addEventListener('ended', () => {
 		playing = false;
 		stopFollowing();
-		// Rest at the end rather than snapping to the start: where the sound
-		// finished is information, and the next press begins again anyway.
 		position = el.duration || position;
 	});
 	element = el;
@@ -122,8 +99,6 @@ async function open(take: TakeFile) {
 	fileName = take.file_name;
 	playing = false;
 	position = 0;
-	// The recorder measured this from the samples themselves. It stands until
-	// the element reads the header and agrees.
 	duration = take.seconds;
 	error = null;
 	loading = true;
@@ -166,8 +141,7 @@ async function play() {
 	try {
 		await element.play();
 	} catch (e) {
-		// The asset road can fail at PLAY rather than at load. One retry over
-		// the byte road, then the truth.
+		// The asset road can fail at PLAY rather than at load — one retry over the byte road, then the truth.
 		const take = currentTake;
 		if (take && !objectUrl) {
 			await openByBytes(take);
@@ -175,7 +149,6 @@ async function play() {
 				await element.play();
 				return;
 			} catch {
-				/* fall through to the plain report */
 			}
 		}
 		error = e instanceof Error ? e.message : String(e);

@@ -6,7 +6,6 @@
 
 	const feelings = $derived(feelingStore.feelings);
 
-	// ── Your Dictionary (folksonomy editor, Compass pattern) ──────────────────
 
 	let selectedDictEmoji = $state<string | null>(null);
 	let editingPersonalDef = $state('');
@@ -31,7 +30,6 @@
 		return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 	}
 
-	// ── 1. Top Emojis ──────────────────────────────────────────────────────────
 
 	const topEmojis = $derived.by(() => {
 		const counts: Record<string, number> = {};
@@ -50,7 +48,6 @@
 		return `${(1.2 + (count / maxCount) * 1.8).toFixed(2)}rem`;
 	}
 
-	// ── 2. By Sense ────────────────────────────────────────────────────────────
 
 	const bySense = $derived.by(() => {
 		const counts: Record<string, number> = {};
@@ -65,7 +62,6 @@
 
 	const topSense = $derived(bySense.find(s => s.count > 0) ?? null);
 
-	// ── 3. Streak ──────────────────────────────────────────────────────────────
 
 	const streak = $derived.by(() => {
 		if (feelings.length === 0) return 0;
@@ -90,7 +86,6 @@
 		return count;
 	});
 
-	// ── 4. Time of Day ─────────────────────────────────────────────────────────
 
 	type TODKey = 'morning' | 'afternoon' | 'evening' | 'night';
 
@@ -133,7 +128,6 @@
 		return `You often log in the ${dominant}.`;
 	});
 
-	// ── 5. Recent Mood ─────────────────────────────────────────────────────────
 
 	function dayLabel(date: Date, index: number): string {
 		if (index === 0) return 'Today';
@@ -160,11 +154,9 @@
 
 	const hasThisWeek = $derived(recentMood.some(d => d.count > 0));
 
-	// ── Not Sure count (Feature 4) ─────────────────────────────────────────────
 
 	const notSureCount = $derived(feelings.filter((e) => e.sense === 'not_sure').length);
 
-	// ── 6. Intensity Trend ─────────────────────────────────────────────────────
 
 	const intensityTrend = $derived.by((): 'increasing' | 'decreasing' | 'stable' | 'insufficient' => {
 		const now = Date.now();
@@ -183,7 +175,6 @@
 		return 'stable';
 	});
 
-	// ── 7. Patterns (Feature 5) ─────────────────────────────────────────────────
 
 	interface PatternEntry {
 		senseId: string;
@@ -232,7 +223,6 @@
 
 	<div class="cards">
 
-		<!-- 1. Top Emojis -->
 		<div class="card">
 			<div class="card-label">Most felt</div>
 			{#if topEmojis.length === 0}
@@ -254,7 +244,6 @@
 			{/if}
 		</div>
 
-		<!-- 2. By Sense -->
 		<div class="card">
 			<div class="card-label">By sense</div>
 			<div class="sense-list">
@@ -276,7 +265,6 @@
 			{/if}
 		</div>
 
-		<!-- 3. Streak -->
 		<div class="card">
 			<div class="card-label">Streak</div>
 			{#if streak === 0}
@@ -295,7 +283,6 @@
 			{/if}
 		</div>
 
-		<!-- 4. Time of Day -->
 		<div class="card">
 			<div class="card-label">Time of day</div>
 			<div class="tod-grid">
@@ -317,7 +304,6 @@
 			{/if}
 		</div>
 
-		<!-- 5. Recent Mood -->
 		<div class="card">
 			<div class="card-label">This week</div>
 			{#if !hasThisWeek}
@@ -334,7 +320,6 @@
 			{/if}
 		</div>
 
-		<!-- 6. Intensity Trend -->
 		<div class="card">
 			<div class="card-label">Intensity</div>
 			<p class="card-insight">
@@ -350,7 +335,6 @@
 			</p>
 		</div>
 
-		<!-- 7. Patterns -->
 		{#if feelings.length >= 20}
 		<div class="card">
 			<div class="card-label">Patterns</div>
@@ -366,8 +350,6 @@
 		</div>
 		{/if}
 
-		<!-- 8. Your Dictionary — the folksonomy layer (Compass pattern):
-		     the Sanctuary defines each emoji once; the vessel may redefine it. -->
 		<div class="card">
 			<div class="card-label">Your dictionary</div>
 			<div class="dict-grid">
@@ -419,7 +401,6 @@
 		min-height: 100%;
 	}
 
-	/* Header */
 	.insights-header {
 		padding: 1rem 1.25rem 0.75rem;
 		border-bottom: 1px solid var(--border-color);
@@ -432,7 +413,6 @@
 		margin: 0;
 	}
 
-	/* Card grid */
 	.cards {
 		padding: 1rem;
 		display: flex;
@@ -479,7 +459,6 @@
 		line-height: 1.5;
 	}
 
-	/* ── 1. Emoji Cloud ── */
 	.emoji-cloud {
 		display: flex;
 		flex-wrap: wrap;
@@ -495,7 +474,6 @@
 	}
 	.cloud-emoji:hover { transform: scale(1.15); }
 
-	/* ── 2. Sense List ── */
 	.sense-list {
 		display: flex;
 		flex-direction: column;
@@ -521,7 +499,6 @@
 		text-align: right;
 	}
 
-	/* ── 3. Streak ── */
 	.streak-display {
 		display: flex;
 		align-items: baseline;
@@ -540,7 +517,6 @@
 		color: var(--text-secondary);
 	}
 
-	/* ── 4. Time of Day ── */
 	.tod-grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
@@ -571,7 +547,6 @@
 	}
 	.tod-lbl { font-size: 0.6rem; color: var(--text-muted); text-align: center; }
 
-	/* ── 5. Recent Mood ── */
 	.mood-row {
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
@@ -601,8 +576,6 @@
 		white-space: nowrap;
 	}
 
-	/* ── 8. Your Dictionary (Compass pattern) ── */
-	/* Single-row carousel — all emojis reachable by horizontal scroll */
 	.dict-grid {
 		display: flex;
 		flex-wrap: nowrap;
