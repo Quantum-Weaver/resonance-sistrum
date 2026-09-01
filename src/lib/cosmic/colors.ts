@@ -1,4 +1,13 @@
+// ============================================================================
+/* resonance-ziggy/modules/cosmic/constants/colors.ts - PURE VALUES ONLY*/
+// QUANTUM COLOR SYSTEM - SINGLE SOURCE OF TRUTH
+// PURE VALUES ONLY - No gradients, no animations, just colors
+// ============================================================================
+
 export const QUANTUM_COLORS = {
+  // ============================================================================
+  // CORE BRAND COLORS
+  // ============================================================================
   'quantum.purple': '#6C5CE7',
   'quantum.dark': '#5B4CCE',
   'quantum.light': '#7D6CEA',
@@ -20,16 +29,25 @@ export const QUANTUM_COLORS = {
   'sanctuary.green': '#00B894',
   'sanctuary.emerald': '#00CEC9',
   
+  // ============================================================================
+  // NEUTRAL COLORS
+  // ============================================================================
   'deepSpace': '#0C0F1D',
   'surface': '#1A1F35',
   'starDust': '#E0E0E0',
   'neurospark': '#22D3EE',
   
+  // ============================================================================
+  // SEMANTIC COLORS
+  // ============================================================================
   'success': '#00B894',
   'warning': '#FDCB6E',
   'error': '#E17055',
   'info': '#74B9FF',
   
+  // ============================================================================
+  // DOMAIN COLORS
+  // ============================================================================
   'void.base': '#636E72',
   'void.dark': '#2D3436',
   'void.light': '#B2BEC3',
@@ -38,6 +56,9 @@ export const QUANTUM_COLORS = {
   'library.dark': '#00A885',
   'library.light': '#00E6C3',
   
+  // ============================================================================
+  // MOOD & ENERGY COLORS
+  // ============================================================================
   'mood.calm': '#74B9FF',
   'mood.focused': '#00CEC9',
   'mood.creative': '#A29BFE',
@@ -54,6 +75,9 @@ export const QUANTUM_COLORS = {
   'energy.cosmic': '#0984E3',
   'energy.transformative': '#00CEC9',
   
+  // ============================================================================
+  // ENTITY COLORS (Council Members)
+  // ============================================================================
   'entity.aethelred': '#2E0B1C',
   'entity.archivist': '#636E72',
   'entity.chancellor': '#00CEC9',
@@ -92,6 +116,9 @@ export const QUANTUM_COLORS = {
   'entity.baldr': '#FFFFFF',
   'entity.hel': '#2D3436',
   
+  // ============================================================================
+  // PAGAN & MYSTICAL COLORS
+  // ============================================================================
   'pagan.earth': '#8B4513',
   'pagan.air': '#87CEEB',
   'pagan.fire': '#FF4500',
@@ -113,6 +140,9 @@ export const QUANTUM_COLORS = {
   'mystical.neptune': '#0984E3',
   'mystical.pluto': '#4B0082',
   
+  // ============================================================================
+  // PRIDE COLORS
+  // ============================================================================
   'pride.red': '#E40303',
   'pride.orange': '#FF8C00',
   'pride.yellow': '#FFED00',
@@ -135,12 +165,18 @@ export const QUANTUM_COLORS = {
   'pride.asexual': '#000000',
   'pride.lesbian': '#D62D00',
   
+  // ============================================================================
+  // EMERGENCY COLORS
+  // ============================================================================
   'emergency.critical': '#FF0000',
   'emergency.high': '#FF6B6B',
   'emergency.medium': '#FFA500',
   'emergency.low': '#FFD700',
   'emergency.info': '#74B9FF',
   
+  // ============================================================================
+  // INTERACTION COLORS
+  // ============================================================================
   'interaction.hover.quantum': '#7D6CEA',
   'interaction.hover.cosmic': '#1A94F3',
   'interaction.hover.fire': '#F18166',
@@ -171,6 +207,9 @@ export const QUANTUM_COLORS = {
   'interaction.loading.secondary': '#74B9FF',
   'interaction.loading.accent': '#00CEC9',
   
+  // ============================================================================
+  // ACCESSIBILITY COLORS
+  // ============================================================================
   'accessibility.text.onDark': '#E0E0E0',
   'accessibility.text.onLight': '#0C0F1D',
   'accessibility.text.onQuantum': '#FFFFFF',
@@ -182,6 +221,9 @@ export const QUANTUM_COLORS = {
   'accessibility.contrast.maximum': '#000000'
 } as const;
 
+// ============================================================================
+// DERIVED COLOR SYSTEMS (References to QUANTUM_COLORS)
+// ============================================================================
 export const COUNCIL_COLORS= {
   'aethelred': QUANTUM_COLORS["entity.aethelred"],
   'archivist': QUANTUM_COLORS["entity.archivist"],
@@ -324,6 +366,9 @@ export const DOMAIN_COLORS = {
   }
 } as const;
 
+// ============================================================================
+// TYPE EXPORTS
+// ============================================================================
 
 export type QuantumColorKey = keyof typeof QUANTUM_COLORS;
 export type CouncilColorKey = keyof typeof COUNCIL_COLORS;
