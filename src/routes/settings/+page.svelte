@@ -5,7 +5,7 @@
 	import { openUrl } from '@tauri-apps/plugin-opener';
 	import { getVersion } from '@tauri-apps/api/app';
 
-	const PRIVACY_URL = 'https://github.com/Quantum-Weaver/resonance-sistrum/blob/main/PRIVACY.md';
+	const PRIVACY_URL = 'https://audhdities.com/apps/privacy';
 	const SANCTUARY_URL = 'https://audhdities.com';
 	let privacyError = $state(false);
 	async function openPrivacy() {
