@@ -1,6 +1,6 @@
 {
   "name": "resonance-sistrum",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The sovereign musician's instrument — capture, layer, and shape music that does not exist yet, on your own device, with nothing leaving it.",
   "type": "module",
   "scripts": {
