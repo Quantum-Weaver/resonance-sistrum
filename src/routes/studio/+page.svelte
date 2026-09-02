@@ -11,6 +11,10 @@
 	import Waveform from '$lib/components/Waveform.svelte';
 	import LaneMarks from '$lib/components/LaneMarks.svelte';
 	import TakePlayer from '$lib/components/TakePlayer.svelte';
+	import { identityStore } from '$lib/stores/identity.svelte';
+	import { sealTake } from '$lib/seal';
+	import { proposeParts, partKey, readProvenance } from '$lib/provenance';
+	import { consent, consented, even, validate, type Merismos, type Part } from '$lib/merismos';
 
 	// THE STUDIO — the multi-track room (docs/THE-STUDIO-PLAN.md), at KP's ⚛ word: "sistrum will now need a multi tract studio for mixing and layering recorded tracks."
 	// A session of N lanes, each a take from the shelf. Nothing copied, nothing deleted: a lane points at a take; a mixdown, a trim, an overdub each make a NEW take on the shelf.
@@ -39,6 +43,8 @@
 	let trimming = $state<string | null>(null);
 	let trimNote = $state<string | null>(null);
 	let roomError = $state<string | null>(null);
+	// What the seal managed on the last take this room made — told, never guessed at.
+	let sealTold = $state<string | null>(null);
 
 	// Per-lane trim selection, seconds into the lane's own take.
 	let trimIn = $state<Record<string, number>>({});
@@ -113,8 +119,16 @@
 		addTake = '';
 	}
 
-	/** A row for a take the studio just made — the file is the truth; this is the meaning around it. */
-	async function registerTake(made: NewTake, provenance: unknown) {
+	/** A row for a take the studio just made — the file is the truth; this is the meaning around it.
+	 *
+	 *  EVERY SEAL SIGNS (2026-09-02, THE COLUMN COMES TO LIFE). The studio's own
+	 *  note goes in as it always did, and the signed hand — and, at a mixdown,
+	 *  the split — are written BESIDE it by `sealTake`. Nothing is replaced.
+	 *  A missing key never blocks a bounce: the take is on the shelf either way
+	 *  and the room says what the seal managed. */
+	async function registerTake(made: NewTake, base: unknown, extra: { merismos?: unknown } = {}) {
+		const mark = await sealTake(made.file_name, base, extra);
+		sealTold = mark.told;
 		try {
 			await takeStore.upsertTake({
 				fileName: made.file_name,
@@ -122,13 +136,103 @@
 				seconds: made.seconds,
 				sampleRate: made.sample_rate,
 				channels: made.channels,
-				provenance,
+				provenance: mark.provenance,
 				createdAt: made.created_at * 1000
 			});
 		} catch (e) {
 			console.error('[studio] the take is safe on the shelf; its row did not write:', e);
 		}
 		await recorderStore.refreshTakes();
+	}
+
+	// ── The splits (THE COLUMN COMES TO LIFE, 2026-09-02) ────────────────────
+	//
+	// KP's vision, verbatim, which this serves: "every musician in a band or an
+	// orchestra records their part sovereignly; an engineer finishes the
+	// project; and all credentials combine so the Sanctuary system can pay
+	// everyone involved no matter how small the role — opt-in always: 'no force
+	// or deceptive theft.'"
+	//
+	// One part per DISTINCT identity found in the lanes' takes' provenance, plus
+	// whoever is at this desk as the engineer if they did not also play.
+	// `even()` by default — the remainder goes WHOLE to the first part the lanes
+	// listed, which is the-merismos's own stated rule rather than a rounding.
+	// Points are editable; the sum is shown; every fault is NAMED and nothing is
+	// silently corrected.
+	//
+	// A PROPOSAL IS NOT A FACT. Consent is a checkbox and this device can tick
+	// exactly one line — the one whose identity holds this device's key. Every
+	// other line reads "awaiting consent", and there is no path here that fills
+	// one in on someone else's behalf.
+	let split = $state<Merismos | null>(null);
+	let splitTouched = $state(false);
+	let splitFrom = $state('');
+
+	const laneSignature = $derived(tracks.map((t) => t.take).join('\u0000'));
+	const splitVerdict = $derived(split ? validate(split) : null);
+	const splitConsent = $derived(split ? consented(split) : null);
+	const meWho = $derived(identityStore.asWho());
+
+	function laneDocs(): unknown[] {
+		return tracks.map((t) => takeStore.byFileName(t.take)?.provenance);
+	}
+
+	function drawSplit() {
+		const proposed = proposeParts(laneDocs(), meWho);
+		if (proposed.length === 0) {
+			split = null;
+			splitTouched = false;
+			return;
+		}
+		const drawn = even(proposed.map((p) => p.who));
+		drawn.parts = drawn.parts.map((p, i) => ({ ...p, role: proposed[i].role }));
+		split = drawn;
+		splitTouched = false;
+	}
+
+	// The proposal follows the lanes until a hand edits it; after that it holds,
+	// and "Redraw from the lanes" is the only thing that replaces a hand's work.
+	$effect(() => {
+		const sig = laneSignature;
+		if (splitTouched) return;
+		if (splitFrom === sig) return;
+		splitFrom = sig;
+		drawSplit();
+	});
+
+	function setPoints(i: number, value: number) {
+		if (!split) return;
+		const points = Number.isFinite(value) ? Math.round(value) : 0;
+		split = { ...split, parts: split.parts.map((p, k) => (k === i ? { ...p, points } : p)) };
+		splitTouched = true;
+	}
+
+	function setRole(i: number, role: string) {
+		if (!split) return;
+		split = { ...split, parts: split.parts.map((p, k) => (k === i ? { ...p, role } : p)) };
+		splitTouched = true;
+	}
+
+	/** Whether this device may tick THIS line. One line, and only ever one. */
+	function isMine(p: Part): boolean {
+		const me = meWho;
+		if (!me) return false;
+		return partKey(p.who) === partKey(me);
+	}
+
+	/** The yes, given by the hand at this desk and nobody else. */
+	function sayYes(p: Part) {
+		const me = meWho;
+		if (!split || !me || !isMine(p)) return;
+		split = consent(split, me, new Date().toISOString());
+		splitTouched = true;
+	}
+
+	/** `told` is derived commentary, not a term — it never rides into the column. */
+	function splitForColumn(m: Merismos): Merismos {
+		const held: Record<string, unknown> = { ...(m as unknown as Record<string, unknown>) };
+		delete held.told;
+		return held as unknown as Merismos;
 	}
 
 	// ── Mixdown (movements 1 and 6) ─────────────────────────────────────────
@@ -149,21 +253,25 @@
 				name: mixName.trim() || `${doc.name}-mix`,
 				layers
 			});
-			await registerTake(made, {
-				studio: {
-					kind: 'mixdown',
-					session: doc.name,
-					layers: doc.tracks.map((t) => ({
-						take: t.take,
-						offset_ms: t.offset_ms,
-						gain: t.gain,
-						pan: t.pan,
-						mute: t.mute,
-						solo: t.solo
-					})),
-					made_at: new Date().toISOString()
-				}
-			});
+			await registerTake(
+				made,
+				{
+					studio: {
+						kind: 'mixdown',
+						session: doc.name,
+						layers: doc.tracks.map((t) => ({
+							take: t.take,
+							offset_ms: t.offset_ms,
+							gain: t.gain,
+							pan: t.pan,
+							mute: t.mute,
+							solo: t.solo
+						})),
+						made_at: new Date().toISOString()
+					}
+				},
+				{ merismos: split ? splitForColumn(split) : undefined }
+			);
 			lastBounce = recorderStore.byFileName(made.file_name) ?? {
 				file_name: made.file_name,
 				path: made.path,
@@ -249,6 +357,15 @@
 		overdubAt = null;
 		overdubName = '';
 		if (!sealed) return;
+		const mark = await sealTake(sealed.file_name, {
+			studio: {
+				kind: 'overdub',
+				session: sessionStore.name,
+				offset_ms: Math.round(at * 1000),
+				made_at: new Date().toISOString()
+			}
+		});
+		sealTold = mark.told;
 		try {
 			await takeStore.upsertTake({
 				fileName: sealed.file_name,
@@ -256,14 +373,7 @@
 				seconds: sealed.seconds,
 				sampleRate: sealed.sample_rate,
 				channels: sealed.channels,
-				provenance: {
-					studio: {
-						kind: 'overdub',
-						session: sessionStore.name,
-						offset_ms: Math.round(at * 1000),
-						made_at: new Date().toISOString()
-					}
-				},
+				provenance: mark.provenance,
 				createdAt: sealed.created_at * 1000
 			});
 		} catch (e) {
@@ -289,6 +399,13 @@
 		}
 	});
 
+	/** A take THIS ROOM made — the studio's own note, not merely a signed take.
+	 *  Since every seal signs, `provenance != null` is now true of a plain
+	 *  recording too, and this list would have quietly claimed them. */
+	function madeHere(fileName: string): boolean {
+		return readProvenance(takeStore.byFileName(fileName)?.provenance).studio !== undefined;
+	}
+
 	function openBounce(fileName: string) {
 		mixStore.pause();
 		lastBounce = recorderStore.byFileName(fileName) ?? lastBounce;
@@ -296,6 +413,7 @@
 
 	onMount(() => {
 		recordPrefs.load();
+		void identityStore.load();
 		mixStore.loadVolume();
 		playbackStore.loadVolume();
 		recorderStore.loadDevices();
@@ -659,8 +777,89 @@
 				16-bit WAV on the shelf. Nothing is normalised: hot lanes clip at the writer, as they would on
 				tape. The bounce is a take like any other: it plays, wears marks, and exports.
 			</p>
+
+			<div class="splits" aria-label="The splits">
+				<h3 class="h3">The splits</h3>
+				{#if !split}
+					<p class="hint">
+						No hand is named in these lanes yet. A split is proposed from the signets the lanes'
+						takes carry — record or bounce with a signet kept in Settings, and the parts appear
+						here. Nothing is invented for a lane that names nobody.
+					</p>
+				{:else}
+					<ul class="parts">
+						{#each split.parts as p, i (i)}
+							<li class="part" class:mine={isMine(p)}>
+								<span class="part-who" style="color: {typeof p.who.color === 'string' ? p.who.color : 'inherit'}">
+									{typeof p.who.sigil === 'string' ? p.who.sigil : '·'}
+									{p.who.name}
+								</span>
+								<input
+									class="text-input tiny"
+									type="text"
+									value={p.role}
+									maxlength="32"
+									aria-label="Role for {p.who.name}"
+									oninput={(e) => setRole(i, e.currentTarget.value)}
+								/>
+								<input
+									class="text-input points"
+									type="number"
+									min="0"
+									max="10000"
+									step="1"
+									value={p.points}
+									aria-label="Basis points for {p.who.name}"
+									oninput={(e) => setPoints(i, Number(e.currentTarget.value))}
+								/>
+								<span class="part-pct">{(p.points / 100).toFixed(2)}%</span>
+								{#if isMine(p)}
+									<label class="part-consent">
+										<input
+											type="checkbox"
+											checked={!!p.consent?.at}
+											disabled={!!p.consent?.at}
+											onchange={() => sayYes(p)}
+										/>
+										<span>{p.consent?.at ? 'you opted in' : 'I opt in'}</span>
+									</label>
+								{:else}
+									<span class="part-consent waiting">
+										{p.consent?.at ? 'opted in' : 'awaiting consent'}
+									</span>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+
+					<p class="note-line">
+						{splitVerdict?.sum ?? 0} / 10000 basis points of the artist's share.
+						{#if splitVerdict && !splitVerdict.ok}
+							<span class="fault">Faults: {splitVerdict.faults.join(' · ')} — told in plain words and left exactly as declared.</span>
+						{/if}
+					</p>
+					{#if splitConsent}
+						<p class="hint">{splitConsent.told[0]}</p>
+					{/if}
+
+					<div class="inline wrap">
+						<button class="plain small" onclick={drawSplit}>Redraw from the lanes</button>
+						{#if splitTouched}<span class="hint">Edited by hand — it no longer follows the lanes.</span>{/if}
+					</div>
+				{/if}
+				<p class="hint">
+					Opt-in always: "no force or deceptive theft." A proposal is not a fact — this device may
+					tick only the line whose identity holds its key, and everybody else's yes is theirs to
+					give on their own device. This is a description of shares, never a promise of money:
+					nothing in this app moves a cent.
+				</p>
+			</div>
+
 			{#if bounceNote}
 				<p class="note-line" role="status">{bounceNote}</p>
+			{/if}
+			{#if sealTold}
+				<p class="hint">{sealTold}</p>
 			{/if}
 		</section>
 
@@ -672,11 +871,11 @@
 		{/if}
 
 		<!-- The shelf's own bounces, for reopening -->
-		{#if shelf.some((s) => takeStore.byFileName(s.file_name)?.provenance != null)}
+		{#if shelf.some((s) => madeHere(s.file_name))}
 			<section class="bounces" aria-label="Takes this studio made">
 				<h2 class="h2">Made here</h2>
 				<ul class="made">
-					{#each shelf.filter((s) => takeStore.byFileName(s.file_name)?.provenance != null) as s (s.file_name)}
+					{#each shelf.filter((s) => madeHere(s.file_name)) as s (s.file_name)}
 						<li>
 							<button class="plain small" onclick={() => openBounce(s.file_name)}>
 								{s.file_name.replace(/\.wav$/, '')} · {fmt(s.seconds)}
@@ -690,6 +889,79 @@
 </div>
 
 <style>
+	.splits {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-top: 0.75rem;
+		padding: 0.75rem 0.85rem;
+		border: 1px solid var(--border-color);
+		border-radius: 10px;
+		background: var(--bg);
+	}
+
+	.h3 {
+		margin: 0;
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--text);
+	}
+
+	.parts {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.part {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		font-size: 0.82rem;
+	}
+
+	.part-who {
+		font-weight: 600;
+		min-width: 8rem;
+	}
+
+	.part-pct {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+		font-variant-numeric: tabular-nums;
+		min-width: 4rem;
+	}
+
+	.part-consent {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.75rem;
+		color: var(--text-secondary);
+	}
+
+	.part-consent.waiting {
+		color: #e1a055;
+	}
+
+	.text-input.tiny {
+		max-width: 8rem;
+	}
+
+	.text-input.points {
+		max-width: 6rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.fault {
+		color: #e17055;
+	}
+
 	.page {
 		padding: 1rem 1.25rem 2rem;
 		padding-top: calc(1rem + env(safe-area-inset-top, 0px));

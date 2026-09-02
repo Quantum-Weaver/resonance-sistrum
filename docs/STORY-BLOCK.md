@@ -70,6 +70,17 @@ is a DJ's work, and a DJ is a performer, not a passive listener.
   stamped from that clock; the bounce a take like any other; a trim a new
   take. The four-track named in v3's plan (2026-07-18) stands in this house
   fifty-six days later.
+- **2026-09-02, the same night** — **the column came to life.** `takes.provenance`
+  was ruled into the schema on 2026-08-12 and deliberately left empty — KP,
+  verbatim: *"none of that belongs in the recorder, the recorder db structure
+  simply requires a json column to handle the expected use case, the column
+  will come to life when ready."* On the day the studio first wrote a `studio`
+  key into it, the rest arrived: a signet identity and an Ed25519 key made on
+  the device and held there non-extractably, every seal signing the take's own
+  bytes, every opening verified through the lok, and a merismos proposed at the
+  Mixdown from the hands the lanes name — opt-in always. The held place was
+  right: the collaboration layer arrived **through** the column and the
+  recorder was never touched to make room for it.
 
 *Founded 2026-08-12.*
 

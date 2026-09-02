@@ -144,27 +144,47 @@ pub fn run() {
     // everyone involved no matter how small the role — regardless of the
     // project's size or shape. Opt-in always: "no force or deceptive theft."
     //
-    // So this column will carry the signed hand that made the take and the
-    // GRANT that travels with it. Three of its four pieces already exist as
-    // waters: `the-signet` (identity as a snapshot, never a reference; combined
+    // So this column carries the signed hand that made the take and the GRANT
+    // that travels with it. Three of its four pieces already existed as waters:
+    // `the-signet` (identity as a snapshot, never a reference; combined
     // authorship read out by deriveLegend), `the-envelope` (versioned carrier,
     // import non-destructive by law), `the-moment-marks` (structure shared,
-    // contents sovereign). The two that do NOT exist yet are the ones money
+    // contents sovereign). The two that did NOT exist were the ones money
     // requires: a verifiable credential — the signet says plainly of itself
     // "a seal, not a lock... if a door ever needs a lock, that is a different
-    // tool and it should say so" — and the splits.
+    // tool and it should say so" — and the splits. Both now exist.
     //
-    // Until then: a TEXT column holding JSON, read with json_extract().
-    // Nothing validates it, and nothing may drop it — whatever a hand puts
-    // here rides whole. It is a held place, and it comes to life when ready.
+    // It stays a TEXT column holding JSON, read with json_extract(). Nothing
+    // validates it, and nothing may drop it — whatever a hand puts here rides
+    // whole, including json this reader cannot parse, which comes back as the
+    // RAW STRING rather than as null.
     //
-    // ONE WRITER SINCE 2026-09-02, told rather than hidden: the studio room
-    // puts a `studio` key on the takes IT makes — a bounce (`kind: mixdown`,
-    // the session's name and its layers), a trim (`kind: trim`, the source
-    // take and the window), an overdub (`kind: overdub`, the session and the
-    // stamped offset). That is provenance in the plain sense — where a sound
-    // came from — and it sits beside, never in place of, the signed hand and
-    // the grant this column is held for. A recorded take still carries none.
+    // THE COLUMN CAME TO LIFE 2026-09-02, and NOTHING IN THIS FILE CHANGED to
+    // let it. The whole collaboration layer arrived through the held place, in
+    // the window, exactly as ruled. What a document may now hold, told rather
+    // than hidden:
+    //
+    //   studio?   — where the sound came from. The studio room's own key on
+    //               the takes IT makes: a bounce (`kind: mixdown`, the
+    //               session's name and its layers), a trim (`kind: trim`, the
+    //               source take and the window), an overdub (`kind: overdub`,
+    //               the session and the stamped offset).
+    //   signet?   — WHO, as a snapshot taken at sealing and never a reference.
+    //   clavis?   — the signed hand: an Ed25519 credential over THE TAKE'S OWN
+    //               BYTES, claimed with a key made on the device and held in
+    //               its own IndexedDB, private half non-extractable. Verified
+    //               on opening through `the-lok`, which answers open or names
+    //               why not. A take sealed with no key carries `signet` alone
+    //               and the room says so — a seal is NEVER blocked on a key.
+    //   merismos? — the splits, in basis points summing to 10000, proposed at
+    //               a mixdown from the hands the lanes name. Opt-in always:
+    //               a part that has not consented is NAMED, never assumed.
+    //
+    // and any key a later hand puts beside them, which rides whole and is
+    // shown by name. This column is not a payment rail and cannot become one:
+    // a merismos is a description of shares, and nothing in this body moves a
+    // cent. `src/lib/provenance.ts` is the reader; the proofs are
+    // `.journals/proofs/provenance-round-trip.mjs` and `splits-from-lanes.mjs`.
 
     let builder = tauri::Builder::default()
         .plugin(

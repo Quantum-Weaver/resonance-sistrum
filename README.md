@@ -22,6 +22,8 @@ Resonance Sistrum is the creator's half of what used to be one app — separated
 
 **Layer.** A multi-track studio (`/studio`, 2026-09-02, at KP's ⚛ word: *"sistrum will now need a multi tract studio for mixing and layering recorded tracks"* — `docs/THE-STUDIO-PLAN.md`). A session is N lanes, each a take from the shelf, with gain, mute, solo, pan and a start offset, kept as a `<name>.session.json` sidecar beside the takes (`src-tauri/src/studio.rs`). The mix is heard live on one Web Audio clock (`src/lib/stores/mix.svelte.ts`), overdubbed with the recorder while it plays (the new lane stamped from the mix clock, nudged by the ms), and bounced through `the-encoder` (`resonance-awen`) to a 44.1 kHz stereo WAV that lands on the shelf as a take like any other — it plays, wears marks, exports. A trim is a NEW take; nothing in the studio copies, moves, or removes one. Proofs: `.journals/proofs/`.
 
+**Sign.** The collaboration layer, arriving 2026-09-02 through the one place that was held open for it — `takes.provenance`, the json column KP ruled into the schema and left empty: *"none of that belongs in the recorder, the recorder db structure simply requires a json column to handle the expected use case, the column will come to life when ready."* Settings now holds **who you are here**: a signet identity (name · sigil · colour, `the-signet`) and, if you want one, an Ed25519 keypair made once through WebCrypto with the private half **non-extractable**, held as CryptoKey objects in this device's own IndexedDB (`src/lib/keyring/`) — this app's sovereign key storage, because `the-clavis` keeps none and says so. Every seal signs: a capture, a mixdown, a trim and an overdub each claim the take's own bytes (`the-clavis`) and write the credential into that column beside whatever is already there. Opening a take verifies it through `the-lok` — open, or not open and why, in the lok's own words. At Mixdown the room proposes a **merismos** (`the-merismos`) from the lanes: one part per distinct signet found in the lanes' takes, plus the sealer as engineer, `even()` by default, basis points editable, every fault named — and consent is a checkbox this device may tick on exactly one line, the one whose identity holds its key. Opt-in always: *"no force or deceptive theft."* A take never waits on a key: with no key it seals with its signet alone and says so, and a take sealed before any of this still reads. It is a description of shares, never a promise of money; nothing here moves a cent, and nothing leaves the device. Proofs: `.journals/proofs/provenance-round-trip.mjs` · `splits-from-lanes.mjs`.
+
 **Tune.** A real-time tuner (`the-tuner`) reads pitch via YIN analysis and shows the nearest note and how many cents you're off.
 
 **Keep time.** A metronome you can see, not just hear.
@@ -87,6 +89,7 @@ npm run tauri dev
 - Tauri v2 (`protocol-asset` feature, for take playback with range-request seeking) + Rust
 - SQLite (`@tauri-apps/plugin-sql`)
 - Tailwind CSS v4 + COSMIC design tokens (`CLAUDE.md`)
+- `the-signet` · `the-clavis` · `the-lok` · `the-merismos` (the collaboration layer, 2026-09-02) — standalone waters from `resonance-awen`, consumed as **byte-faithful mirrors** under `src/lib/`, each with its own `MIRROR.md` naming the source of truth (the road the cosmic, cumdach, epagoge and sky mirrors already travel). The hosts are this app's own (`src/lib/keyring/hosts.ts`) — the waters declare a host surface and implement no primitive, by law
 - `the-recorder` · `the-tuner` · `the-encoder` (the studio's mixer, 2026-09-02) — standalone waters from `resonance-awen`, consumed as path crates (not yet distributed in — path crates, so a lone clone cannot `cargo check` until the cosmic distribution carries them; that distribution is KP's law)
 - hound (WAV read/fold) · cpal (tuner's own input stream, independent of the recorder's session)
 
@@ -113,7 +116,10 @@ src/
 │   ├── stores/
 │   ├── components/
 │   ├── cosmic/            # COSMIC design tokens
+│   ├── signet/ · clavis/ · lok/ · merismos/  # byte-faithful mirrors of the waters (see each MIRROR.md)
+│   ├── keyring/          # this device's key storage + the WebCrypto hosts
 │   ├── marks.ts · metronome.ts · waveform.ts · studio.ts (the studio's pure arithmetic)
+│   ├── provenance.ts · seal.ts  (the held column, read/written/verified)
 │   └── types/
 src-tauri/src/
 ├── lib.rs · main.rs

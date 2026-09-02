@@ -2,8 +2,11 @@
 	import { themeStore } from '$lib/stores/theme.svelte';
 	import { feelingStore } from '$lib/stores/feeling.svelte';
 	import { PRESET_THEMES, presetSwatch } from '$lib/theme/theme';
+	import { onMount } from 'svelte';
 	import { openUrl } from '@tauri-apps/plugin-opener';
 	import { getVersion } from '@tauri-apps/api/app';
+	import { identityStore } from '$lib/stores/identity.svelte';
+	import { forgetKeyring } from '$lib/keyring/store';
 
 	const PRIVACY_URL = 'https://audhdities.com/apps/privacy';
 	const SANCTUARY_URL = 'https://audhdities.com';
@@ -26,6 +29,66 @@
 	let appVersion = $state('');
 	getVersion().then((v) => (appVersion = v)).catch(() => (appVersion = ''));
 
+
+	// ── WHO YOU ARE HERE (2026-09-02, THE COLUMN COMES TO LIFE) ───────────
+	//
+	// A signet (name · sigil · color) and a clavis keypair. The keypair is
+	// generated ONCE through the WebCrypto host with the private half
+	// NON-EXTRACTABLE, and it is held as CryptoKey objects in THIS DEVICE'S
+	// IndexedDB — this app's own sovereign key storage, because `the-clavis`
+	// says plainly that storage is the host's business and keeps none itself.
+	// The public half is shown and can be copied. NOTHING LEAVES THE DEVICE,
+	// and there is no verb anywhere in this app that could send it.
+	let signetName = $state('');
+	let signetSigil = $state('⚛');
+	let signetColor = $state('#b58cff');
+	let signetSaved = $state(false);
+	let publicCopied = $state(false);
+	let keyConfirm = $state(false);
+
+	const identity = $derived(identityStore.identity);
+	const publicHalf = $derived(identityStore.publicKey);
+
+	// The form follows the stored identity the first time it arrives, and never again:
+	// a hand editing the fields must not have them yanked back by a load.
+	let filledFrom = $state<string | null>(null);
+	$effect(() => {
+		const who = identityStore.identity;
+		const stamp = who ? `${who.name}|${who.sigil}|${who.color}` : null;
+		if (!who || filledFrom !== null) return;
+		filledFrom = stamp;
+		signetName = who.name;
+		signetSigil = who.sigil;
+		signetColor = who.color;
+	});
+
+	async function saveSignet() {
+		signetSaved = await identityStore.saveIdentity({
+			name: signetName,
+			sigil: signetSigil || '·',
+			color: signetColor
+		});
+	}
+
+	async function makeKey() {
+		keyConfirm = false;
+		await identityStore.generateKey();
+	}
+
+	async function copyPublic() {
+		const text = identityStore.publicHalfText();
+		if (!text) return;
+		try {
+			await navigator.clipboard.writeText(text);
+			publicCopied = true;
+		} catch {
+			publicCopied = false;
+		}
+	}
+
+	onMount(() => {
+		void identityStore.load();
+	});
 
 	const PRESET_ICONS: Record<string, string> = {
 		dark: '🌙', warm: '🔥', ocean: '🌊', forest: '🌲', sunset: '🌅', amoled: '⚫'
@@ -192,6 +255,12 @@
 			await feelingStore.purgeAll();
 			// Clear everything, not a curated list — future keys must not survive a purge by omission.
 			localStorage.clear();
+			// THE PURGE TRULY PURGES: the signet and the keypair go with it. The
+			// private half is non-extractable and has no copy anywhere, so this
+			// ends it — takes already sealed stay verifiable, and nothing new can
+			// ever be sealed as that key again. Said on the screen before the press.
+			await identityStore.forget();
+			await forgetKeyring();
 		} catch (err) {
 			purgeError = err instanceof Error ? err.message : String(err);
 			return;
@@ -262,6 +331,128 @@
 				{/each}
 			</div>
 		</div>
+	</section>
+
+	<section class="section">
+		<h2 class="section-title">Who you are here</h2>
+
+		<p class="who-intro">
+			A take can carry the hand that made it. This is that hand: a name, a sigil and a colour, and —
+			if you want one — a signing key made on this device and held only here.
+		</p>
+
+		<div class="who-grid">
+			<label class="who-field">
+				<span class="who-label">Name</span>
+				<input
+					class="who-input"
+					type="text"
+					bind:value={signetName}
+					oninput={() => (signetSaved = false)}
+					placeholder="Whoever owns the mark"
+					maxlength="64"
+				/>
+			</label>
+			<label class="who-field narrow">
+				<span class="who-label">Sigil</span>
+				<input
+					class="who-input"
+					type="text"
+					bind:value={signetSigil}
+					oninput={() => (signetSaved = false)}
+					placeholder="⚛"
+					maxlength="8"
+				/>
+			</label>
+			<label class="who-field narrow">
+				<span class="who-label">Colour</span>
+				<input
+					class="who-color"
+					type="color"
+					bind:value={signetColor}
+					oninput={() => (signetSaved = false)}
+					aria-label="Your colour"
+				/>
+			</label>
+		</div>
+
+		<div class="who-actions">
+			<button class="btn-data" onclick={saveSignet} disabled={identityStore.busy}>
+				Keep this signet
+			</button>
+			{#if signetSaved}<span class="who-note">Kept.</span>{/if}
+			{#if identity}
+				<span class="who-preview" style="color: {identity.color}">
+					{identity.sigil} {identity.name}
+				</span>
+			{/if}
+		</div>
+
+		<p class="who-fine">
+			A seal, not a lock: the signet carries provenance and makes no tamper-proof claim. It rides
+			into a take as a <em>snapshot</em> — change your colour tomorrow and every take you already
+			sealed keeps the colour it was sealed under.
+		</p>
+
+		<div class="who-key">
+			<p class="who-label">Your signing key</p>
+
+			{#if identityStore.ed25519 === false}
+				<p class="purge-error">
+					This device's WebCrypto does not name Ed25519, so no key can be made here. Takes still seal
+					with your signet alone, and the room says so on each one.
+				</p>
+			{:else if !identityStore.hasKey}
+				{#if !keyConfirm}
+					<button class="btn-data" onclick={() => (keyConfirm = true)} disabled={!identity || identityStore.busy}>
+						Make a key on this device
+					</button>
+					{#if !identity}
+						<span class="who-note">Keep a signet first — a key signs on behalf of a named hand.</span>
+					{/if}
+				{:else}
+					<div class="confirm-card">
+						<p class="confirm-text">
+							The key is made here and stays here. The private half is generated
+							<strong>non-extractable</strong>: this app cannot read it, cannot export it, cannot back
+							it up and cannot move it to another device — the machine itself refuses. If you purge
+							this app or clear its storage, that key is gone for good. Takes already sealed under it
+							stay verifiable; nothing new could ever be sealed as it again.
+						</p>
+						<div class="confirm-actions">
+							<button class="btn-neutral" onclick={() => (keyConfirm = false)}>Cancel</button>
+							<button class="btn-data" onclick={makeKey} disabled={identityStore.busy}>
+								Make it
+							</button>
+						</div>
+					</div>
+				{/if}
+			{:else}
+				<p class="who-note">
+					A key stands on this device. It is made once — a second one would orphan every take sealed
+					under the first, so it is refused rather than done quietly.
+				</p>
+				<p class="who-public">Public half<br /><code>{publicHalf}</code></p>
+				<div class="who-actions">
+					<button class="btn-data" onclick={copyPublic}>Copy the public half</button>
+					{#if publicCopied}<span class="who-note">Copied.</span>{/if}
+				</div>
+				<p class="who-fine">
+					The public half, and only ever the public half: there is no export path for the private one
+					anywhere in this app, and the absence is the law. Signing, not secrecy — a credential
+					proves who made a take and hides nothing from anyone.
+				</p>
+			{/if}
+
+			{#if identityStore.error}
+				<p class="purge-error" role="alert">{identityStore.error}</p>
+			{/if}
+		</div>
+
+		<p class="privacy-line">
+			Your signet and your key never leave this device. Nothing in this app sends either anywhere,
+			and a take's credential travels only if you export the take yourself.
+		</p>
 	</section>
 
 	<section class="section">
@@ -336,6 +527,11 @@
 						{:else}
 							Are you absolutely sure? All feelings, insights, and settings will be removed.
 						{/if}
+						{#if identityStore.hasKey}
+							<br /><strong>Your signing key goes too.</strong> The private half is non-extractable —
+							there is no copy of it anywhere, so this ends it. Takes you have already sealed stay
+							verifiable; nothing new can ever be sealed as that key again.
+						{/if}
 					</p>
 					{#if purgeError}
 						<p class="purge-error" role="alert">Purge failed: {purgeError}</p>
@@ -388,6 +584,105 @@
 </div>
 
 <style>
+	.who-intro,
+	.who-fine,
+	.who-note,
+	.who-public {
+		font-size: 0.82rem;
+		color: var(--text-secondary);
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	.who-fine,
+	.who-note {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+	}
+
+	.who-grid {
+		display: flex;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+		margin: 0.75rem 0 0.5rem;
+	}
+
+	.who-field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		flex: 1 1 12rem;
+		min-width: 0;
+	}
+
+	.who-field.narrow {
+		flex: 0 0 6rem;
+	}
+
+	.who-label {
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--text-muted);
+	}
+
+	.who-input {
+		min-height: 44px;
+		padding: 0.5rem 0.75rem;
+		border-radius: 10px;
+		border: 1px solid var(--border-color);
+		background: var(--bg);
+		color: var(--text);
+		font-size: 0.9rem;
+		font-family: inherit;
+		box-sizing: border-box;
+		outline: none;
+	}
+
+	.who-input:focus {
+		border-color: var(--accent);
+	}
+
+	.who-color {
+		min-height: 44px;
+		width: 100%;
+		padding: 0.2rem;
+		border-radius: 10px;
+		border: 1px solid var(--border-color);
+		background: var(--bg);
+		box-sizing: border-box;
+	}
+
+	.who-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+		margin-bottom: 0.5rem;
+	}
+
+	.who-preview {
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+
+	.who-key {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin: 1rem 0 0.75rem;
+		padding: 0.85rem 1rem;
+		border: 1px solid var(--border-color);
+		border-radius: 12px;
+		background: var(--bg);
+	}
+
+	.who-public code {
+		font-size: 0.72rem;
+		word-break: break-all;
+		color: var(--text-muted);
+	}
+
 	.settings {
 		min-height: 100%;
 	}

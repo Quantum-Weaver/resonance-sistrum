@@ -8,6 +8,8 @@
 	import { marksStore } from '$lib/stores/marks.svelte';
 	import TakePlayer from '$lib/components/TakePlayer.svelte';
 	import FeelingHere from '$lib/components/FeelingHere.svelte';
+	import { identityStore } from '$lib/stores/identity.svelte';
+	import { sealTake } from '$lib/seal';
 
 
 	// The chosen input is held by its row index, never its name: the S25 lists two inputs under one name, and a name-keyed list froze the room (W4-1). Null is the default input.
@@ -15,6 +17,8 @@
 	let takeName = $state('');
 	let openTake = $state<string | null>(null);
 	let lastSealed = $state<TakeFile | null>(null);
+	// What the seal did with the hand and the key — told on the screen, never guessed at.
+	let sealTold = $state<string | null>(null);
 
 	const recording = $derived(recorderStore.recording);
 	const paused = $derived(recorderStore.paused);
@@ -59,15 +63,24 @@
 
 	async function startTake() {
 		lastSealed = null;
+		sealTold = null;
 		await recorderStore.start(selectedDeviceName, recordPrefs.capSecs);
 	}
 
 	// The row lands with the file and carries NO work: `work_id` stays null until a hand says otherwise.
+	//
+	// EVERY SEAL SIGNS (2026-09-02). The take's own bytes are claimed with this
+	// device's clavis key and the credential rides into `takes.provenance`
+	// beside the signet snapshot. A missing key NEVER blocks a seal: the take
+	// is on the shelf either way, and `sealTake` says in plain words what it
+	// managed — signed, sealed-but-unsigned, or no signet at all.
 	async function saveTake() {
 		const sealed = await recorderStore.stop(true, takeName.trim() ? takeName.trim() : null);
 		takeName = '';
 		if (!sealed) return;
 		lastSealed = sealed;
+		const mark = await sealTake(sealed.file_name, undefined);
+		sealTold = mark.told;
 		try {
 			await takeStore.upsertTake({
 				fileName: sealed.file_name,
@@ -75,6 +88,7 @@
 				seconds: sealed.seconds,
 				sampleRate: sealed.sample_rate,
 				channels: sealed.channels,
+				provenance: mark.provenance,
 				createdAt: sealed.created_at * 1000
 			});
 		} catch (e) {
@@ -119,6 +133,7 @@
 		recordPrefs.load();
 		playbackStore.loadVolume();
 		recorderStore.loadDevices();
+		void identityStore.load();
 		void (async () => {
 			await Promise.all([
 				recorderStore.refreshTakes(),
@@ -284,6 +299,10 @@
 			{/if}{#if lastSealed.clipped}
 				· clipped ×{lastSealed.clipped}{/if}. It is on the shelf.
 		</p>
+
+		{#if sealTold}
+			<p class="sealed-hand">{sealTold}</p>
+		{/if}
 
 		<div class="sealed-feeling">
 			<FeelingHere
@@ -580,6 +599,13 @@
 		font-size: 0.85rem;
 		color: var(--text-secondary);
 		margin: 0 0 1rem;
+	}
+
+	.sealed-hand {
+		font-size: 0.78rem;
+		color: var(--text-muted);
+		margin: 0.15rem 0 0;
+		line-height: 1.45;
 	}
 
 	.sealed-feeling,

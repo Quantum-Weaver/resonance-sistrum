@@ -7,6 +7,7 @@
 	import WorkPicker from '$lib/components/WorkPicker.svelte';
 	import MarksRail from '$lib/components/MarksRail.svelte';
 	import FeelingHere from '$lib/components/FeelingHere.svelte';
+	import ProvenancePanel from '$lib/components/ProvenancePanel.svelte';
 
 	// No autoplay: opening this panel loads the take and stops there.
 
@@ -156,6 +157,8 @@
 		</div>
 	</div>
 
+	<ProvenancePanel fileName={take.file_name} provenance={row?.provenance} />
+
 	<div class="shelf-actions">
 		<button class="plain" onclick={exportTake}>Export a copy</button>
 		{#if lastExported}
@@ -167,7 +170,9 @@
 		The take itself stays on the shelf. Exporting copies it; nothing here moves or removes it. Marks
 		are kept in a file beside the take and are append-only — retracting one takes it out of the view,
 		never out of the history. Pinning a mark also logs the face you chose as a feeling, unless you
-		switch that off on the rail.
+		switch that off on the rail. What the take carries — the hand, the key, the splits — is read
+		from the take's own row and verified against the take's own bytes; nothing on this device sends
+		any of it anywhere.
 	</p>
 </section>
 

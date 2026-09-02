@@ -1,4 +1,5 @@
 import { getDb } from '$lib/stores/db';
+import { parseProvenanceColumn, provenanceColumnText } from '$lib/provenance';
 import type { Take } from '$lib/types/types';
 
 // Take rows carry the MEANING around the files, never a copy of them — `the-recorder` owns the directory and each WAV's header is the truth. Nothing here infers a take's work.
@@ -7,16 +8,10 @@ let takes = $state<Take[]>([]);
 let loading = $state(false);
 let dbError = $state<string | null>(null);
 
-// Unreadable json comes back as the raw string rather than dropped or nulled — a parse failure is not permission to discard.
-function parseProvenance(raw: unknown): unknown {
-	if (raw == null) return undefined;
-	if (typeof raw !== 'string') return raw;
-	try {
-		return JSON.parse(raw);
-	} catch {
-		return raw;
-	}
-}
+// The read and write paths for the held column live in `$lib/provenance` so a
+// node proof can walk the very road this store walks. Unreadable json comes
+// back as the raw string rather than dropped or nulled — a parse failure is not
+// permission to discard.
 
 function rowToTake(row: Record<string, unknown>): Take {
 	return {
@@ -27,7 +22,7 @@ function rowToTake(row: Record<string, unknown>): Take {
 		seconds: row.seconds != null ? (row.seconds as number) : undefined,
 		sampleRate: row.sample_rate != null ? (row.sample_rate as number) : undefined,
 		channels: row.channels != null ? (row.channels as number) : undefined,
-		provenance: parseProvenance(row.provenance),
+		provenance: parseProvenanceColumn(row.provenance),
 		createdAt: row.created_at as number
 	};
 }
@@ -73,7 +68,7 @@ async function upsertTake(t: Take) {
 			t.seconds ?? null,
 			t.sampleRate ?? null,
 			t.channels ?? null,
-			t.provenance != null ? JSON.stringify(t.provenance) : null,
+			provenanceColumnText(t.provenance),
 			t.createdAt
 		]
 	);
