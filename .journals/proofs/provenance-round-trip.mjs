@@ -56,6 +56,12 @@ const whole = {
 		who: { name: 'KP', sigil: '⚛', color: '#b58cff' },
 		when: 1788350400000
 	},
+	// DELIBERATELY THE PRE-RULING SHAPE — `of` and `points`, as the 2026-09-02
+	// first build wrote them. `takes.provenance` may not drop what a hand put in
+	// it, so this proves a legacy document round-trips BYTE-FOR-BYTE. The
+	// numbers are carried and never read: the-merismos divides by headcount now
+	// ("there is nothing to do but divide by the number of contributors,
+	// regardless of role" — KP ⚛), and `validate` says the field was ignored.
 	merismos: {
 		of: 'artist-share',
 		parts: [

@@ -14,7 +14,7 @@
 	import { identityStore } from '$lib/stores/identity.svelte';
 	import { sealTake } from '$lib/seal';
 	import { proposeParts, partKey, readProvenance } from '$lib/provenance';
-	import { consent, consented, even, validate, type Merismos, type Part } from '$lib/merismos';
+	import { consent, consented, contributors, validate, type Merismos, type Part } from '$lib/merismos';
 
 	// THE STUDIO — the multi-track room (docs/THE-STUDIO-PLAN.md), at KP's ⚛ word: "sistrum will now need a multi tract studio for mixing and layering recorded tracks."
 	// A session of N lanes, each a take from the shelf. Nothing copied, nothing deleted: a lane points at a take; a mixdown, a trim, an overdub each make a NEW take on the shelf.
@@ -145,7 +145,7 @@
 		await recorderStore.refreshTakes();
 	}
 
-	// ── The splits (THE COLUMN COMES TO LIFE, 2026-09-02) ────────────────────
+	// ── The contributors (THE COLUMN COMES TO LIFE, 2026-09-02) ──────────────
 	//
 	// KP's vision, verbatim, which this serves: "every musician in a band or an
 	// orchestra records their part sovereignly; an engineer finishes the
@@ -153,12 +153,14 @@
 	// everyone involved no matter how small the role — opt-in always: 'no force
 	// or deceptive theft.'"
 	//
-	// One part per DISTINCT identity found in the lanes' takes' provenance, plus
-	// whoever is at this desk as the engineer if they did not also play.
-	// `even()` by default — the remainder goes WHOLE to the first part the lanes
-	// listed, which is the-merismos's own stated rule rather than a rounding.
-	// Points are editable; the sum is shown; every fault is NAMED and nothing is
-	// silently corrected.
+	// THE RULING, verbatim (KP ⚛, pointing at financial-ecosystem.md 140–142):
+	// "there is nothing to do but divide by the number of contributors,
+	// regardless of role." So this room proposes A LIST OF PEOPLE and NOTHING
+	// ELSE — one contributor per DISTINCT identity found in the lanes' takes'
+	// provenance, plus whoever is at this desk as the engineer if they did not
+	// also play. There is no share to set, no number to type, and nothing here
+	// that could rank one hand above another: the divisor is the headcount, and
+	// the main artisan is one of them. A role is RECORDED AND NEVER WEIGHED.
 	//
 	// A PROPOSAL IS NOT A FACT. Consent is a checkbox and this device can tick
 	// exactly one line — the one whose identity holds this device's key. Every
@@ -184,7 +186,7 @@
 			splitTouched = false;
 			return;
 		}
-		const drawn = even(proposed.map((p) => p.who));
+		const drawn = contributors(proposed.map((p) => p.who));
 		drawn.parts = drawn.parts.map((p, i) => ({ ...p, role: proposed[i].role }));
 		split = drawn;
 		splitTouched = false;
@@ -199,13 +201,6 @@
 		splitFrom = sig;
 		drawSplit();
 	});
-
-	function setPoints(i: number, value: number) {
-		if (!split) return;
-		const points = Number.isFinite(value) ? Math.round(value) : 0;
-		split = { ...split, parts: split.parts.map((p, k) => (k === i ? { ...p, points } : p)) };
-		splitTouched = true;
-	}
 
 	function setRole(i: number, role: string) {
 		if (!split) return;
@@ -778,13 +773,13 @@
 				tape. The bounce is a take like any other: it plays, wears marks, and exports.
 			</p>
 
-			<div class="splits" aria-label="The splits">
-				<h3 class="h3">The splits</h3>
+			<div class="splits" aria-label="The contributors">
+				<h3 class="h3">The contributors</h3>
 				{#if !split}
 					<p class="hint">
-						No hand is named in these lanes yet. A split is proposed from the signets the lanes'
-						takes carry — record or bounce with a signet kept in Settings, and the parts appear
-						here. Nothing is invented for a lane that names nobody.
+						No hand is named in these lanes yet. The contributors are proposed from the signets
+						the lanes' takes carry — record or bounce with a signet kept in Settings, and the
+						names appear here. Nothing is invented for a lane that names nobody.
 					</p>
 				{:else}
 					<ul class="parts">
@@ -802,17 +797,7 @@
 									aria-label="Role for {p.who.name}"
 									oninput={(e) => setRole(i, e.currentTarget.value)}
 								/>
-								<input
-									class="text-input points"
-									type="number"
-									min="0"
-									max="10000"
-									step="1"
-									value={p.points}
-									aria-label="Basis points for {p.who.name}"
-									oninput={(e) => setPoints(i, Number(e.currentTarget.value))}
-								/>
-								<span class="part-pct">{(p.points / 100).toFixed(2)}%</span>
+								<span class="part-share">an equal share</span>
 								{#if isMine(p)}
 									<label class="part-consent">
 										<input
@@ -833,7 +818,10 @@
 					</ul>
 
 					<p class="note-line">
-						{splitVerdict?.sum ?? 0} / 10000 basis points of the artist's share.
+						{splitVerdict?.count ?? 0}
+						{(splitVerdict?.count ?? 0) === 1 ? 'contributor' : 'contributors'} — the artist's share
+						is divided equally, regardless of role. No ranking, no percentage shares; whoever led
+						the work is one of them.
 						{#if splitVerdict && !splitVerdict.ok}
 							<span class="fault">Faults: {splitVerdict.faults.join(' · ')} — told in plain words and left exactly as declared.</span>
 						{/if}
@@ -844,9 +832,14 @@
 
 					<div class="inline wrap">
 						<button class="plain small" onclick={drawSplit}>Redraw from the lanes</button>
-						{#if splitTouched}<span class="hint">Edited by hand — it no longer follows the lanes.</span>{/if}
+						{#if splitTouched}<span class="hint">A role was renamed or a yes was given — it no longer follows the lanes.</span>{/if}
 					</div>
 				{/if}
+				<p class="hint">
+					"There is nothing to do but divide by the number of contributors, regardless of role."
+					A role is written down so the work is remembered in your own words — it is never weighed,
+					and there is no share here to edit.
+				</p>
 				<p class="hint">
 					Opt-in always: "no force or deceptive theft." A proposal is not a fact — this device may
 					tick only the line whose identity holds its key, and everybody else's yes is theirs to
@@ -929,11 +922,10 @@
 		min-width: 8rem;
 	}
 
-	.part-pct {
+	.part-share {
 		font-size: 0.75rem;
 		color: var(--text-muted);
-		font-variant-numeric: tabular-nums;
-		min-width: 4rem;
+		min-width: 6rem;
 	}
 
 	.part-consent {
@@ -951,11 +943,6 @@
 
 	.text-input.tiny {
 		max-width: 8rem;
-	}
-
-	.text-input.points {
-		max-width: 6rem;
-		font-variant-numeric: tabular-nums;
 	}
 
 	.fault {

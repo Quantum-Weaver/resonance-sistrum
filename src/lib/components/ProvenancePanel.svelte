@@ -82,10 +82,14 @@
 		return `${sigil}${who.name || '(unnamed)'}`;
 	}
 
-	function points(p: Part): string {
-		const v = typeof p.points === 'number' ? p.points : 0;
-		return `${v} bp · ${(v / 100).toFixed(2)}%`;
-	}
+	/** A document written before KP's ⚛ ruling may still carry a `points` field.
+	 *  It rides whole — nothing may drop what a hand put in this column — and it
+	 *  is IGNORED and SAID to be ignored, rather than shown as if it meant
+	 *  something. "There is nothing to do but divide by the number of
+	 *  contributors, regardless of role." */
+	const legacyWeighted = $derived(
+		!!split && Array.isArray(split.parts) && split.parts.some((p) => 'points' in (p ?? {}))
+	);
 </script>
 
 <section class="prov" aria-label="What this take carries">
@@ -169,14 +173,14 @@
 
 		{#if split}
 			<div class="prov-block">
-				<span class="prov-label">The splits</span>
+				<span class="prov-label">The contributors</span>
 				{#if Array.isArray(split.parts) && split.parts.length > 0}
 					<ul class="parts">
 						{#each split.parts as p, i (i)}
 							<li class="part">
 								<span class="part-who">{partName(p)}</span>
-								<span class="part-role">{p.role}</span>
-								<span class="part-points">{points(p)}</span>
+								<span class="part-role">{p.role ?? ''}</span>
+								<span class="part-share">an equal share</span>
 								<span class="part-consent" class:given={!!p.consent?.at}>
 									{p.consent?.at ? `opted in ${new Date(p.consent.at).toLocaleDateString()}` : 'awaiting consent'}
 								</span>
@@ -184,11 +188,20 @@
 						{/each}
 					</ul>
 					<p class="prov-told">
-						{verdict?.sum ?? 0} of 10000 basis points of the artist's share.
+						{verdict?.count ?? 0}
+						{(verdict?.count ?? 0) === 1 ? 'contributor' : 'contributors'} — the artist's share
+						divided equally, regardless of role. No ranking, no percentage shares.
 						{#if verdict && !verdict.ok}
 							<span class="prov-shut">Faults: {verdict.faults.join(' · ')} — told, and left exactly as declared.</span>
 						{/if}
 					</p>
+					{#if legacyWeighted}
+						<p class="prov-told prov-shut">
+							This take was sealed before the ruling and carries a weighting on its
+							contributors. It is kept exactly as it was written and it is not read: the share
+							is equal.
+						</p>
+					{/if}
 					{#if yeses}
 						<p class="prov-told" class:prov-open={yeses.all}>
 							{yeses.told[0]}
@@ -199,7 +212,7 @@
 						promise of money — nothing in this app moves a cent.
 					</p>
 				{:else}
-					<p class="prov-told">A split with no parts. It apportions nothing, and is shown rather than hidden.</p>
+					<p class="prov-told">A list with nobody on it. It apportions nothing, and is shown rather than hidden.</p>
 				{/if}
 			</div>
 		{/if}
@@ -321,13 +334,9 @@
 	}
 
 	.part-role,
-	.part-points {
+	.part-share {
 		color: var(--text-muted);
 		font-size: 0.75rem;
-	}
-
-	.part-points {
-		font-variant-numeric: tabular-nums;
 	}
 
 	.part-consent {

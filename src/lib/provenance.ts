@@ -47,7 +47,10 @@ export interface ProposedWho {
 	[k: string]: unknown;
 }
 
-/** One proposed line of a split: a person and what they did. Points come from `even`. */
+/** One proposed contributor: a person and what they did. THERE IS NO SHARE ON
+ *  IT. KP ⚛, verbatim: "there is nothing to do but divide by the number of
+ *  contributors, regardless of role" — so the role is recorded and never
+ *  weighed, and the division is the-merismos's `shares`, by headcount. */
 export interface ProposedPart {
 	who: ProposedWho;
 	role: string;
@@ -217,8 +220,8 @@ export function identitiesFrom(docs: readonly unknown[]): ProposedWho[] {
  * serves: *"every musician in a band or an orchestra records their part
  * sovereignly; an engineer finishes the project."*
  *
- * A PROPOSAL IS NOT A FACT. Nothing here consents to anything: the points come
- * from `the-merismos`'s `even()` and every part starts with `consent: null`,
+ * A PROPOSAL IS NOT A FACT. Nothing here consents to anything: the list goes to
+ * `the-merismos`'s `contributors()` and every part starts with `consent: null`,
  * and the room ticks one line only — the identity that holds this device's
  * key. Opt-in always: "no force or deceptive theft."
  *
