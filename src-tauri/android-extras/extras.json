@@ -1,0 +1,25 @@
+{
+	"app": "resonance-sistrum",
+	"from": "resonance-sistrum/scripts/sync-android-extras.mjs (44 lines), read 2026-09-02",
+	"kotlinPlugins": true,
+	"manifest": {
+		"blocks": [
+			{
+				"id": "record-audio",
+				"test": "RECORD_AUDIO",
+				"anchor": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+				"mode": "after",
+				"lines": [
+					"    <!-- the record room and the tuner — the microphone (runtime-granted via MediaPermissionPlugin) -->",
+					"    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />"
+				]
+			}
+		]
+	},
+	"sections": {
+		"launcherIcons": false,
+		"windowGround": false,
+		"templateLeftovers": false,
+		"signingConfig": false
+	}
+}
