@@ -20,6 +20,8 @@ Resonance Sistrum is the creator's half of what used to be one app — separated
 
 **Record.** Capture a take, review it, keep it. Built on `the-recorder` (`resonance-awen`), the same freeze-fix-proven engine the Compass's v3 keel first proved.
 
+**Layer.** A multi-track studio (`/studio`, 2026-09-02, at KP's ⚛ word: *"sistrum will now need a multi tract studio for mixing and layering recorded tracks"* — `docs/THE-STUDIO-PLAN.md`). A session is N lanes, each a take from the shelf, with gain, mute, solo, pan and a start offset, kept as a `<name>.session.json` sidecar beside the takes (`src-tauri/src/studio.rs`). The mix is heard live on one Web Audio clock (`src/lib/stores/mix.svelte.ts`), overdubbed with the recorder while it plays (the new lane stamped from the mix clock, nudged by the ms), and bounced through `the-encoder` (`resonance-awen`) to a 44.1 kHz stereo WAV that lands on the shelf as a take like any other — it plays, wears marks, exports. A trim is a NEW take; nothing in the studio copies, moves, or removes one. Proofs: `.journals/proofs/`.
+
 **Tune.** A real-time tuner (`the-tuner`) reads pitch via YIN analysis and shows the nearest note and how many cents you're off.
 
 **Keep time.** A metronome you can see, not just hear.
@@ -59,7 +61,7 @@ For the musician the market never served — the first user is KP himself, "a mu
 - Node.js + npm
 - Rust toolchain (`edition = "2021"`, `src-tauri/Cargo.toml`)
 - Tauri CLI v2 (`@tauri-apps/cli`, installed via `npm install`)
-- A local checkout of `resonance-awen` beside this repo — `src-tauri/Cargo.toml` depends on `the-recorder` and `the-tuner` by relative path (`../../resonance-awen/tools/...`), so a lone clone of this repo alone does not currently build (`CLAUDE.md`, "the path-dependency seam")
+- A local checkout of `resonance-awen` beside this repo — `src-tauri/Cargo.toml` depends on `the-recorder`, `the-tuner` and `the-encoder` by relative path (`../../resonance-awen/tools/...`), so a lone clone of this repo alone does not currently build (`CLAUDE.md`, "the path-dependency seam")
 
 ### Build
 
@@ -85,7 +87,7 @@ npm run tauri dev
 - Tauri v2 (`protocol-asset` feature, for take playback with range-request seeking) + Rust
 - SQLite (`@tauri-apps/plugin-sql`)
 - Tailwind CSS v4 + COSMIC design tokens (`CLAUDE.md`)
-- `the-recorder` · `the-tuner` — standalone waters from `resonance-awen`, consumed as path crates (not yet distributed in — path crates, so a lone clone cannot `cargo check` until the cosmic distribution carries them; that distribution is KP's law)
+- `the-recorder` · `the-tuner` · `the-encoder` (the studio's mixer, 2026-09-02) — standalone waters from `resonance-awen`, consumed as path crates (not yet distributed in — path crates, so a lone clone cannot `cargo check` until the cosmic distribution carries them; that distribution is KP's law)
 - hound (WAV read/fold) · cpal (tuner's own input stream, independent of the recorder's session)
 
 ---
@@ -98,6 +100,7 @@ src/
 │   ├── +layout.svelte
 │   ├── +page.svelte
 │   ├── record/          # The recorder
+│   ├── studio/          # The multi-track studio (2026-09-02)
 │   ├── tuner/            # Real-time pitch tuner
 │   ├── metronome/        # Visual metronome
 │   ├── insights/         # Feelings/mood dashboard
@@ -110,11 +113,11 @@ src/
 │   ├── stores/
 │   ├── components/
 │   ├── cosmic/            # COSMIC design tokens
-│   ├── marks.ts · metronome.ts · waveform.ts
+│   ├── marks.ts · metronome.ts · waveform.ts · studio.ts (the studio's pure arithmetic)
 │   └── types/
 src-tauri/src/
 ├── lib.rs · main.rs
-├── recorder.rs · tuner.rs · waveform.rs · marks.rs
+├── recorder.rs · tuner.rs · waveform.rs · marks.rs · studio.rs
 └── media_permission.rs
 ```
 

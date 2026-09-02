@@ -128,7 +128,7 @@ pub fn takes_dir(app_handle: &tauri::AppHandle) -> Result<std::path::PathBuf, St
 }
 
 // The fragments' safe-name discipline, carried exactly.
-fn safe_name(name: &str) -> String {
+pub(crate) fn safe_name(name: &str) -> String {
     name.chars()
         .map(|c| if c.is_alphanumeric() || c == '-' || c == '_' || c == ' ' { c } else { '_' })
         .collect::<String>()

@@ -18,9 +18,17 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 //
 // The metronome is the third water of this wave and it has no Rust at all —
 // it is a beat clock and a Web Audio scheduler, and both belong in the window.
+// THE STUDIO (2026-09-02, a Fable hand dealt by Caesura 🎻), at KP's ⚛ word:
+//   studio   — `the-encoder`'s mixer called from a path crate, exactly as
+//              the recorder is: a mixdown to one new take on the shelf, a
+//              trim as a NEW take (the original kept), and the session
+//              document as a `.session.json` sidecar beside the sound —
+//              the marks' own road, nothing in this database.
+//              `docs/THE-STUDIO-PLAN.md` is the brief.
 mod marks;
 mod media_permission;
 mod recorder;
+mod studio;
 mod tuner;
 mod waveform;
 
@@ -147,9 +155,16 @@ pub fn run() {
     // tool and it should say so" — and the splits.
     //
     // Until then: a TEXT column holding JSON, read with json_extract().
-    // NOTHING in this repo writes it, nothing validates it, and nothing may
-    // drop it — whatever a hand puts here rides whole. It is a held place, and
-    // it comes to life when ready.
+    // Nothing validates it, and nothing may drop it — whatever a hand puts
+    // here rides whole. It is a held place, and it comes to life when ready.
+    //
+    // ONE WRITER SINCE 2026-09-02, told rather than hidden: the studio room
+    // puts a `studio` key on the takes IT makes — a bounce (`kind: mixdown`,
+    // the session's name and its layers), a trim (`kind: trim`, the source
+    // take and the window), an overdub (`kind: overdub`, the session and the
+    // stamped offset). That is provenance in the plain sense — where a sound
+    // came from — and it sits beside, never in place of, the signed hand and
+    // the grant this column is held for. A recorded take still carries none.
 
     let builder = tauri::Builder::default()
         .plugin(
@@ -202,6 +217,14 @@ pub fn run() {
             marks::read_take_marks,
             marks::append_take_marks,
             marks::takes_with_marks,
+            // ── The studio (2026-09-02) ──────────────────────────────────
+            // A bounce and a trim each make a NEW take and never touch an
+            // existing one; the session is a sidecar on the shelf.
+            studio::mixdown,
+            studio::trim_take,
+            studio::read_session,
+            studio::write_session,
+            studio::list_sessions,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Resonance Sistrum");

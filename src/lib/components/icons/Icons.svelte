@@ -7,6 +7,7 @@
   import IconRecord from './IconRecord.svelte';
   import IconTuner from './IconTuner.svelte';
   import IconMetronome from './IconMetronome.svelte';
+  import IconStudio from './IconStudio.svelte';
 
   export type IconName =
     | 'home'
@@ -16,7 +17,8 @@
     | 'sattva'
     | 'record'
     | 'tuner'
-    | 'metronome';
+    | 'metronome'
+    | 'studio';
 
   let {
     name,
@@ -37,6 +39,7 @@
     'record': IconRecord,
     'tuner': IconTuner,
     'metronome': IconMetronome,
+    'studio': IconStudio,
   };
 
   const Component = $derived(components[name]);

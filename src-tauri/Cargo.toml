@@ -37,8 +37,14 @@ serde_json = "1"
 #                  Only its LIBRARY crosses; `meter_line` draws an ASCII bar
 #                  for a terminal and this body has a screen, so the position
 #                  is drawn in Svelte from the same signed cents.
+#   the-encoder  — the mixer (THE STUDIO, 2026-09-02): `mix_layers`,
+#                  `decode_window`, `write_wav`. One contract, the crate's
+#                  own: 44.1 kHz stereo 16-bit WAV out, whatever the takes'
+#                  rate. It pulls rodio 0.20 with symphonia, so the first
+#                  build after this line is the long one.
 the-recorder = { path = "../../resonance-awen/tools/the-recorder" }
 the-tuner = { path = "../../resonance-awen/tools/the-tuner" }
+the-encoder = { path = "../../resonance-awen/tools/the-encoder" }
 
 # `hound` is here in its own right because the harness reads WAV headers and
 # folds WAV samples (list_takes, take_shape) without going back through the

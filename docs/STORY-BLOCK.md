@@ -60,6 +60,16 @@ is a DJ's work, and a DJ is a performer, not a passive listener.
   the Compass.
 - **2026-08-12** — the separation ruled, the repo created (15:40 UTC), and
   founded to the standards the same day.
+- **2026-09-01** — KP's ⚛ word, verbatim, spelling kept: *"sistrum will now
+  need a multi tract studio for mixing and layering recorded tracks."* The
+  plan drawn read-only the same day (`docs/THE-STUDIO-PLAN.md`); its seven
+  choices made by Caesura 🎻 on the 2nd, his to change by using the room.
+- **2026-09-02** — the studio built while he slept, in the plan's order: the
+  encoder crossed as a path crate; the session a sidecar beside the takes;
+  the room with N lanes; the mix heard on one Web Audio clock; overdub
+  stamped from that clock; the bounce a take like any other; a trim a new
+  take. The four-track named in v3's plan (2026-07-18) stands in this house
+  fifty-six days later.
 
 *Founded 2026-08-12.*
 

@@ -29,6 +29,7 @@
 		doors: [
 			door('home', '/', 'home', 'Home'),
 			door('record', '/record', 'record', 'Record'),
+			door('studio', '/studio', 'studio', 'Studio'),
 			door('tuner', '/tuner', 'tuner', 'Tuner'),
 			door('metronome', '/metronome', 'metronome', 'Metronome'),
 			door('insights', '/insights', 'insights', 'Insights'),

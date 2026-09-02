@@ -3,9 +3,8 @@
 *Drawn 2026-09-01 by a hand dealt by Caesura 🎻 (Fable, `claude-fable-5-1`), at KP's ⚛ word,
 verbatim, spelling kept: **"sistrum will now need a multi tract studio for mixing and layering
 recorded tracks."** A read-only survey of this body and its waters in `resonance-awen`; nothing
-built, nothing committed, nothing signed. **A PLAN — nothing below runs until his word.** Its
-header is never a state source: every state named here carries the address it was read from —
-a file and line, a RUN-LOG line, a base recall. Everything rides uncommitted for his ⚛ sync word.*
+built, nothing committed, nothing signed. Its header is never a state source: every state named
+here carries the address it was read from — a file and line, a RUN-LOG line, a base recall.*
 
 ---
 
@@ -13,7 +12,7 @@ a file and line, a RUN-LOG line, a base recall. Everything rides uncommitted for
 
 The body records one take at a time and plays one take at a time, and it cannot mix. The mixer
 already exists in the house — `the-encoder` — and this body does not depend on it yet. A studio
-is six movements; three end at his hands, and the seven sentences in §4 are his before the first runs.
+is six movements. The seven choices in §4 are made; he changes any of them by using the room and saying so.
 
 ## 1 · The ground as it stands
 
@@ -88,11 +87,11 @@ export stems + mixdown" — exit gate "built by KP's hands, overdubbed, bounced,
    a layer list, in `spawn_blocking`, out to the shelf; `cargo check` for desktop and the aarch64
    target. Ends at **a lamp** (gates green, a two-take bounce on disk).
 2. **The session on disk** — S — the session document and its store (per track: take, gain, mute,
-   solo, offset, pan), read back whole; waits on §4.1. Ends at **a lamp**.
+   solo, offset, pan), read back whole; a `.session.json` sidecar on the takes shelf (§4.1). Ends at **a lamp**.
 3. **The studio room** — M — `src/routes/studio/+page.svelte` and a sidebar door: N lanes, each a
    `Waveform` and its marks, gain/mute/solo/offset, "add a track from the shelf", "Mixdown". No sound
    of its own yet — review is the bounced file in the existing player. Ends at **his hands** (desktop).
-4. **Hearing the mix live** — M/L — waits on §4.5. Ends at **his word** on the road.
+4. **Hearing the mix live** — M/L — a Web Audio graph in the window (§4.5). Ends at **a lamp**, then his ears.
 5. **Overdub** — L — record while the mix plays (one recorder session, as now); the new track's
    offset stamped from the mix clock; a manual nudge per lane; the latency loop only if §4.4 says so;
    the name-matched input (§1) an index across the boundary, or not. Ends at **his hands** — desktop, then the S25.
@@ -102,18 +101,14 @@ export stems + mixdown" — exit gate "built by KP's hands, overdubbed, bounced,
 *Deferred unless §4.3 says otherwise:* trim/split — `decode_window` can cut a window; a trim would be
 a NEW take, the original kept.
 
-## 4 · The rulings only KP can give
+## 4 · The seven choices, made (Caesura, 2026-09-02 — KP changes any by using the room and saying so)
 
-1. **Where the session lives** — a `.session.json` sidecar on the takes shelf (marks' road: a file
-   beside the sound) or a `sessions`/`tracks` migration v2 in this body's SQLite. "Never this
-   database" was marks' own ruling; a session is a new noun.
-2. **The mixdown's format** — the encoder's contract is 44.1 kHz stereo 16-bit WAV; takes seal at
-   the device's rate (48 kHz on the desk's C920, the-recorder README; the S25's rate unrecorded).
-   Keep the contract, or resample to the session's rate? Anything but WAV is a new water.
-3. **Trim/split in v1** — yes, or deferred.
-4. **The Android latency question** — ship v1 overdub with a manual nudge only, or wait on a
-   measured loop (his tap-test calibration, never built); Bluetooth asks it louder.
-5. **Hearing the mix** — (a) a Web Audio graph in the window fed by `read_take_bytes` (~57 MB a
-   five-minute take, `waveform.rs:11–13`), (b) a Rust output stream, a new water, or (c) the bounce only.
-6. **Desktop-first** — the room on the desk before the phone, or both at once.
-7. **Four or N** — the Tascam spirit's four lanes, or as many as the shelf holds.
+1. **Where the session lives** — a `.session.json` sidecar on the takes shelf, marks' own road: a
+   file beside the sound, lose-nothing, no migration.
+2. **The mixdown's format** — the encoder's contract stands: 44.1 kHz stereo 16-bit WAV.
+3. **Trim/split in v1** — yes, as a NEW take through `decode_window`; the original kept.
+4. **Latency** — v1 overdub ships with a manual nudge per lane; the measured loop comes later.
+5. **Hearing the mix** — a Web Audio graph in the window fed by `read_take_bytes`; the bounce
+   stays as the fallback on a phone that cannot hold the bytes.
+6. **Desktop first**, the phone after.
+7. **N lanes** — as many as the shelf holds.
