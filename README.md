@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)]()
-[![Status](https://img.shields.io/badge/status-founded-1e90ff.svg)](docs/CHECKLIST.md)
+[![Status](https://img.shields.io/badge/status-founded-1e90ff.svg)](RUN-LOG.md)
 [![Standard](https://img.shields.io/badge/standard-resonance--standards-orange.svg)](https://github.com/Quantum-Weaver/resonance-standards)
 [![Grammar](https://img.shields.io/badge/built%20on-resonance--grammar-8a2be2.svg)](https://github.com/Quantum-Weaver/resonance-grammar)
 [![Data collected](https://img.shields.io/badge/data%20collected-none-brightgreen.svg)](PHILOSOPHY.md)
@@ -24,9 +24,9 @@ Resonance Sistrum is the creator's half of what used to be one app — separated
 
 **Keep time.** A metronome you can see, not just hear.
 
-**Mark the moment.** One press pins a moment-mark to a take *and* logs an emoji feeling in the same motion — "a quick log of emoji in the moment is the capture" (KP's ⚛ ruling, `docs/CHECKLIST.md`, Phase 3 Wave 3). A mark is never held hostage to the feeling log: a missed log stays retryable, named honestly.
+**Mark the moment.** One press pins a moment-mark to a take *and* logs an emoji feeling in the same motion — "a quick log of emoji in the moment is the capture" (KP's ⚛ ruling — the retired checklist's Phase 3 Wave 3, git history before 2026-08-25). A mark is never held hostage to the feeling log: a missed log stays retryable, named honestly.
 
-**Works, takes, feelings.** The domain KP ruled directly: works hold takes, and a feeling can hang on either a work or a take (`docs/CHECKLIST.md`, Phase 2).
+**Works, takes, feelings.** The domain KP ruled directly: works hold takes, and a feeling can hang on either a work or a take (the retired checklist, Phase 2).
 
 ---
 
@@ -48,7 +48,7 @@ For the musician the market never served — the first user is KP himself, "a mu
 
 ## Screenshots
 
-*No screenshots yet — the interface is still mid-build (waves 1–3 tested on desktop 2026-08-20; Android device testing is its own open wave, see `docs/CHECKLIST.md`).*
+*No screenshots yet — they are KP's own phone's to give. Waves 1–3 were tested on desktop 2026-08-20; the on-device proof of a real take is the base's open item 354, his hands — the realm's open items and plans live in the base — `python C:/_superposition/resonance-progenatrix/progenatrix.py recall --realm resonance-sistrum`.*
 
 ---
 
@@ -67,7 +67,7 @@ For the musician the market never served — the first user is KP himself, "a mu
 npm install
 npm run build
 ```
-*(No signed release build is recorded yet in `docs/CHECKLIST.md` as of this pass — desktop dev and the Android body have both been verified; see Development below.)*
+*(A signed v0.1.0 AAB + APK + idsig was cut 2026-08-20 18:30 into `release/` — before that evening's Android microphone wave, so the shipped body carries no mic and must not be re-uploaded as current; no MSI or setup.exe has been cut. The checklist that recorded builds was retired in KP's 2026-08-25 cleanup, under his ruling that no checklist docs exist; the realm's open items and plans live in the base — `python C:/_superposition/resonance-progenatrix/progenatrix.py recall --realm resonance-sistrum`.)*
 
 ### Development
 
@@ -75,7 +75,7 @@ npm run build
 npm run dev
 npm run tauri dev
 ```
-*(KP's own words, verified 2026-08-20: "desktop works fine" — all three built waves tested on desktop; `docs/CHECKLIST.md`. Android: `tauri android init` has been run and the desktop shell verified, but the microphone is not yet wired on Android — "mic is not wired on android yet, device is plugged in," same record.)*
+*(KP's own words, verified 2026-08-20: "desktop works fine" — all three built waves tested on desktop; the retired checklist, git history before 2026-08-25. Android: the microphone bridge landed later the same evening as wave 4 — `src-tauri/src/media_permission.rs` + `src-tauri/android-extras/MediaPermissionPlugin.kt`, synced into gen/ by `scripts/sync-android-extras.mjs`; "mic is not wired on android yet, device is plugged in" was true of that afternoon, not the night. The device proof of a real take is the base's item 354.)*
 
 ---
 
@@ -85,7 +85,7 @@ npm run tauri dev
 - Tauri v2 (`protocol-asset` feature, for take playback with range-request seeking) + Rust
 - SQLite (`@tauri-apps/plugin-sql`)
 - Tailwind CSS v4 + COSMIC design tokens (`CLAUDE.md`)
-- `the-recorder` · `the-tuner` — standalone waters from `resonance-awen`, consumed as path crates (not yet distributed in; see CONFUSIONS in the sending report)
+- `the-recorder` · `the-tuner` — standalone waters from `resonance-awen`, consumed as path crates (not yet distributed in — path crates, so a lone clone cannot `cargo check` until the cosmic distribution carries them; that distribution is KP's law)
 - hound (WAV read/fold) · cpal (tuner's own input stream, independent of the recorder's session)
 
 ---

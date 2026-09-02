@@ -10,7 +10,8 @@
 	import FeelingHere from '$lib/components/FeelingHere.svelte';
 
 
-	let selectedDevice = $state<string | null>(null);
+	// The chosen input is held by its row index, never its name: the S25 lists two inputs under one name, and a name-keyed list froze the room (W4-1). Null is the default input.
+	let selectedDevice = $state<number | null>(null);
 	let takeName = $state('');
 	let openTake = $state<string | null>(null);
 	let lastSealed = $state<TakeFile | null>(null);
@@ -23,13 +24,17 @@
 	const clipped = $derived(recorderStore.clipped);
 	const takes = $derived(recorderStore.takes);
 	const chosen = $derived(openTake ? recorderStore.byFileName(openTake) : undefined);
+	// The name the recorder is asked for — resolved from the index at the moment of asking.
+	const selectedDeviceName = $derived(
+		selectedDevice === null ? null : (recorderStore.devices[selectedDevice]?.name ?? null)
+	);
 
 	const prefersReduced =
 		typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	const btHint = $derived.by(() => {
 		const name = (
-			selectedDevice ??
+			selectedDeviceName ??
 			recorderStore.devices.find((d) => d.is_default)?.name ??
 			''
 		).toLowerCase();
@@ -54,7 +59,7 @@
 
 	async function startTake() {
 		lastSealed = null;
-		await recorderStore.start(selectedDevice, recordPrefs.capSecs);
+		await recorderStore.start(selectedDeviceName, recordPrefs.capSecs);
 	}
 
 	// The row lands with the file and carries NO work: `work_id` stays null until a hand says otherwise.
@@ -157,8 +162,8 @@
 					<span class="field-word">Input</span>
 					<select class="device-select" bind:value={selectedDevice}>
 						<option value={null}>Default input</option>
-						{#each recorderStore.devices as d (d.name)}
-							<option value={d.name}>{d.name}{d.is_default ? ' (default)' : ''}</option>
+						{#each recorderStore.devices as d, i (i)}
+							<option value={i}>{d.name}{d.is_default ? ' (default)' : ''}</option>
 						{/each}
 					</select>
 				</label>

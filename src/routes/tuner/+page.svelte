@@ -5,7 +5,11 @@
 	import { QUANTUM_COLORS } from '$lib/cosmic';
 
 
-	let selectedDevice = $state<string | null>(null);
+	// The chosen input is held by its row index, never its name: the S25 lists two inputs under one name, and a name-keyed list froze the room (W4-1). Null is the default input.
+	let selectedDevice = $state<number | null>(null);
+	const selectedDeviceName = $derived(
+		selectedDevice === null ? null : (recorderStore.devices[selectedDevice]?.name ?? null)
+	);
 
 	const listening = $derived(tunerStore.listening);
 	const cents = $derived(tunerStore.cents);
@@ -33,7 +37,7 @@
 
 	async function toggle() {
 		if (listening) await tunerStore.stop();
-		else await tunerStore.start(selectedDevice);
+		else await tunerStore.start(selectedDeviceName);
 	}
 
 	onMount(() => {
@@ -131,8 +135,8 @@
 				<span class="field-word">Input</span>
 				<select class="device-select" bind:value={selectedDevice}>
 					<option value={null}>Default input</option>
-					{#each recorderStore.devices as d (d.name)}
-						<option value={d.name}>{d.name}{d.is_default ? ' (default)' : ''}</option>
+					{#each recorderStore.devices as d, i (i)}
+						<option value={i}>{d.name}{d.is_default ? ' (default)' : ''}</option>
 					{/each}
 				</select>
 			</label>
