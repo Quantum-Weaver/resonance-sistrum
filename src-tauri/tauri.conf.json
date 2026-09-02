@@ -4,9 +4,9 @@
   "version": "0.2.0",
   "identifier": "com.audhd.resonance-sistrum",
   "build": {
-    "beforeDevCommand": "node C:/_superposition/resonance-ziggy/modules/android-extras/sync-android-extras.mjs resonance-sistrum && npm run dev",
+    "beforeDevCommand": "npm run sync-android && npm run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "node C:/_superposition/resonance-ziggy/modules/android-extras/sync-android-extras.mjs resonance-sistrum && npm run build",
+    "beforeBuildCommand": "npm run sync-android && npm run build",
     "frontendDist": "../build"
   },
   "app": {
