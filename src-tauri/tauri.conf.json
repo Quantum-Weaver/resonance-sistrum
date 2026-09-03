@@ -5,7 +5,7 @@
   "identifier": "com.audhd.resonance-sistrum",
   "build": {
     "beforeDevCommand": "npm run sync-android && npm run dev",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://localhost:1448",
     "beforeBuildCommand": "npm run sync-android && npm run build",
     "frontendDist": "../build"
   },
