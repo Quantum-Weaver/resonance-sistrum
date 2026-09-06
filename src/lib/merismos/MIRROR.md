@@ -2,7 +2,7 @@
 
 As of 2026-09-02 (THE COLUMN COMES TO LIFE - the splits proposed at
 the studio's Mixdown), the apportionment's single editable truth is:
-C:\_superposition\resonance-awen\tools\the-merismos\src\index.ts
+../resonance-awen/tools/the-merismos/src/index.ts
 
 Do not edit index.ts in THIS folder - it is a byte-faithful mirror
 (SHA256 verified at the copy: E4AE3FFF02C0FE3E). Split-law changes -

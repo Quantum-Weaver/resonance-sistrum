@@ -52,7 +52,7 @@ For the musician the market never served — the first user is KP himself, "a mu
 
 ## Screenshots
 
-*No screenshots yet — they are KP's own phone's to give. Waves 1–3 were tested on desktop 2026-08-20; the on-device proof of a real take is the base's open item 354, his hands — the realm's open items and plans live in the base — `python C:/_superposition/resonance-progenatrix/progenatrix.py recall --realm resonance-sistrum`.*
+*No screenshots yet — they are KP's own phone's to give. Waves 1–3 were tested on desktop 2026-08-20; the on-device proof of a real take is the base's open item 354, his hands — the realm's open items and plans live in the base — `python ../resonance-progenatrix/progenatrix.py recall --realm resonance-sistrum`.*
 
 ---
 
@@ -71,7 +71,7 @@ For the musician the market never served — the first user is KP himself, "a mu
 npm install
 npm run build
 ```
-*(A signed v0.1.0 AAB + APK + idsig was cut 2026-08-20 18:30 into `release/` — before that evening's Android microphone wave, so the shipped body carries no mic and must not be re-uploaded as current; no MSI or setup.exe has been cut. The checklist that recorded builds was retired in KP's 2026-08-25 cleanup, under his ruling that no checklist docs exist; the realm's open items and plans live in the base — `python C:/_superposition/resonance-progenatrix/progenatrix.py recall --realm resonance-sistrum`.)*
+*(A signed v0.1.0 AAB + APK + idsig was cut 2026-08-20 18:30 into `release/` — before that evening's Android microphone wave, so the shipped body carries no mic and must not be re-uploaded as current; no MSI or setup.exe has been cut. The checklist that recorded builds was retired in KP's 2026-08-25 cleanup, under his ruling that no checklist docs exist; the realm's open items and plans live in the base — `python ../resonance-progenatrix/progenatrix.py recall --realm resonance-sistrum`.)*
 
 ### Development
 

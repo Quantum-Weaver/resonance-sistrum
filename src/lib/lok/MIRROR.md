@@ -2,7 +2,7 @@
 
 As of 2026-09-02 (THE COLUMN COMES TO LIFE), the lock's single
 editable truth is:
-C:\_superposition\resonance-awen\tools\the-lok\src\index.ts
+../resonance-awen/tools/the-lok/src/index.ts
 
 Do not edit index.ts in THIS folder - it is a byte-faithful mirror
 (SHA256 verified at the copy: 78B75769881B9D33). Gate-law changes

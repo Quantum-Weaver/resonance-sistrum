@@ -3,7 +3,7 @@
 As of 2026-08-08 (echoes-sky - KP's ruling at the Hearth's
 communications sitting: "this is echoes, tied into the sky facts"),
 the sky organs' single editable truth is:
-C:\_superposition\resonance-awen\tools\the-sky\src\index.ts
+../resonance-awen/tools/the-sky/src/index.ts
 
 Do not edit index.ts in THIS folder - it is a byte-faithful mirror
 (SHA256 verified at the copy: E877BE1D66649548, identical to the

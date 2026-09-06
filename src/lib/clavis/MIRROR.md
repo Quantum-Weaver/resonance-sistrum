@@ -3,7 +3,7 @@
 As of 2026-09-02 (THE COLUMN COMES TO LIFE - the collaboration layer
 beside the recorder, at KP's ⚛ ruling on takes.provenance), the key's
 single editable truth is:
-C:\_superposition\resonance-awen\tools\the-clavis\src\index.ts
+../resonance-awen/tools/the-clavis/src/index.ts
 
 Do not edit index.ts in THIS folder - it is a byte-faithful mirror
 (SHA256 verified at the copy: 2E3448EEB220FE20). Claiming-law changes

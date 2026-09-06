@@ -6,7 +6,7 @@
       "Bash(npm outdated *)"
     ],
     "additionalDirectories": [
-      "c:\\_superposition\\resonance-sistrum\\src-tauri"
+      "src-tauri"
     ]
   },
   "attribution": {

@@ -5,7 +5,7 @@ beside the recorder, at KP's ⚛ ruling: "none of that belongs in the
 recorder, the recorder db structure simply requires a json column to
 handle the expected use case, the column will come to life when
 ready"), the identity's single editable truth is:
-C:\_superposition\resonance-awen\tools\the-signet\src\index.ts
+../resonance-awen/tools/the-signet/src/index.ts
 
 Do not edit index.ts in THIS folder - it is a byte-faithful mirror
 (SHA256 verified at the copy: C9EB0014B82A3C2D), to be refreshed by

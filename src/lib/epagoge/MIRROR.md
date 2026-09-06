@@ -4,7 +4,7 @@ As of 2026-08-06 (the onboarding refinement - Echoes' epagoge
 consumption, KP's word: "and the onboarding... it adds the other
 available styles choices at the onboarding"), the leading-in's
 single editable truth is:
-C:\_superposition\resonance-awen\tools\the-epagoge\src\index.ts
+../resonance-awen/tools/the-epagoge/src/index.ts
 
 Do not edit index.ts in THIS folder - it is a byte-faithful mirror
 (SHA256 verified at the copy: CBF19821CDCB4BA6, the same truth
