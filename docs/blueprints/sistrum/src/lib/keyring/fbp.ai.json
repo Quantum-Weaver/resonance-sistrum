@@ -1,0 +1,64 @@
+{
+  "tier": "folder",
+  "folder_name": "keyring",
+  "folder_path": "src/lib/keyring",
+  "self": "sistrum/src/lib/keyring/fbp.ai.json",
+  "parent": "sistrum/src/lib/obp.ai.json",
+  "description": "2 files, 0 subfolders",
+  "files": [
+    {
+      "path": "src/lib/keyring/hosts.ts",
+      "description": "THE HOSTS"
+    },
+    {
+      "path": "src/lib/keyring/store.ts",
+      "description": "THE KEYRING"
+    }
+  ],
+  "file_count": 2,
+  "subdirectories": [],
+  "code_analysis": {
+    "hosts.ts": {
+      "language": "typescript",
+      "lines": 88,
+      "exported_functions": [
+        "ed25519Available"
+      ],
+      "exported_consts": [
+        "clavisHost",
+        "lokHost"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "store.ts": {
+      "language": "typescript",
+      "lines": 96,
+      "exported_functions": [
+        "readKeyring",
+        "writeKeyring",
+        "forgetKeyring"
+      ],
+      "exported_consts": [
+        "IDENTITY_KEY",
+        "KEYPAIR_KEY"
+      ],
+      "interfaces": [
+        "StoredKeyPair"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-09-07T14:01:55.389623 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

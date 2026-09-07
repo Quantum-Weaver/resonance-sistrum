@@ -4,53 +4,61 @@
   "folder_path": "src/lib/components",
   "self": "sistrum/src/lib/components/fbp.ai.json",
   "parent": "sistrum/src/lib/obp.ai.json",
-  "description": "9 files, 1 subfolders",
+  "description": "11 files, 1 subfolders",
   "files": [
     {
       "path": "src/lib/components/ComfortBar.svelte",
-      "description": "surface, 5,146 bytes"
+      "description": "surface, 5,402 bytes"
     },
     {
       "path": "src/lib/components/FeelingHere.svelte",
-      "description": "surface, 14,344 bytes"
+      "description": "surface, 11,077 bytes"
     },
     {
       "path": "src/lib/components/GradientPulse.svelte",
       "description": "surface, 1,005 bytes"
     },
     {
+      "path": "src/lib/components/LaneMarks.svelte",
+      "description": "surface, 5,484 bytes"
+    },
+    {
       "path": "src/lib/components/MarksRail.svelte",
-      "description": "surface, 23,865 bytes"
+      "description": "surface, 17,348 bytes"
+    },
+    {
+      "path": "src/lib/components/ProvenancePanel.svelte",
+      "description": "surface, 10,547 bytes"
     },
     {
       "path": "src/lib/components/Sidebar.svelte",
-      "description": "surface, 10,399 bytes"
+      "description": "surface, 7,200 bytes"
     },
     {
       "path": "src/lib/components/TakePlayer.svelte",
-      "description": "surface, 10,615 bytes"
+      "description": "surface, 8,136 bytes"
     },
     {
       "path": "src/lib/components/TimerVisualization.svelte",
-      "description": "surface, 18,223 bytes"
+      "description": "surface, 17,368 bytes"
     },
     {
       "path": "src/lib/components/Waveform.svelte",
-      "description": "surface, 6,777 bytes"
+      "description": "surface, 5,510 bytes"
     },
     {
       "path": "src/lib/components/WorkPicker.svelte",
-      "description": "surface, 5,016 bytes"
+      "description": "surface, 4,067 bytes"
     }
   ],
-  "file_count": 9,
+  "file_count": 11,
   "subdirectories": [
     "src/lib/components/icons"
   ],
   "code_analysis": {
     "ComfortBar.svelte": {
       "language": "svelte",
-      "lines": 208,
+      "lines": 235,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -61,7 +69,7 @@
     },
     "FeelingHere.svelte": {
       "language": "svelte",
-      "lines": 568,
+      "lines": 511,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -80,9 +88,33 @@
       "fetch_calls": [],
       "has_style_block": true
     },
+    "LaneMarks.svelte": {
+      "language": "svelte",
+      "lines": 230,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
     "MarksRail.svelte": {
       "language": "svelte",
-      "lines": 876,
+      "lines": 768,
+      "uses_runes": [
+        "$derived",
+        "$effect",
+        "$props",
+        "$state"
+      ],
+      "fetch_calls": [],
+      "has_style_block": true
+    },
+    "ProvenancePanel.svelte": {
+      "language": "svelte",
+      "lines": 352,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -94,7 +126,7 @@
     },
     "Sidebar.svelte": {
       "language": "svelte",
-      "lines": 373,
+      "lines": 303,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -105,7 +137,7 @@
     },
     "TakePlayer.svelte": {
       "language": "svelte",
-      "lines": 383,
+      "lines": 344,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -117,7 +149,7 @@
     },
     "TimerVisualization.svelte": {
       "language": "svelte",
-      "lines": 599,
+      "lines": 592,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -129,7 +161,7 @@
     },
     "Waveform.svelte": {
       "language": "svelte",
-      "lines": 241,
+      "lines": 221,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -141,7 +173,7 @@
     },
     "WorkPicker.svelte": {
       "language": "svelte",
-      "lines": 233,
+      "lines": 218,
       "uses_runes": [
         "$derived",
         "$props",
@@ -152,7 +184,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.720893 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.366572 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

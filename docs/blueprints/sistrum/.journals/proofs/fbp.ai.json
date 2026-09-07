@@ -1,0 +1,71 @@
+{
+  "tier": "folder",
+  "folder_name": "proofs",
+  "folder_path": ".journals/proofs",
+  "self": "sistrum/.journals/proofs/fbp.ai.json",
+  "parent": "sistrum/.journals/obp.ai.json",
+  "description": "5 files, 0 subfolders",
+  "files": [
+    {
+      "path": ".journals/proofs/mixdown-two-takes.mjs",
+      "description": "PROOF"
+    },
+    {
+      "path": ".journals/proofs/offsets-to-schedule.mjs",
+      "description": "PROOF"
+    },
+    {
+      "path": ".journals/proofs/provenance-round-trip.mjs",
+      "description": "PROOF"
+    },
+    {
+      "path": ".journals/proofs/session-round-trip.mjs",
+      "description": "PROOF"
+    },
+    {
+      "path": ".journals/proofs/splits-from-lanes.mjs",
+      "description": "PROOF"
+    }
+  ],
+  "file_count": 5,
+  "subdirectories": [],
+  "code_analysis": {
+    "mixdown-two-takes.mjs": {
+      "language": "node",
+      "lines": 126,
+      "functions": [
+        "readWav",
+        "writeWav"
+      ],
+      "commands": []
+    },
+    "offsets-to-schedule.mjs": {
+      "language": "node",
+      "lines": 62,
+      "functions": [],
+      "commands": []
+    },
+    "provenance-round-trip.mjs": {
+      "language": "node",
+      "lines": 155,
+      "functions": [],
+      "commands": []
+    },
+    "session-round-trip.mjs": {
+      "language": "node",
+      "lines": 62,
+      "functions": [],
+      "commands": []
+    },
+    "splits-from-lanes.mjs": {
+      "language": "node",
+      "lines": 139,
+      "functions": [],
+      "commands": []
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-09-07T14:01:55.337313 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

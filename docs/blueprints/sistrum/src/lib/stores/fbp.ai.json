@@ -4,71 +4,83 @@
   "folder_path": "src/lib/stores",
   "self": "sistrum/src/lib/stores/fbp.ai.json",
   "parent": "sistrum/src/lib/obp.ai.json",
-  "description": "14 files, 0 subfolders",
+  "description": "17 files, 0 subfolders",
   "files": [
     {
       "path": "src/lib/stores/db.ts",
-      "description": "typescript, 1,666 bytes"
+      "description": "typescript, 1,183 bytes"
     },
     {
       "path": "src/lib/stores/feeling.svelte.ts",
-      "description": "typescript, 9,650 bytes"
+      "description": "typescript, 7,776 bytes"
+    },
+    {
+      "path": "src/lib/stores/identity.svelte.ts",
+      "description": "typescript, 6,064 bytes"
     },
     {
       "path": "src/lib/stores/markPrefs.svelte.ts",
-      "description": "typescript, 1,700 bytes"
+      "description": "typescript, 527 bytes"
     },
     {
       "path": "src/lib/stores/marks.svelte.ts",
-      "description": "typescript, 8,357 bytes"
+      "description": "typescript, 6,257 bytes"
     },
     {
       "path": "src/lib/stores/metronome.svelte.ts",
-      "description": "typescript, 8,588 bytes"
+      "description": "typescript, 6,333 bytes"
+    },
+    {
+      "path": "src/lib/stores/mix.svelte.ts",
+      "description": "typescript, 10,644 bytes"
     },
     {
       "path": "src/lib/stores/playback.svelte.ts",
-      "description": "typescript, 7,752 bytes"
+      "description": "typescript, 6,206 bytes"
     },
     {
       "path": "src/lib/stores/recorder.svelte.ts",
-      "description": "typescript, 8,300 bytes"
+      "description": "typescript, 5,951 bytes"
     },
     {
       "path": "src/lib/stores/recordPrefs.svelte.ts",
-      "description": "The record room's one preference"
+      "description": "'hold'"
+    },
+    {
+      "path": "src/lib/stores/session.svelte.ts",
+      "description": "typescript, 4,301 bytes"
     },
     {
       "path": "src/lib/stores/take.svelte.ts",
-      "description": "typescript, 5,338 bytes"
+      "description": "typescript, 4,271 bytes"
     },
     {
       "path": "src/lib/stores/theme.svelte.ts",
-      "description": "typescript, 1,051 bytes"
+      "description": "typescript, 1,645 bytes"
     },
     {
       "path": "src/lib/stores/timer.svelte.ts",
-      "description": "typescript, 7,644 bytes"
+      "description": "typescript, 6,513 bytes"
     },
     {
       "path": "src/lib/stores/tuner.svelte.ts",
-      "description": "typescript, 5,450 bytes"
+      "description": "typescript, 4,001 bytes"
     },
     {
       "path": "src/lib/stores/ui.svelte.ts",
-      "description": "Cross-component UI signals that don't belong to any domain store"
+      "description": "typescript, 364 bytes"
     },
     {
       "path": "src/lib/stores/work.svelte.ts",
-      "description": "typescript, 3,050 bytes"
+      "description": "typescript, 2,634 bytes"
     }
   ],
-  "file_count": 14,
+  "file_count": 17,
   "subdirectories": [],
   "code_analysis": {
     "db.ts": {
       "language": "typescript",
-      "lines": 48,
+      "lines": 40,
       "exported_functions": [
         "getDb",
         "dbLoadError",
@@ -84,7 +96,7 @@
     },
     "feeling.svelte.ts": {
       "language": "typescript",
-      "lines": 312,
+      "lines": 279,
       "exported_functions": [],
       "exported_consts": [
         "feelingStore"
@@ -96,9 +108,23 @@
       "writes_files": false,
       "env_names_read": []
     },
+    "identity.svelte.ts": {
+      "language": "typescript",
+      "lines": 208,
+      "exported_functions": [],
+      "exported_consts": [
+        "identityStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
     "markPrefs.svelte.ts": {
       "language": "typescript",
-      "lines": 43,
+      "lines": 22,
       "exported_functions": [],
       "exported_consts": [
         "markPrefs"
@@ -112,7 +138,7 @@
     },
     "marks.svelte.ts": {
       "language": "typescript",
-      "lines": 247,
+      "lines": 209,
       "exported_functions": [],
       "exported_consts": [
         "marksStore"
@@ -126,7 +152,7 @@
     },
     "metronome.svelte.ts": {
       "language": "typescript",
-      "lines": 280,
+      "lines": 238,
       "exported_functions": [],
       "exported_consts": [
         "SUBDIVISIONS",
@@ -141,9 +167,23 @@
       "writes_files": false,
       "env_names_read": []
     },
+    "mix.svelte.ts": {
+      "language": "typescript",
+      "lines": 373,
+      "exported_functions": [],
+      "exported_consts": [
+        "mixStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
     "playback.svelte.ts": {
       "language": "typescript",
-      "lines": 271,
+      "lines": 244,
       "exported_functions": [],
       "exported_consts": [
         "playbackStore"
@@ -157,7 +197,7 @@
     },
     "recorder.svelte.ts": {
       "language": "typescript",
-      "lines": 287,
+      "lines": 246,
       "exported_functions": [],
       "exported_consts": [
         "recorderStore"
@@ -174,7 +214,7 @@
     },
     "recordPrefs.svelte.ts": {
       "language": "typescript",
-      "lines": 77,
+      "lines": 56,
       "exported_functions": [
         "fmtMax"
       ],
@@ -191,9 +231,23 @@
       "writes_files": false,
       "env_names_read": []
     },
+    "session.svelte.ts": {
+      "language": "typescript",
+      "lines": 174,
+      "exported_functions": [],
+      "exported_consts": [
+        "sessionStore"
+      ],
+      "interfaces": [],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
     "take.svelte.ts": {
       "language": "typescript",
-      "lines": 159,
+      "lines": 134,
       "exported_functions": [],
       "exported_consts": [
         "takeStore"
@@ -207,7 +261,7 @@
     },
     "theme.svelte.ts": {
       "language": "typescript",
-      "lines": 43,
+      "lines": 58,
       "exported_functions": [],
       "exported_consts": [
         "themeStore"
@@ -221,7 +275,7 @@
     },
     "timer.svelte.ts": {
       "language": "typescript",
-      "lines": 239,
+      "lines": 222,
       "exported_functions": [],
       "exported_consts": [
         "prefersReducedMotion",
@@ -239,7 +293,7 @@
     },
     "tuner.svelte.ts": {
       "language": "typescript",
-      "lines": 197,
+      "lines": 170,
       "exported_functions": [],
       "exported_consts": [
         "tunerStore"
@@ -269,7 +323,7 @@
     },
     "work.svelte.ts": {
       "language": "typescript",
-      "lines": 105,
+      "lines": 96,
       "exported_functions": [],
       "exported_consts": [
         "workStore"
@@ -283,7 +337,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.758519 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.407160 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

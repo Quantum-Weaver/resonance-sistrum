@@ -4,18 +4,37 @@
   "folder_path": "src-tauri/android-extras",
   "self": "sistrum/src-tauri/android-extras/fbp.ai.json",
   "parent": "sistrum/src-tauri/android-extras/obp.ai.json",
-  "description": "1 files, 0 subfolders",
+  "description": "2 files, 0 subfolders",
   "files": [
+    {
+      "path": "src-tauri/android-extras/extras.json",
+      "description": "data, 690 bytes"
+    },
     {
       "path": "src-tauri/android-extras/MediaPermissionPlugin.kt",
       "description": "file, 2,893 bytes"
     }
   ],
-  "file_count": 1,
+  "file_count": 2,
   "subdirectories": [],
-  "code_analysis": {},
+  "code_analysis": {
+    "extras.json": {
+      "language": "json",
+      "lines": 26,
+      "valid": true,
+      "root": "object",
+      "top_level_keys": [
+        "app",
+        "from",
+        "kotlinPlugins",
+        "manifest",
+        "sections"
+      ],
+      "key_count": 5
+    }
+  },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.807490 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.446374 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

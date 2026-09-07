@@ -7,54 +7,21 @@
   "description": "2 files, 0 subfolders",
   "files": [
     {
-      "path": "docs/CHECKLIST.md",
-      "description": "RESONANCE-SISTRUM"
-    },
-    {
       "path": "docs/STORY-BLOCK.md",
       "description": "STORY BLOCK"
+    },
+    {
+      "path": "docs/THE-STUDIO-PLAN.md",
+      "description": "THE STUDIO"
     }
   ],
   "file_count": 2,
   "subdirectories": [],
   "code_analysis": {
-    "CHECKLIST.md": {
-      "language": "markdown",
-      "lines": 636,
-      "words": 7686,
-      "heading_count": 12,
-      "headings": [
-        "RESONANCE-SISTRUM \u2014 MASTER CHECKLIST",
-        "LEGEND",
-        "PHASE STATUS",
-        "Phase 0: The Founding \u2705",
-        "Phase 1: The Body \u2014 mirrored from `resonance-echoes` \u26a0\ufe0f",
-        "Phase 2: The domain \u2014 works \u00b7 takes \u00b7 feelings \u2705",
-        "Phase 3: Awen fills it \u26a0\ufe0f *(Wave 1 of several \u2014 landed 2026-08-13)*",
-        "WAVE 1 \u2014 the recorder, the player, the waveform \u2705",
-        "WAVE 2 \u2014 the tuner, the metronome, the marks sidecar, the feelings retarget \u2705",
-        "WAVE 3 \u2014 the mark that logs a feeling \u2705",
-        "KNOWN BUGS",
-        "SESSION LOG"
-      ],
-      "links_external": 0,
-      "links_site_absolute": [],
-      "links_internal": [],
-      "links_internal_unresolved": [],
-      "links_internal_outside_checkout": [],
-      "code_fences": 0,
-      "table_rows": 52,
-      "checkboxes": {
-        "open": 1,
-        "done": 77
-      },
-      "has_story_block": false,
-      "declares_mirror_class": false
-    },
     "STORY-BLOCK.md": {
       "language": "markdown",
-      "lines": 195,
-      "words": 1474,
+      "lines": 216,
+      "words": 1731,
       "heading_count": 12,
       "headings": [
         "STORY BLOCK \u2014 resonance-sistrum",
@@ -83,6 +50,33 @@
       },
       "has_story_block": false,
       "declares_mirror_class": false
+    },
+    "THE-STUDIO-PLAN.md": {
+      "language": "markdown",
+      "lines": 115,
+      "words": 1296,
+      "heading_count": 6,
+      "headings": [
+        "THE STUDIO \u2014 a multi-track room for resonance-sistrum, as the ground stands 2026-09-01",
+        "If you read only this",
+        "1 \u00b7 The ground as it stands",
+        "2 \u00b7 What a studio needs on this device",
+        "3 \u00b7 The movements, in order",
+        "4 \u00b7 The seven choices, made (Caesura, 2026-09-02 \u2014 KP changes any by using the room and saying so)"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
     }
   },
   "folders_not_walked": [
@@ -93,7 +87,7 @@
       "reason": "a blueprint output tree \u2014 the forge does not blueprint blueprints"
     }
   ],
-  "scan_timestamp": "2026-08-21T15:20:01.703047 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.346423 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

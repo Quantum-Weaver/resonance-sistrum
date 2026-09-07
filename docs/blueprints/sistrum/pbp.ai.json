@@ -16,8 +16,8 @@
       "domain_path": "src",
       "description": "2 files, 2 subfolders",
       "object_count": 2,
-      "total_folders": 24,
-      "total_files": 93
+      "total_folders": 30,
+      "total_files": 113
     },
     {
       "blueprint": "sistrum/src-tauri/dbp.ai.json",
@@ -25,18 +25,26 @@
       "description": "5 files, 6 subfolders",
       "object_count": 6,
       "total_folders": 56,
-      "total_files": 124
+      "total_files": 118
     }
   ],
   "domain_count": 2,
-  "objects_reporting_directly": [],
+  "objects_reporting_directly": [
+    {
+      "blueprint": "sistrum/.journals/obp.ai.json",
+      "object_path": ".journals",
+      "description": "0 files, 3 subfolders",
+      "folder_count": 4,
+      "total_files": 14
+    }
+  ],
   "folders_reporting_directly": [
     {
       "blueprint": "sistrum/fbp.ai.json",
       "folder_path": ".",
       "description": "The sovereign musician's instrument",
-      "file_count": 12,
-      "subdirectory_count": 7
+      "file_count": 11,
+      "subdirectory_count": 8
     },
     {
       "blueprint": "sistrum/.cargo/fbp.ai.json",
@@ -48,8 +56,8 @@
     {
       "blueprint": "sistrum/.claude/fbp.ai.json",
       "folder_path": ".claude",
-      "description": "2 files, 0 subfolders",
-      "file_count": 2,
+      "description": "1 files, 0 subfolders",
+      "file_count": 1,
       "subdirectory_count": 0
     },
     {
@@ -85,8 +93,8 @@
     }
   ],
   "totals": {
-    "folders_blueprinted": 86,
-    "files_described": 252
+    "folders_blueprinted": 96,
+    "files_described": 278
   },
   "not_walked": {
     "reason": "package-class trees, this repo's own gitignored trees at every depth, reparse points, and this tool's own output",
@@ -119,7 +127,7 @@
     "gitignored_trees": {
       "release": {
         "address": "release",
-        "files_on_disk": 3,
+        "files_on_disk": 8,
         "walked": false,
         "reason": "gitignored by this repo's own .gitignore \u2014 named and counted, never described, never opened"
       }
@@ -127,7 +135,7 @@
     "gitignored_trees_at_depth": {
       "src-tauri/target": {
         "address": "src-tauri/target",
-        "files_on_disk": 26961,
+        "files_on_disk": 4122,
         "walked": false,
         "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
       },
@@ -137,33 +145,9 @@
         "walked": false,
         "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
       },
-      "src-tauri/gen/android/.gradle": {
-        "address": "src-tauri/gen/android/.gradle",
-        "files_on_disk": 14,
-        "walked": false,
-        "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
-      },
-      "src-tauri/gen/android/build": {
-        "address": "src-tauri/gen/android/build",
-        "files_on_disk": 1,
-        "walked": false,
-        "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
-      },
-      "src-tauri/gen/android/buildSrc/.gradle": {
-        "address": "src-tauri/gen/android/buildSrc/.gradle",
-        "files_on_disk": 6,
-        "walked": false,
-        "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
-      },
       "src-tauri/gen/android/buildSrc/build": {
         "address": "src-tauri/gen/android/buildSrc/build",
         "files_on_disk": 114,
-        "walked": false,
-        "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
-      },
-      "src-tauri/gen/android/app/build": {
-        "address": "src-tauri/gen/android/app/build",
-        "files_on_disk": 1460,
         "walked": false,
         "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
       },
@@ -179,6 +163,6 @@
     "reparse_note": "Junctions and symlinks are named, never entered. Following one would pull an external ground into this repo's count, or loop on a self-junction.",
     "own_output": "docs/blueprints"
   },
-  "generated": "2026-08-21T15:20:01.979208 | in sovereign time",
+  "generated": "2026-09-07T14:01:55.597291 | in sovereign time",
   "maintaining_agent": "ProjectAgent"
 }

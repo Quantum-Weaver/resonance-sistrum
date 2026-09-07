@@ -4,11 +4,11 @@
   "folder_path": "src-tauri/src",
   "self": "sistrum/src-tauri/src/fbp.ai.json",
   "parent": "sistrum/src-tauri/src/obp.ai.json",
-  "description": "7 files, 0 subfolders",
+  "description": "8 files, 0 subfolders",
   "files": [
     {
       "path": "src-tauri/src/lib.rs",
-      "description": "rust, 10,321 bytes"
+      "description": "rust, 12,923 bytes"
     },
     {
       "path": "src-tauri/src/main.rs",
@@ -27,6 +27,10 @@
       "description": "recorder.rs"
     },
     {
+      "path": "src-tauri/src/studio.rs",
+      "description": "studio.rs"
+    },
+    {
       "path": "src-tauri/src/tuner.rs",
       "description": "tuner.rs"
     },
@@ -35,12 +39,12 @@
       "description": "waveform.rs"
     }
   ],
-  "file_count": 7,
+  "file_count": 8,
   "subdirectories": [],
   "code_analysis": {
     "lib.rs": {
       "language": "rust",
-      "lines": 209,
+      "lines": 252,
       "pub_fns": [
         "run"
       ],
@@ -107,6 +111,24 @@
       "tauri_commands": 8,
       "uses_unsafe": false
     },
+    "studio.rs": {
+      "language": "rust",
+      "lines": 363,
+      "pub_fns": [
+        "bounce_to",
+        "mixdown",
+        "trim_take",
+        "read_session",
+        "write_session",
+        "list_sessions"
+      ],
+      "structs": [
+        "Layer",
+        "NewTake"
+      ],
+      "tauri_commands": 5,
+      "uses_unsafe": false
+    },
     "tuner.rs": {
       "language": "rust",
       "lines": 401,
@@ -140,7 +162,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.923146 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.525608 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

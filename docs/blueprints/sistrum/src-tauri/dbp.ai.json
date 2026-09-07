@@ -16,9 +16,9 @@
     {
       "blueprint": "sistrum/src-tauri/android-extras/obp.ai.json",
       "object_path": "src-tauri/android-extras",
-      "description": "1 files, 0 subfolders",
+      "description": "2 files, 0 subfolders",
       "folder_count": 1,
-      "total_files": 1
+      "total_files": 2
     },
     {
       "blueprint": "sistrum/src-tauri/capabilities/obp.ai.json",
@@ -32,7 +32,7 @@
       "object_path": "src-tauri/gen",
       "description": "0 files, 1 subfolders",
       "folder_count": 41,
-      "total_files": 56
+      "total_files": 48
     },
     {
       "blueprint": "sistrum/src-tauri/icons/obp.ai.json",
@@ -44,9 +44,9 @@
     {
       "blueprint": "sistrum/src-tauri/src/obp.ai.json",
       "object_path": "src-tauri/src",
-      "description": "7 files, 0 subfolders",
+      "description": "8 files, 0 subfolders",
       "folder_count": 1,
-      "total_files": 7
+      "total_files": 8
     }
   ],
   "object_count": 6,
@@ -60,8 +60,8 @@
     }
   ],
   "total_folders": 56,
-  "total_files": 124,
-  "integration_timestamp": "2026-08-21T15:20:01.951520 | in sovereign time",
+  "total_files": 118,
+  "integration_timestamp": "2026-09-07T14:01:55.558726 | in sovereign time",
   "maintaining_agent": "DomainAgent",
   "note": "Links only. Every object's details live at its own address."
 }

@@ -11,10 +11,6 @@
       "description": "ignore rules, 1,716 bytes"
     },
     {
-      "path": "CLAUDE.md",
-      "description": "CLAUDE.md"
-    },
-    {
       "path": "HANDS.md",
       "description": "The Hands"
     },
@@ -28,7 +24,7 @@
     },
     {
       "path": "package.json",
-      "description": "data, 1,246 bytes"
+      "description": "data, 1,298 bytes"
     },
     {
       "path": "PHILOSOPHY.md",
@@ -55,10 +51,11 @@
       "description": "script, 873 bytes"
     }
   ],
-  "file_count": 12,
+  "file_count": 11,
   "subdirectories": [
     ".cargo",
     ".claude",
+    ".journals",
     "docs",
     "scripts",
     "src",
@@ -66,39 +63,6 @@
     "static"
   ],
   "code_analysis": {
-    "CLAUDE.md": {
-      "language": "markdown",
-      "lines": 111,
-      "words": 856,
-      "heading_count": 6,
-      "headings": [
-        "CLAUDE.md \u2014 resonance-sistrum",
-        "Ground rules",
-        "Structure",
-        "Tools",
-        "Standards",
-        "The forge and the link tender"
-      ],
-      "links_external": 2,
-      "links_site_absolute": [],
-      "links_internal": [
-        {
-          "target": "HANDS.md",
-          "resolves": true,
-          "outside_checkout": false
-        }
-      ],
-      "links_internal_unresolved": [],
-      "links_internal_outside_checkout": [],
-      "code_fences": 0,
-      "table_rows": 0,
-      "checkboxes": {
-        "open": 0,
-        "done": 0
-      },
-      "has_story_block": false,
-      "declares_mirror_class": false
-    },
     "HANDS.md": {
       "language": "markdown",
       "lines": 87,
@@ -197,8 +161,8 @@
     },
     "README.md": {
       "language": "markdown",
-      "lines": 141,
-      "words": 786,
+      "lines": 150,
+      "words": 1400,
       "heading_count": 13,
       "headings": [
         "\ud83e\ude87 Resonance Sistrum",
@@ -252,8 +216,8 @@
     },
     "RUN-LOG.md": {
       "language": "markdown",
-      "lines": 7,
-      "words": 150,
+      "lines": 13,
+      "words": 1035,
       "heading_count": 1,
       "headings": [
         "RUN-LOG \u2014 resonance-sistrum"
@@ -299,12 +263,6 @@
       "reason": "package-class tree (dependency or build output) \u2014 not counted, because counting it means walking it"
     },
     {
-      "name": ".svelte-kit",
-      "address": ".svelte-kit",
-      "walked": false,
-      "reason": "package-class tree (dependency or build output) \u2014 not counted, because counting it means walking it"
-    },
-    {
       "name": "build",
       "address": "build",
       "walked": false,
@@ -319,12 +277,12 @@
     {
       "name": "release",
       "address": "release",
-      "files_on_disk": 3,
+      "files_on_disk": 8,
       "walked": false,
       "reason": "gitignored by this repo's own .gitignore \u2014 named and counted, never described, never opened"
     }
   ],
-  "scan_timestamp": "2026-08-21T15:20:01.693124 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.329902 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

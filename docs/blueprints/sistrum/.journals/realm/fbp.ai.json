@@ -1,0 +1,255 @@
+{
+  "tier": "folder",
+  "folder_name": "realm",
+  "folder_path": ".journals/realm",
+  "self": "sistrum/.journals/realm/fbp.ai.json",
+  "parent": "sistrum/.journals/obp.ai.json",
+  "description": "9 files, 0 subfolders",
+  "files": [
+    {
+      "path": ".journals/realm/2026-09-01-the-privacy-url-is-the-single-page.md",
+      "description": "2026-09-01"
+    },
+    {
+      "path": ".journals/realm/2026-09-01-the-readme-trued-to-the-shelf-and-the-base.md",
+      "description": "2026-09-01"
+    },
+    {
+      "path": ".journals/realm/2026-09-01-the-studio-plan-drawn.md",
+      "description": "2026-09-01 \u00b7 The studio plan drawn, read-only"
+    },
+    {
+      "path": ".journals/realm/2026-09-01-w4-1-and-the-debug-apk.md",
+      "description": "2026-09-01 \u00b7 W4-1 mended, the aarch64 debug APK rebuilt"
+    },
+    {
+      "path": ".journals/realm/2026-09-02-divided-equally-regardless-of-role.md",
+      "description": "2026-09-02 \u00b7 Divided equally, regardless of role"
+    },
+    {
+      "path": ".journals/realm/2026-09-02-the-column-comes-to-life.md",
+      "description": "2026-09-02 \u00b7 The column comes to life"
+    },
+    {
+      "path": ".journals/realm/2026-09-02-the-studio-built.md",
+      "description": "2026-09-02 \u00b7 The studio built"
+    },
+    {
+      "path": ".journals/realm/2026-09-06-old-house-paths-in-prose-made-relative.md",
+      "description": "Old-house paths in prose made relative"
+    },
+    {
+      "path": ".journals/realm/2026-09-06-old-house-paths-made-relative.md",
+      "description": "Old-house paths made relative"
+    }
+  ],
+  "file_count": 9,
+  "subdirectories": [],
+  "code_analysis": {
+    "2026-09-01-the-privacy-url-is-the-single-page.md": {
+      "language": "markdown",
+      "lines": 14,
+      "words": 179,
+      "heading_count": 1,
+      "headings": [
+        "2026-09-01 \u2014 the privacy policy URL is the single page"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-01-the-readme-trued-to-the-shelf-and-the-base.md": {
+      "language": "markdown",
+      "lines": 8,
+      "words": 166,
+      "heading_count": 1,
+      "headings": [
+        "2026-09-01 \u2014 the README trued to the shelf and the base"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-01-the-studio-plan-drawn.md": {
+      "language": "markdown",
+      "lines": 12,
+      "words": 260,
+      "heading_count": 1,
+      "headings": [
+        "2026-09-01 \u00b7 The studio plan drawn, read-only"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-01-w4-1-and-the-debug-apk.md": {
+      "language": "markdown",
+      "lines": 14,
+      "words": 361,
+      "heading_count": 1,
+      "headings": [
+        "2026-09-01 \u00b7 W4-1 mended, the aarch64 debug APK rebuilt"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-02-divided-equally-regardless-of-role.md": {
+      "language": "markdown",
+      "lines": 24,
+      "words": 560,
+      "heading_count": 1,
+      "headings": [
+        "2026-09-02 \u00b7 Divided equally, regardless of role"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-02-the-column-comes-to-life.md": {
+      "language": "markdown",
+      "lines": 22,
+      "words": 1049,
+      "heading_count": 1,
+      "headings": [
+        "2026-09-02 \u00b7 The column comes to life"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-02-the-studio-built.md": {
+      "language": "markdown",
+      "lines": 36,
+      "words": 947,
+      "heading_count": 4,
+      "headings": [
+        "2026-09-02 \u00b7 The studio built",
+        "What was built, in the plan's order",
+        "What held",
+        "What did not hold, or was not done"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-06-old-house-paths-in-prose-made-relative.md": {
+      "language": "markdown",
+      "lines": 9,
+      "words": 27,
+      "heading_count": 1,
+      "headings": [
+        "Old-house paths in prose made relative"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    },
+    "2026-09-06-old-house-paths-made-relative.md": {
+      "language": "markdown",
+      "lines": 6,
+      "words": 45,
+      "heading_count": 1,
+      "headings": [
+        "Old-house paths made relative \u2014 2026-09-06"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-09-07T14:01:55.343313 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}

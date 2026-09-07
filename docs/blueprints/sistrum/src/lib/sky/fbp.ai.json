@@ -8,7 +8,7 @@
   "files": [
     {
       "path": "src/lib/sky/index.ts",
-      "description": "The sky organs"
+      "description": "Sky facts, computed offline, no API ever: moon phase to ~hours, solstices/equinoxes to ~minutes, planet longitudes to a few degrees"
     },
     {
       "path": "src/lib/sky/MIRROR.md",
@@ -20,7 +20,7 @@
   "code_analysis": {
     "index.ts": {
       "language": "typescript",
-      "lines": 227,
+      "lines": 212,
       "exported_functions": [
         "julianDay",
         "moonPhase",
@@ -74,7 +74,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.749684 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.397884 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

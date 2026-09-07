@@ -19,13 +19,6 @@
   "code_analysis": {},
   "folders_not_walked": [
     {
-      "name": ".gradle",
-      "address": "src-tauri/gen/android/buildSrc/.gradle",
-      "files_on_disk": 6,
-      "walked": false,
-      "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
-    },
-    {
       "name": "build",
       "address": "src-tauri/gen/android/buildSrc/build",
       "files_on_disk": 114,
@@ -33,7 +26,7 @@
       "reason": "gitignored at depth by this repo's own .gitignore \u2014 named and counted, never described, never opened"
     }
   ],
-  "scan_timestamp": "2026-08-21T15:20:01.872769 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.488142 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

@@ -8,7 +8,7 @@
   "files": [
     {
       "path": "scripts/sync-android-extras.mjs",
-      "description": "Syncs committed Android customizations into the regenerable src-tauri/gen/"
+      "description": "Syncs committed Android customizations into the regenerable src-tauri/gen/ tree"
     }
   ],
   "file_count": 1,
@@ -16,13 +16,13 @@
   "code_analysis": {
     "sync-android-extras.mjs": {
       "language": "node",
-      "lines": 60,
+      "lines": 45,
       "functions": [],
       "commands": []
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.704463 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.347488 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

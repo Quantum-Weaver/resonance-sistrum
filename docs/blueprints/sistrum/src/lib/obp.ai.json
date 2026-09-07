@@ -4,27 +4,34 @@
   "object_path": "src/lib",
   "self": "sistrum/src/lib/obp.ai.json",
   "parent": "sistrum/src/dbp.ai.json",
-  "description": "3 files, 10 subfolders",
+  "description": "6 files, 15 subfolders",
   "folders": [
     {
       "blueprint": "sistrum/src/lib/fbp.ai.json",
       "folder_path": "src/lib",
-      "description": "3 files, 10 subfolders",
-      "file_count": 3,
-      "subdirectory_count": 10
+      "description": "6 files, 15 subfolders",
+      "file_count": 6,
+      "subdirectory_count": 15
+    },
+    {
+      "blueprint": "sistrum/src/lib/clavis/fbp.ai.json",
+      "folder_path": "src/lib/clavis",
+      "description": "2 files, 0 subfolders",
+      "file_count": 2,
+      "subdirectory_count": 0
     },
     {
       "blueprint": "sistrum/src/lib/components/fbp.ai.json",
       "folder_path": "src/lib/components",
-      "description": "9 files, 1 subfolders",
-      "file_count": 9,
+      "description": "11 files, 1 subfolders",
+      "file_count": 11,
       "subdirectory_count": 1
     },
     {
       "blueprint": "sistrum/src/lib/components/icons/fbp.ai.json",
       "folder_path": "src/lib/components/icons",
-      "description": "9 files, 0 subfolders",
-      "file_count": 9,
+      "description": "10 files, 0 subfolders",
+      "file_count": 10,
       "subdirectory_count": 0
     },
     {
@@ -56,6 +63,34 @@
       "subdirectory_count": 0
     },
     {
+      "blueprint": "sistrum/src/lib/keyring/fbp.ai.json",
+      "folder_path": "src/lib/keyring",
+      "description": "2 files, 0 subfolders",
+      "file_count": 2,
+      "subdirectory_count": 0
+    },
+    {
+      "blueprint": "sistrum/src/lib/lok/fbp.ai.json",
+      "folder_path": "src/lib/lok",
+      "description": "2 files, 0 subfolders",
+      "file_count": 2,
+      "subdirectory_count": 0
+    },
+    {
+      "blueprint": "sistrum/src/lib/merismos/fbp.ai.json",
+      "folder_path": "src/lib/merismos",
+      "description": "2 files, 0 subfolders",
+      "file_count": 2,
+      "subdirectory_count": 0
+    },
+    {
+      "blueprint": "sistrum/src/lib/signet/fbp.ai.json",
+      "folder_path": "src/lib/signet",
+      "description": "2 files, 0 subfolders",
+      "file_count": 2,
+      "subdirectory_count": 0
+    },
+    {
       "blueprint": "sistrum/src/lib/sky/fbp.ai.json",
       "folder_path": "src/lib/sky",
       "description": "2 files, 0 subfolders",
@@ -65,8 +100,8 @@
     {
       "blueprint": "sistrum/src/lib/stores/fbp.ai.json",
       "folder_path": "src/lib/stores",
-      "description": "14 files, 0 subfolders",
-      "file_count": 14,
+      "description": "17 files, 0 subfolders",
+      "file_count": 17,
       "subdirectory_count": 0
     },
     {
@@ -98,9 +133,9 @@
       "subdirectory_count": 0
     }
   ],
-  "folder_count": 13,
-  "total_files": 79,
-  "integration_timestamp": "2026-08-21T15:20:01.930098 | in sovereign time",
+  "folder_count": 18,
+  "total_files": 98,
+  "integration_timestamp": "2026-09-07T14:01:55.531762 | in sovereign time",
   "maintaining_agent": "ObjectAgent",
   "note": "Links only. Every folder's details live at its own address."
 }

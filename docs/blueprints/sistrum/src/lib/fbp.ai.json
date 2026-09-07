@@ -4,28 +4,45 @@
   "folder_path": "src/lib",
   "self": "sistrum/src/lib/fbp.ai.json",
   "parent": "sistrum/src/lib/obp.ai.json",
-  "description": "3 files, 10 subfolders",
+  "description": "6 files, 15 subfolders",
   "files": [
     {
       "path": "src/lib/marks.ts",
-      "description": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+      "description": "Copied whole from resonance-awen/tools/the-moment-marks/src/index.ts"
     },
     {
       "path": "src/lib/metronome.ts",
-      "description": "metronome.ts"
+      "description": "Volume, subdivision and beatsPerBar are read live at each booking"
+    },
+    {
+      "path": "src/lib/provenance.ts",
+      "description": "provenance.ts"
+    },
+    {
+      "path": "src/lib/seal.ts",
+      "description": "typescript, 4,160 bytes"
+    },
+    {
+      "path": "src/lib/studio.ts",
+      "description": "studio.ts"
     },
     {
       "path": "src/lib/waveform.ts",
-      "description": "waveform.ts"
+      "description": "The fold happens in Rust (src-tauri/src/waveform.rs); what arrives here is two parallel Float arrays, min and max"
     }
   ],
-  "file_count": 3,
+  "file_count": 6,
   "subdirectories": [
+    "src/lib/clavis",
     "src/lib/components",
     "src/lib/cosmic",
     "src/lib/cumdach",
     "src/lib/data",
     "src/lib/epagoge",
+    "src/lib/keyring",
+    "src/lib/lok",
+    "src/lib/merismos",
+    "src/lib/signet",
     "src/lib/sky",
     "src/lib/stores",
     "src/lib/styles",
@@ -35,7 +52,7 @@
   "code_analysis": {
     "marks.ts": {
       "language": "typescript",
-      "lines": 322,
+      "lines": 264,
       "exported_functions": [
         "newDoc",
         "addMark",
@@ -64,7 +81,7 @@
     },
     "metronome.ts": {
       "language": "typescript",
-      "lines": 253,
+      "lines": 195,
       "exported_functions": [
         "createBeatClock",
         "clampBpm",
@@ -82,9 +99,82 @@
       "writes_files": false,
       "env_names_read": []
     },
+    "provenance.ts": {
+      "language": "typescript",
+      "lines": 246,
+      "exported_functions": [
+        "parseProvenanceColumn",
+        "provenanceColumnText",
+        "isSignetSnapshot",
+        "readProvenance",
+        "sealProvenance",
+        "partKey",
+        "identitiesFrom",
+        "proposeParts"
+      ],
+      "exported_consts": [],
+      "interfaces": [
+        "SignetSnapshot",
+        "ProposedWho",
+        "ProposedPart",
+        "ProvenanceRead"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "seal.ts": {
+      "language": "typescript",
+      "lines": 106,
+      "exported_functions": [
+        "takeBytes",
+        "sealTake",
+        "openCredential"
+      ],
+      "exported_consts": [],
+      "interfaces": [
+        "Sealed"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "studio.ts": {
+      "language": "typescript",
+      "lines": 203,
+      "exported_functions": [
+        "newSession",
+        "normalizeTrack",
+        "parseSession",
+        "canonicalJson",
+        "scheduleLane",
+        "mixLength",
+        "effectiveGain",
+        "positionAt",
+        "sessionToLayers"
+      ],
+      "exported_consts": [
+        "SESSION_FORMAT",
+        "SESSION_VERSION"
+      ],
+      "interfaces": [
+        "SessionTrack",
+        "SessionDoc",
+        "MixLayer"
+      ],
+      "types": [],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
     "waveform.ts": {
       "language": "typescript",
-      "lines": 96,
+      "lines": 80,
       "exported_functions": [
         "positionToSeconds",
         "secondsToPosition",
@@ -102,7 +192,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.714296 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.358131 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

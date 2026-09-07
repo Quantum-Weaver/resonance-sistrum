@@ -8,7 +8,7 @@
   "files": [
     {
       "path": "src/routes/add/+page.svelte",
-      "description": "surface, 23,571 bytes"
+      "description": "surface, 21,613 bytes"
     }
   ],
   "file_count": 1,
@@ -16,7 +16,7 @@
   "code_analysis": {
     "+page.svelte": {
       "language": "svelte",
-      "lines": 890,
+      "lines": 843,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -27,7 +27,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.783142 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.429208 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

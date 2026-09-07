@@ -93,29 +93,29 @@
     {
       "blueprint": "sistrum/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a/fbp.ai.json",
       "folder_path": "src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a",
-      "description": "2 files, 0 subfolders",
-      "file_count": 2,
+      "description": "0 files, 0 subfolders",
+      "file_count": 0,
       "subdirectory_count": 0
     },
     {
       "blueprint": "sistrum/src-tauri/gen/android/app/src/main/jniLibs/armeabi-v7a/fbp.ai.json",
       "folder_path": "src-tauri/gen/android/app/src/main/jniLibs/armeabi-v7a",
-      "description": "2 files, 0 subfolders",
-      "file_count": 2,
+      "description": "0 files, 0 subfolders",
+      "file_count": 0,
       "subdirectory_count": 0
     },
     {
       "blueprint": "sistrum/src-tauri/gen/android/app/src/main/jniLibs/x86/fbp.ai.json",
       "folder_path": "src-tauri/gen/android/app/src/main/jniLibs/x86",
-      "description": "2 files, 0 subfolders",
-      "file_count": 2,
+      "description": "0 files, 0 subfolders",
+      "file_count": 0,
       "subdirectory_count": 0
     },
     {
       "blueprint": "sistrum/src-tauri/gen/android/app/src/main/jniLibs/x86_64/fbp.ai.json",
       "folder_path": "src-tauri/gen/android/app/src/main/jniLibs/x86_64",
-      "description": "2 files, 0 subfolders",
-      "file_count": 2,
+      "description": "0 files, 0 subfolders",
+      "file_count": 0,
       "subdirectory_count": 0
     },
     {
@@ -295,8 +295,8 @@
     }
   ],
   "folder_count": 41,
-  "total_files": 56,
-  "integration_timestamp": "2026-08-21T15:20:01.943458 | in sovereign time",
+  "total_files": 48,
+  "integration_timestamp": "2026-09-07T14:01:55.547670 | in sovereign time",
   "maintaining_agent": "ObjectAgent",
   "note": "Links only. Every folder's details live at its own address."
 }

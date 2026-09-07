@@ -4,19 +4,19 @@
   "folder_path": "src/routes",
   "self": "sistrum/src/routes/fbp.ai.json",
   "parent": "sistrum/src/routes/obp.ai.json",
-  "description": "3 files, 9 subfolders",
+  "description": "3 files, 10 subfolders",
   "files": [
     {
       "path": "src/routes/+layout.svelte",
-      "description": "surface, 2,310 bytes"
+      "description": "surface, 2,192 bytes"
     },
     {
       "path": "src/routes/+layout.ts",
-      "description": "Tauri doesn't have a Node.js server to do proper SSR"
+      "description": "Tauri has no Node server: adapter-static with an index.html fallback puts the app in SPA mode"
     },
     {
       "path": "src/routes/+page.svelte",
-      "description": "surface, 17,474 bytes"
+      "description": "surface, 16,590 bytes"
     }
   ],
   "file_count": 3,
@@ -28,13 +28,14 @@
     "src/routes/record",
     "src/routes/sattva",
     "src/routes/settings",
+    "src/routes/studio",
     "src/routes/timer",
     "src/routes/tuner"
   ],
   "code_analysis": {
     "+layout.svelte": {
       "language": "svelte",
-      "lines": 88,
+      "lines": 85,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -45,7 +46,7 @@
     },
     "+layout.ts": {
       "language": "typescript",
-      "lines": 6,
+      "lines": 3,
       "exported_functions": [],
       "exported_consts": [
         "ssr"
@@ -59,7 +60,7 @@
     },
     "+page.svelte": {
       "language": "svelte",
-      "lines": 680,
+      "lines": 651,
       "uses_runes": [
         "$derived",
         "$effect",
@@ -70,7 +71,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.781136 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.427888 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

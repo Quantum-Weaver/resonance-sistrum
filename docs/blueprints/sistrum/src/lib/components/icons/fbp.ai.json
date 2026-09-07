@@ -4,7 +4,7 @@
   "folder_path": "src/lib/components/icons",
   "self": "sistrum/src/lib/components/icons/fbp.ai.json",
   "parent": "sistrum/src/lib/obp.ai.json",
-  "description": "9 files, 0 subfolders",
+  "description": "10 files, 0 subfolders",
   "files": [
     {
       "path": "src/lib/components/icons/IconHome.svelte",
@@ -12,11 +12,11 @@
     },
     {
       "path": "src/lib/components/icons/IconInsights.svelte",
-      "description": "surface, 539 bytes"
+      "description": "surface, 449 bytes"
     },
     {
       "path": "src/lib/components/icons/IconMetronome.svelte",
-      "description": "surface, 427 bytes"
+      "description": "surface, 377 bytes"
     },
     {
       "path": "src/lib/components/icons/IconRecord.svelte",
@@ -24,15 +24,19 @@
     },
     {
       "path": "src/lib/components/icons/Icons.svelte",
-      "description": "surface, 1,129 bytes"
+      "description": "surface, 1,171 bytes"
     },
     {
       "path": "src/lib/components/icons/IconSattva.svelte",
-      "description": "surface, 547 bytes"
+      "description": "surface, 408 bytes"
     },
     {
       "path": "src/lib/components/icons/IconSettings.svelte",
       "description": "surface, 963 bytes"
+    },
+    {
+      "path": "src/lib/components/icons/IconStudio.svelte",
+      "description": "surface, 593 bytes"
     },
     {
       "path": "src/lib/components/icons/IconTimer.svelte",
@@ -40,10 +44,10 @@
     },
     {
       "path": "src/lib/components/icons/IconTuner.svelte",
-      "description": "surface, 634 bytes"
+      "description": "surface, 453 bytes"
     }
   ],
-  "file_count": 9,
+  "file_count": 10,
   "subdirectories": [],
   "code_analysis": {
     "IconHome.svelte": {
@@ -57,7 +61,7 @@
     },
     "IconInsights.svelte": {
       "language": "svelte",
-      "lines": 10,
+      "lines": 9,
       "uses_runes": [
         "$props"
       ],
@@ -66,7 +70,7 @@
     },
     "IconMetronome.svelte": {
       "language": "svelte",
-      "lines": 10,
+      "lines": 9,
       "uses_runes": [
         "$props"
       ],
@@ -84,7 +88,7 @@
     },
     "Icons.svelte": {
       "language": "svelte",
-      "lines": 48,
+      "lines": 51,
       "uses_runes": [
         "$derived",
         "$props"
@@ -94,7 +98,7 @@
     },
     "IconSattva.svelte": {
       "language": "svelte",
-      "lines": 10,
+      "lines": 8,
       "uses_runes": [
         "$props"
       ],
@@ -104,6 +108,15 @@
     "IconSettings.svelte": {
       "language": "svelte",
       "lines": 8,
+      "uses_runes": [
+        "$props"
+      ],
+      "fetch_calls": [],
+      "has_style_block": false
+    },
+    "IconStudio.svelte": {
+      "language": "svelte",
+      "lines": 13,
       "uses_runes": [
         "$props"
       ],
@@ -121,7 +134,7 @@
     },
     "IconTuner.svelte": {
       "language": "svelte",
-      "lines": 15,
+      "lines": 12,
       "uses_runes": [
         "$props"
       ],
@@ -130,7 +143,7 @@
     }
   },
   "folders_not_walked": [],
-  "scan_timestamp": "2026-08-21T15:20:01.725409 | in sovereign time",
+  "scan_timestamp": "2026-09-07T14:01:55.370672 | in sovereign time",
   "maintaining_agent": "FolderAgent",
   "note": "The details live here. Upper tiers link to this address; they do not copy this body."
 }

@@ -1,0 +1,90 @@
+{
+  "tier": "folder",
+  "folder_name": "merismos",
+  "folder_path": "src/lib/merismos",
+  "self": "sistrum/src/lib/merismos/fbp.ai.json",
+  "parent": "sistrum/src/lib/obp.ai.json",
+  "description": "2 files, 0 subfolders",
+  "files": [
+    {
+      "path": "src/lib/merismos/index.ts",
+      "description": "the-merismos"
+    },
+    {
+      "path": "src/lib/merismos/MIRROR.md",
+      "description": "DISTRIBUTED MIRROR - the source of truth lives in resonance-awen"
+    }
+  ],
+  "file_count": 2,
+  "subdirectories": [],
+  "code_analysis": {
+    "index.ts": {
+      "language": "typescript",
+      "lines": 579,
+      "exported_functions": [
+        "whoKey",
+        "canonical",
+        "validate",
+        "contributors",
+        "shares",
+        "combine",
+        "consent",
+        "consented"
+      ],
+      "exported_consts": [
+        "TOOL_NAME",
+        "EQUALLY",
+        "THE_RULING",
+        "OPT_IN",
+        "NEVER_MONEY",
+        "LOGGING"
+      ],
+      "interfaces": [
+        "Who",
+        "Consent",
+        "Part",
+        "Merismos",
+        "Verdict",
+        "Share",
+        "Shares",
+        "HouseSplit",
+        "CombinedPart",
+        "Combined",
+        "ConsentReport"
+      ],
+      "types": [
+        "Fault"
+      ],
+      "imports_node": [],
+      "spawns_process": false,
+      "writes_files": false,
+      "env_names_read": []
+    },
+    "MIRROR.md": {
+      "language": "markdown",
+      "lines": 34,
+      "words": 267,
+      "heading_count": 1,
+      "headings": [
+        "DISTRIBUTED MIRROR - the source of truth lives in resonance-awen"
+      ],
+      "links_external": 0,
+      "links_site_absolute": [],
+      "links_internal": [],
+      "links_internal_unresolved": [],
+      "links_internal_outside_checkout": [],
+      "code_fences": 0,
+      "table_rows": 0,
+      "checkboxes": {
+        "open": 0,
+        "done": 0
+      },
+      "has_story_block": false,
+      "declares_mirror_class": false
+    }
+  },
+  "folders_not_walked": [],
+  "scan_timestamp": "2026-09-07T14:01:55.394401 | in sovereign time",
+  "maintaining_agent": "FolderAgent",
+  "note": "The details live here. Upper tiers link to this address; they do not copy this body."
+}
