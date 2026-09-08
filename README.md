@@ -38,7 +38,7 @@ Resonance Sistrum is the creator's half of what used to be one app — separated
 
 *This section required by the [Story Block Standard](https://github.com/Quantum-Weaver/resonance-standards).*
 
-Sistrum exists because the friction was diagnostic, and it kept getting treated as bugs: the same transport was being asked to serve a listener and a creator at once, and no amount of careful reconciliation made one shell serve both honestly. KP named the split himself: *"we need to separate the resonance compass and musicians compass to make this right. maybe the musicians compass belongs in resonance-sistrum, the compass remains a media player of licensed materials the user holds rights to."* The repo was created 2026-08-12 and founded to the Sanctuary standards the same afternoon.
+Resonance Sistrum is the creator's half of what used to be one app — a sovereign musician's instrument to capture, layer, and shape music that does not exist yet, entirely on-device. Its sibling, Resonance Compass, stayed a media player for music you already hold the rights to. The idea traces back to Compass v3, commissioned 2026-07-18 for a musician the market never served; KP named the split himself, 2026-08-12: *"we need to separate the resonance compass and musicians compass to make this right. maybe the musicians compass belongs in resonance-sistrum, the compass remains a media player of licensed materials the user holds rights to."*
 
 📖 [Full Story Block](docs/STORY-BLOCK.md)
 
