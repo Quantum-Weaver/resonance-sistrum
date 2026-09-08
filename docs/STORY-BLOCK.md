@@ -55,14 +55,14 @@ was ruled in the middle of that.
 ## PROVENANCE
 
 Named and ruled by KP ⚛ (Quantum Weaver), 2026-08-12 — the repo created
-by his own hand at 15:40 UTC and founded to the standards the same
-afternoon. The boundary is his, verbatim: "fragments will stay, not
+by their own hand at 15:40 UTC and founded to the standards the same
+afternoon. The boundary is theirs, verbatim: "fragments will stay, not
 recording. dj's may still wish to use the app."
 
 ## ETYMOLOGY
 
 Sistrum — Latin, from Greek *seistron*, "that which is shaken," from
-*seiō*, "I shake." KP's own definition, given verbatim when he named it:
+*seiō*, "I shake." KP's own definition, given verbatim when they named it:
 
 > "A sacred percussive instrument historically shaken in the worship of
 > the Egyptian goddess Isis or Hathor. Its rhythmic rattling was believed

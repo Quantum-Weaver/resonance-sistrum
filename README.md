@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)]()
-[![Status](https://img.shields.io/badge/status-founded-1e90ff.svg)](RUN-LOG.md)
+[![Status](https://img.shields.io/badge/status-founded-1e90ff.svg)](docs/STORY-BLOCK.md)
 [![Standard](https://img.shields.io/badge/standard-resonance--standards-orange.svg)](https://github.com/Quantum-Weaver/resonance-standards)
 [![Grammar](https://img.shields.io/badge/built%20on-resonance--grammar-8a2be2.svg)](https://github.com/Quantum-Weaver/resonance-grammar)
 [![Data collected](https://img.shields.io/badge/data%20collected-none-brightgreen.svg)](PHILOSOPHY.md)
@@ -38,7 +38,7 @@ Resonance Sistrum is the creator's half of what used to be one app — separated
 
 *This section required by the [Story Block Standard](https://github.com/Quantum-Weaver/resonance-standards).*
 
-Resonance Sistrum is the creator's half of what used to be one app — a sovereign musician's instrument to capture, layer, and shape music that does not exist yet, entirely on-device. Its sibling, Resonance Compass, stayed a media player for music you already hold the rights to. The idea traces back to Compass v3, commissioned 2026-07-18 for a musician the market never served; KP named the split himself, 2026-08-12: *"we need to separate the resonance compass and musicians compass to make this right. maybe the musicians compass belongs in resonance-sistrum, the compass remains a media player of licensed materials the user holds rights to."*
+Resonance Sistrum is the creator's half of what used to be one app — a sovereign musician's instrument to capture, layer, and shape music that does not exist yet, entirely on-device. Its sibling, Resonance Compass, stayed a media player for music you already hold the rights to. The idea traces back to Compass v3, commissioned 2026-07-18 for a musician the market never served; KP named the split themself, 2026-08-12: *"we need to separate the resonance compass and musicians compass to make this right. maybe the musicians compass belongs in resonance-sistrum, the compass remains a media player of licensed materials the user holds rights to."*
 
 📖 [Full Story Block](docs/STORY-BLOCK.md)
 
