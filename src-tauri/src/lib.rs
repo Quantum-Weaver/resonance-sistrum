@@ -242,6 +242,12 @@ pub fn run() {
             // existing one; the session is a sidecar on the shelf.
             studio::mixdown,
             studio::trim_take,
+            // A repair, a splice or a punch made in the window lands as a NEW
+            // take; nothing it was made from is written.
+            studio::write_take_wav,
+            // An encoded master and its chapter sidecar are not takes; they
+            // land beside them under a guarded extension.
+            studio::write_studio_file,
             studio::read_session,
             studio::write_session,
             studio::list_sessions,

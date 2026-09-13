@@ -229,6 +229,175 @@ pub async fn trim_take(
     .map_err(|e| e.to_string())?
 }
 
+// ── A take the window made (repair, splice, punch-in) ───────────────────────
+//
+// Repair and splice are typed-array work in the window, on samples Web Audio
+// already decoded there (`src/lib/repair.ts`, `src/lib/splice.ts`). What lands
+// here is the finished WAV, base64 across the IPC because Android's invoke
+// carries no raw body. This door WRITES A NEW TAKE AND NOTHING ELSE: the take
+// it was made from is untouched, and the name is suffixed until it is free.
+
+/// Base64 to bytes, standard alphabet, padding and line breaks tolerated.
+fn from_base64(text: &str) -> Result<Vec<u8>, String> {
+    let mut out = Vec::with_capacity(text.len() / 4 * 3);
+    let mut acc: u32 = 0;
+    let mut bits: u32 = 0;
+    for c in text.bytes() {
+        let value = match c {
+            b'A'..=b'Z' => c - b'A',
+            b'a'..=b'z' => c - b'a' + 26,
+            b'0'..=b'9' => c - b'0' + 52,
+            b'+' => 62,
+            b'/' => 63,
+            b'=' => break,
+            b'\r' | b'\n' => continue,
+            _ => return Err("the take's bytes did not arrive as base64".into()),
+        } as u32;
+        acc = (acc << 6) | value;
+        bits += 6;
+        if bits >= 8 {
+            bits -= 8;
+            out.push(((acc >> bits) & 0xff) as u8);
+        }
+    }
+    Ok(out)
+}
+
+/// Land WAV bytes made in the window as a NEW take on the shelf. The header is
+/// read back before anything is written, so nothing lands that will not open.
+#[tauri::command]
+pub async fn write_take_wav(
+    app_handle: tauri::AppHandle,
+    name: Option<String>,
+    wav_base64: String,
+) -> Result<NewTake, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let bytes = from_base64(&wav_base64)?;
+        let (sample_rate, channels, frames) = {
+            let reader = hound::WavReader::new(std::io::Cursor::new(&bytes))
+                .map_err(|e| format!("those bytes are not a WAV: {e}"))?;
+            let spec = reader.spec();
+            (spec.sample_rate, spec.channels, reader.duration())
+        };
+        if sample_rate == 0 || channels == 0 {
+            return Err("that WAV names no rate or no channels".into());
+        }
+
+        let dir = takes_dir(&app_handle)?;
+        let base = name
+            .map(|n| safe_name(&n))
+            .filter(|n| !n.is_empty())
+            .unwrap_or_else(|| format!("edit-{}", now_secs()));
+        let file_name = free_wav_name(&dir, &base);
+        let out = dir.join(&file_name);
+
+        // Through a temp file and renamed over, as the session is.
+        let tmp = out.with_extension("wav.writing");
+        std::fs::write(&tmp, &bytes).map_err(|e| format!("the take would not write: {e}"))?;
+        std::fs::rename(&tmp, &out).map_err(|e| {
+            let _ = std::fs::remove_file(&tmp);
+            format!("the take would not land: {e}")
+        })?;
+
+        Ok(NewTake {
+            file_name,
+            path: out.to_string_lossy().to_string(),
+            seconds: frames as f64 / sample_rate as f64,
+            sample_rate,
+            channels,
+            created_at: now_secs(),
+            clamped: Vec::new(),
+        })
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+// ── A file the master made that is not a take ───────────────────────────────
+//
+// The chapterized WAV is a take and goes through `write_take_wav` above: hound
+// reads the fmt and data chunks and ignores the `cue ` and `LIST` chunks that
+// follow them, so a chapterized WAV opens exactly as a plain one does.
+//
+// An encoded file and a chapter sidecar are NOT takes — `list_takes` reads only
+// `.wav` and would never see them — so they land through this door instead. It
+// takes no audio on trust and reads no header: bytes in, a file beside the
+// takes out, on a name that is free. It never deletes, moves or overwrites.
+
+/// The extensions this door will land. Anything else is refused by name.
+const SIDE_EXTENSIONS: [&str; 6] = ["webm", "ogg", "m4a", "opus", "txt", "vtt"];
+
+/// A file that is not a take: where it landed and how big it is.
+#[derive(Serialize)]
+pub struct LandedFile {
+    pub file_name: String,
+    pub path: String,
+    pub bytes: usize,
+}
+
+/// The first free `base.ext`, `base-2.ext`, `base-3.ext`… on the shelf.
+fn free_name(dir: &Path, base: &str, ext: &str) -> String {
+    let first = format!("{base}.{ext}");
+    if !dir.join(&first).exists() {
+        return first;
+    }
+    let mut n = 2u32;
+    loop {
+        let candidate = format!("{base}-{n}.{ext}");
+        if !dir.join(&candidate).exists() {
+            return candidate;
+        }
+        n += 1;
+    }
+}
+
+/// Land bytes the window made beside the takes, under a guarded extension.
+#[tauri::command]
+pub async fn write_studio_file(
+    app_handle: tauri::AppHandle,
+    name: String,
+    extension: String,
+    bytes_base64: String,
+) -> Result<LandedFile, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let ext = extension.to_ascii_lowercase();
+        if !SIDE_EXTENSIONS.contains(&ext.as_str()) {
+            return Err(format!(
+                "this door lands {} and nothing else — not .{ext}",
+                SIDE_EXTENSIONS.join(", .")
+            ));
+        }
+        let base = safe_name(&name);
+        if base.is_empty() {
+            return Err("that file needs a name".into());
+        }
+        let bytes = from_base64(&bytes_base64)?;
+        if bytes.is_empty() {
+            return Err("there were no bytes to land".into());
+        }
+
+        let dir = takes_dir(&app_handle)?;
+        let file_name = free_name(&dir, &base, &ext);
+        let out = dir.join(&file_name);
+
+        // Through a temp file and renamed over, as every other write here is.
+        let tmp = out.with_extension(format!("{ext}.writing"));
+        std::fs::write(&tmp, &bytes).map_err(|e| format!("the file would not write: {e}"))?;
+        std::fs::rename(&tmp, &out).map_err(|e| {
+            let _ = std::fs::remove_file(&tmp);
+            format!("the file would not land: {e}")
+        })?;
+
+        Ok(LandedFile {
+            file_name,
+            path: out.to_string_lossy().to_string(),
+            bytes: bytes.len(),
+        })
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
 // ── The session on disk (the plan's §4.1) ───────────────────────────────────
 //
 // A `<name>.session.json` sidecar ON THE TAKES SHELF — the marks' own road:
@@ -345,6 +514,97 @@ mod tests {
         let layers: Vec<LayerSpec> = serde_json::from_str(&text).expect("spec parses");
         let frames = bounce_to(&layers, Path::new(&out)).expect("bounce");
         println!("STUDIO_PROOF_FRAMES={frames}");
+    }
+
+    #[test]
+    fn base64_carries_the_window_s_bytes_whole() {
+        assert_eq!(from_base64("").unwrap(), Vec::<u8>::new());
+        assert_eq!(from_base64("TQ==").unwrap(), b"M");
+        assert_eq!(from_base64("TWE=").unwrap(), b"Ma");
+        assert_eq!(from_base64("TWFu").unwrap(), b"Man");
+        assert_eq!(from_base64("UklGRg==").unwrap(), b"RIFF");
+        assert_eq!(from_base64("TWFu\r\nTWFu").unwrap(), b"ManMan");
+        assert!(from_base64("not base64!").is_err());
+    }
+
+    /// THE CHAPTERIZED WAV'S DOOR. `src/lib/container.ts` appends a `cue ` chunk
+    /// and a `LIST`/`adtl` chunk after the data chunk. `write_take_wav` reads the
+    /// header back through hound before anything lands, so a chapterized WAV must
+    /// open there exactly as a plain one does.
+    #[test]
+    fn hound_opens_a_wav_that_carries_chapters_after_its_samples() {
+        let rate: u32 = 8000u32;
+        let frames: u32 = 4;
+        let data: Vec<u8> = vec![0, 0, 1, 0, 2, 0, 3, 0];
+
+        let mut cue = Vec::new();
+        cue.extend_from_slice(b"cue ");
+        cue.extend_from_slice(&(4u32 + 24).to_le_bytes());
+        cue.extend_from_slice(&1u32.to_le_bytes()); // one point
+        cue.extend_from_slice(&1u32.to_le_bytes()); // its name
+        cue.extend_from_slice(&2u32.to_le_bytes()); // position
+        cue.extend_from_slice(b"data");
+        cue.extend_from_slice(&0u32.to_le_bytes());
+        cue.extend_from_slice(&0u32.to_le_bytes());
+        cue.extend_from_slice(&2u32.to_le_bytes()); // sample offset
+
+        let mut labl = Vec::new();
+        labl.extend_from_slice(b"labl");
+        labl.extend_from_slice(&8u32.to_le_bytes());
+        labl.extend_from_slice(&1u32.to_le_bytes());
+        labl.extend_from_slice(b"two\0");
+
+        let mut list = Vec::new();
+        list.extend_from_slice(b"LIST");
+        list.extend_from_slice(&((4 + labl.len()) as u32).to_le_bytes());
+        list.extend_from_slice(b"adtl");
+        list.extend_from_slice(&labl);
+
+        let mut bytes = Vec::new();
+        bytes.extend_from_slice(b"RIFF");
+        bytes.extend_from_slice(&0u32.to_le_bytes()); // filled in below
+        bytes.extend_from_slice(b"WAVE");
+        bytes.extend_from_slice(b"fmt ");
+        bytes.extend_from_slice(&16u32.to_le_bytes());
+        bytes.extend_from_slice(&1u16.to_le_bytes()); // PCM
+        bytes.extend_from_slice(&1u16.to_le_bytes()); // mono
+        bytes.extend_from_slice(&rate.to_le_bytes());
+        bytes.extend_from_slice(&(rate * 2).to_le_bytes());
+        bytes.extend_from_slice(&2u16.to_le_bytes());
+        bytes.extend_from_slice(&16u16.to_le_bytes());
+        bytes.extend_from_slice(b"data");
+        bytes.extend_from_slice(&(data.len() as u32).to_le_bytes());
+        bytes.extend_from_slice(&data);
+        bytes.extend_from_slice(&cue);
+        bytes.extend_from_slice(&list);
+        let riff = (bytes.len() - 8) as u32;
+        bytes[4..8].copy_from_slice(&riff.to_le_bytes());
+
+        let reader = hound::WavReader::new(std::io::Cursor::new(&bytes))
+            .expect("a chapterized WAV opens");
+        let spec = reader.spec();
+        assert_eq!(spec.sample_rate, rate);
+        assert_eq!(spec.channels, 1);
+        assert_eq!(spec.bits_per_sample, 16);
+        // The frame count comes from the data chunk, not the file length: the
+        // chapter chunks after it must not be read as samples.
+        assert_eq!(reader.duration(), frames);
+    }
+
+    #[test]
+    fn a_side_file_name_is_free_and_its_extension_is_guarded() {
+        let dir = std::env::temp_dir().join("sistrum-studio-side-name");
+        std::fs::create_dir_all(&dir).unwrap();
+        let _ = std::fs::remove_file(dir.join("master.webm"));
+        let _ = std::fs::remove_file(dir.join("master-2.webm"));
+        assert_eq!(free_name(&dir, "master", "webm"), "master.webm");
+        std::fs::write(dir.join("master.webm"), b"x").unwrap();
+        assert_eq!(free_name(&dir, "master", "webm"), "master-2.webm");
+        assert_eq!(free_name(&dir, "master", "txt"), "master.txt");
+        assert!(SIDE_EXTENSIONS.contains(&"webm"));
+        assert!(SIDE_EXTENSIONS.contains(&"vtt"));
+        assert!(!SIDE_EXTENSIONS.contains(&"wav"));
+        assert!(!SIDE_EXTENSIONS.contains(&"exe"));
     }
 
     #[test]

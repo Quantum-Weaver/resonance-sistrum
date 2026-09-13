@@ -6,6 +6,8 @@
 // spelling kept: "sistrum will now need a multi tract studio for mixing and
 // layering recorded tracks." The plan is `docs/THE-STUDIO-PLAN.md`.
 
+import type { ChapterMark } from '$lib/container';
+
 // ── The session document (the plan's §4.1) ──────────────────────────────────
 //
 // A `<name>.session.json` sidecar on the takes shelf. A track POINTS at a
@@ -35,6 +37,8 @@ export interface SessionDoc {
 	version: typeof SESSION_VERSION;
 	name: string;
 	tracks: SessionTrack[];
+	/** Chapter marks on the mix's own clock, for the chapterized container. */
+	chapters: ChapterMark[];
 	/** ISO timestamps. */
 	created_at: string;
 	updated_at: string;
@@ -46,6 +50,7 @@ export function newSession(name: string, at: string = new Date().toISOString()):
 		version: SESSION_VERSION,
 		name,
 		tracks: [],
+		chapters: [],
 		created_at: at,
 		updated_at: at
 	};
@@ -63,6 +68,15 @@ export function normalizeTrack(t: SessionTrack): SessionTrack {
 		solo: Boolean(t.solo),
 		offset_ms: Math.max(0, Math.round(Number.isFinite(t.offset_ms) ? t.offset_ms : 0)),
 		pan: clamp(Number.isFinite(t.pan) ? t.pan : 0, -1, 1)
+	};
+}
+
+/** A chapter mark with its position whole and its title held to a readable length. */
+export function normalizeChapter(c: Partial<ChapterMark>): ChapterMark {
+	return {
+		id: typeof c.id === 'string' && c.id ? c.id : '0',
+		at_ms: Math.max(0, Math.round(Number.isFinite(c.at_ms) ? (c.at_ms as number) : 0)),
+		title: String(c.title ?? '').trim().slice(0, 120)
 	};
 }
 
@@ -94,11 +108,15 @@ export function parseSession(raw: unknown): SessionDoc {
 			pan: typeof tr.pan === 'number' ? tr.pan : 0
 		});
 	});
+	// A session written before chapters existed carries none, and reads as none.
+	const chapters = Array.isArray(d.chapters) ? d.chapters.map(normalizeChapter) : [];
+	chapters.sort((a, b) => a.at_ms - b.at_ms);
 	return {
 		format: SESSION_FORMAT,
 		version: SESSION_VERSION,
 		name: d.name,
 		tracks,
+		chapters,
 		created_at: typeof d.created_at === 'string' ? d.created_at : new Date(0).toISOString(),
 		updated_at: typeof d.updated_at === 'string' ? d.updated_at : new Date(0).toISOString()
 	};

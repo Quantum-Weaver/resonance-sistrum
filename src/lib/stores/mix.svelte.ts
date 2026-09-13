@@ -11,6 +11,8 @@ interface Lane {
 	trackId: string;
 	take: string;
 	buffer: AudioBuffer | null;
+	/** The take as it decoded, before any repair or splice — what an undo returns to. */
+	pristine: AudioBuffer | null;
 	source: AudioBufferSourceNode | null;
 	gain: GainNode;
 	pan: StereoPannerNode;
@@ -64,7 +66,16 @@ function makeLane(c: AudioContext, track: SessionTrack): Lane {
 	const pan = c.createStereoPanner();
 	gain.connect(pan);
 	if (master) pan.connect(master);
-	return { trackId: track.id, take: track.take, buffer: null, source: null, gain, pan, error: null };
+	return {
+		trackId: track.id,
+		take: track.take,
+		buffer: null,
+		pristine: null,
+		source: null,
+		gain,
+		pan,
+		error: null
+	};
 }
 
 function recomputeLength(tracks: SessionTrack[]) {
@@ -76,14 +87,20 @@ function recomputeLength(tracks: SessionTrack[]) {
 	);
 }
 
-/** Decode one lane's take. The bytes come over the IPC once — `read_take_bytes` is the road, raw binary, never base64. */
-async function decodeLane(lane: Lane) {
+/** A take on the shelf decoded onto the mix's own context. The bytes come over the IPC once — `read_take_bytes` is the road, raw binary, never base64. */
+async function decodeTake(fileName: string): Promise<AudioBuffer> {
 	const c = ensureContext();
+	const bytes = await invoke<ArrayBuffer | Uint8Array>('read_take_bytes', { fileName });
+	const ab = bytes instanceof ArrayBuffer ? bytes : new Uint8Array(bytes).buffer.slice(0);
+	return c.decodeAudioData(ab as ArrayBuffer);
+}
+
+/** Decode one lane's take into its own buffer. */
+async function decodeLane(lane: Lane) {
 	loadingCount++;
 	try {
-		const bytes = await invoke<ArrayBuffer | Uint8Array>('read_take_bytes', { fileName: lane.take });
-		const ab = bytes instanceof ArrayBuffer ? bytes : new Uint8Array(bytes).buffer.slice(0);
-		lane.buffer = await c.decodeAudioData(ab as ArrayBuffer);
+		lane.buffer = await decodeTake(lane.take);
+		lane.pristine = lane.buffer;
 		lane.error = null;
 		ready = { ...ready, [lane.trackId]: true };
 		const next = { ...laneErrors };
@@ -91,6 +108,7 @@ async function decodeLane(lane: Lane) {
 		laneErrors = next;
 	} catch (e) {
 		lane.buffer = null;
+		lane.pristine = null;
 		lane.error = e instanceof Error ? e.message : String(e);
 		laneErrors = { ...laneErrors, [lane.trackId]: lane.error };
 	} finally {
@@ -313,6 +331,88 @@ function laneDuration(trackId: string): number {
 	return lanes.get(trackId)?.buffer?.duration ?? 0;
 }
 
+// ── What a lane plays (repair, splice, punch-in) ─────────────────────────────
+//
+// A repair is heard by swapping the lane's buffer for one made in the window.
+// The decoded take is kept beside it as `pristine`, so dropping every step is
+// the undo, and the file on the shelf is never written by any of this.
+
+/** What the lane is playing now, or null before it has decoded. */
+function laneBuffer(trackId: string): AudioBuffer | null {
+	return lanes.get(trackId)?.buffer ?? null;
+}
+
+/** The take as it decoded, before any repair. */
+function laneSource(trackId: string): AudioBuffer | null {
+	return lanes.get(trackId)?.pristine ?? null;
+}
+
+/** Put a made buffer on a lane, or null to hear the take as it decoded. */
+function setLaneBuffer(trackId: string, buffer: AudioBuffer | null) {
+	const lane = lanes.get(trackId);
+	if (!lane) return;
+	lane.buffer = buffer ?? lane.pristine;
+	recomputeLength(currentTracks);
+	if (playing) restartSources(currentTracks);
+}
+
+/** An empty buffer on the mix's own context, for a repair or a splice to fill. */
+function newBuffer(channels: number, frames: number, sampleRate: number): AudioBuffer | null {
+	if (!browser) return null;
+	try {
+		const c = ensureContext();
+		return c.createBuffer(Math.max(1, channels), Math.max(1, frames), sampleRate || c.sampleRate);
+	} catch {
+		return null;
+	}
+}
+
+/** The rate the window decoded at — what a made take is written at. */
+function contextRate(): number {
+	return ctx?.sampleRate ?? 0;
+}
+
+// ── The mix as one buffer (the mastering rack's source) ──────────────────────
+//
+// The lanes summed offline, in the window, at the rate they decoded at: the mix
+// exactly as it is heard, including whatever repair or splice sits on a lane,
+// without writing a bounce first. Nothing here touches the live graph or a file.
+
+/** The session's lanes rendered into one stereo buffer, or null when none is decoded. */
+async function renderMix(tracks: SessionTrack[]): Promise<AudioBuffer | null> {
+	if (!browser) return null;
+	const rate = contextRate() || 44100;
+	const audible = tracks.filter((t) => {
+		const lane = lanes.get(t.id);
+		return lane?.buffer && effectiveGain(t, tracks.some((o) => o.solo)) > 0;
+	});
+	if (audible.length === 0) return null;
+	const seconds = mixLength(
+		audible.map((t) => ({
+			offsetSecs: t.offset_ms / 1000,
+			durationSecs: lanes.get(t.id)?.buffer?.duration ?? 0
+		}))
+	);
+	const frames = Math.max(1, Math.ceil(seconds * rate));
+	const offline = new OfflineAudioContext(2, frames, rate);
+	const anySolo = tracks.some((t) => t.solo);
+	for (const t of audible) {
+		const buffer = lanes.get(t.id)?.buffer;
+		if (!buffer) continue;
+		const src = offline.createBufferSource();
+		src.buffer = buffer;
+		const gain = offline.createGain();
+		gain.gain.value = effectiveGain(t, anySolo);
+		const pan = offline.createStereoPanner();
+		pan.pan.value = Math.min(1, Math.max(-1, t.pan));
+		src.connect(gain);
+		gain.connect(pan);
+		pan.connect(offline.destination);
+		src.start(t.offset_ms / 1000);
+	}
+	return offline.startRendering();
+}
+
 /** Let the graph go. Buffers are released; the files stay exactly where they are. */
 function close() {
 	stop();
@@ -368,5 +468,12 @@ export const mixStore = {
 	setVolume,
 	loadVolume,
 	laneDuration,
+	laneBuffer,
+	laneSource,
+	setLaneBuffer,
+	decodeTake,
+	newBuffer,
+	contextRate,
+	renderMix,
 	close
 };

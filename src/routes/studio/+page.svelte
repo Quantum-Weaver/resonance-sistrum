@@ -10,7 +10,13 @@
 	import { sessionToLayers, type SessionTrack } from '$lib/studio';
 	import Waveform from '$lib/components/Waveform.svelte';
 	import LaneMarks from '$lib/components/LaneMarks.svelte';
+	import LaneRepair from '$lib/components/LaneRepair.svelte';
+	import LaneSplice from '$lib/components/LaneSplice.svelte';
+	import Master from '$lib/components/Master.svelte';
 	import TakePlayer from '$lib/components/TakePlayer.svelte';
+	import { masterStore } from '$lib/stores/master.svelte';
+	import { repairStore, type MadeTake } from '$lib/stores/repair.svelte';
+	import { spliceStore } from '$lib/stores/splice.svelte';
 	import { identityStore } from '$lib/stores/identity.svelte';
 	import { sealTake } from '$lib/seal';
 	import { proposeParts, partKey, readProvenance } from '$lib/provenance';
@@ -323,6 +329,102 @@
 		}
 	}
 
+	// ── Repair, splice and punch-in on a lane ───────────────────────────────
+	//
+	// The repair is heard on the lane's own buffer and undone step by step; a
+	// splice and a punch each make a NEW take, as a trim does. Nothing here
+	// writes the take a lane points at.
+	interface PunchAsk {
+		inSecs: number;
+		outSecs: number;
+		crossfadeMs: number;
+	}
+	let punchArmed = $state<{ trackId: string; take: string; ask: PunchAsk } | null>(null);
+	let editNote = $state<string | null>(null);
+
+	/** A take a lane's bench made: a row, the shelf, and a new lane beside the old one. */
+	async function landMade(
+		t: SessionTrack,
+		made: MadeTake,
+		kind: string,
+		detail: Record<string, unknown>
+	) {
+		await registerTake(made, {
+			studio: { kind, from: t.take, ...detail, made_at: new Date().toISOString() }
+		});
+		sessionStore.addTrack(made.file_name, t.offset_ms);
+		editNote = `${made.file_name} is on the shelf and in this session. ${t.take} is untouched.`;
+	}
+
+	/** The repair is now a take of its own, so the lane goes back to what it points at. */
+	async function keepRepair(t: SessionTrack, made: MadeTake) {
+		const steps = repairStore.steps(t.id, t.take).length;
+		await landMade(t, made, 'repair', { steps });
+		await repairStore.clear(t.id, t.take);
+	}
+
+	async function armPunch(t: SessionTrack, ask: PunchAsk) {
+		if (recording) return;
+		roomError = null;
+		arming = true;
+		try {
+			// The mix runs from the punch's in point, read on the mix's own clock.
+			mixStore.seek(t.offset_ms / 1000 + ask.inSecs, tracks);
+			if (!playing) await mixStore.play(tracks);
+			const ok = await recorderStore.start(
+				selectedDeviceName,
+				recordPrefs.mode === 'bounded' ? recordPrefs.maxSecs : null
+			);
+			if (!ok) {
+				mixStore.pause();
+				return;
+			}
+			punchArmed = { trackId: t.id, take: t.take, ask };
+		} finally {
+			arming = false;
+		}
+	}
+
+	async function keepPunch() {
+		const armed = punchArmed;
+		if (!armed) return;
+		const t = sessionStore.byId(armed.trackId);
+		const sealed = await recorderStore.stop(true, null);
+		mixStore.pause();
+		punchArmed = null;
+		if (!sealed || !t) return;
+		const made = await spliceStore.punchLane(t.id, t.take, {
+			insertTake: sealed.file_name,
+			inSecs: armed.ask.inSecs,
+			outSecs: armed.ask.outSecs,
+			crossfadeMs: armed.ask.crossfadeMs
+		});
+		if (made)
+			await landMade(t, made, 'punch', {
+				insert: sealed.file_name,
+				in_secs: armed.ask.inSecs,
+				out_secs: armed.ask.outSecs,
+				crossfade_ms: armed.ask.crossfadeMs
+			});
+	}
+
+	async function discardPunch() {
+		await recorderStore.stop(false, null);
+		mixStore.pause();
+		punchArmed = null;
+	}
+
+	// A capped punch has already released the device; keep it as the room would.
+	let sealingPunch = false;
+	$effect(() => {
+		if (recorderStore.capped && punchArmed && !sealingPunch) {
+			sealingPunch = true;
+			keepPunch().finally(() => {
+				sealingPunch = false;
+			});
+		}
+	});
+
 	// ── Overdub (movement 5) ────────────────────────────────────────────────
 	// The mix plays; the recorder's own session starts (one at a time, as now); the new take's offset is the mix clock at the moment the stream opened. The stamp is honest about what it is: the position when `start_recording` returned, not the first sample — the nudge is for the difference.
 	async function overdub() {
@@ -394,6 +496,44 @@
 		}
 	});
 
+	// ── The mastering rack ──────────────────────────────────────────────────
+	//
+	// The rack renders the lanes to one buffer, reads it to BS.1770-4 and lands a
+	// chapterized WAV as a NEW take. Nothing here writes a lane or an existing
+	// take, so it sits beside the mixdown rather than inside it.
+	let masterNote = $state<string | null>(null);
+
+	async function landedMaster(made: MadeTake, beside: string[]) {
+		await registerTake(made, {
+			studio: {
+				kind: 'master',
+				session: sessionStore.name,
+				target_lufs: masterStore.report?.targetLufs ?? masterStore.targetLufs,
+				ceiling_dbtp: masterStore.report?.ceilingDbtp ?? masterStore.ceilingDbtp,
+				integrated_lufs: masterStore.report?.after.integratedLufs ?? null,
+				true_peak_dbtp: masterStore.report?.after.truePeakDbtp ?? null,
+				chapters: sessionStore.chapters.length,
+				beside,
+				made_at: new Date().toISOString()
+			}
+		});
+		lastBounce = recorderStore.byFileName(made.file_name) ?? {
+			file_name: made.file_name,
+			path: made.path,
+			seconds: made.seconds,
+			sample_rate: made.sample_rate,
+			channels: made.channels,
+			created_at: made.created_at,
+			peak_dbfs: null,
+			clipped: null
+		};
+		masterNote = `${made.file_name} is on the shelf${beside.length > 0 ? `, beside ${beside.join(' and ')}` : ''}. Every lane it was made from is untouched.`;
+	}
+
+	function addChapterHere(atMs: number) {
+		sessionStore.addChapter(atMs, '');
+	}
+
 	/** A take THIS ROOM made — the studio's own note, not merely a signed take.
 	 *  Since every seal signs, `provenance != null` is now true of a plain
 	 *  recording too, and this list would have quietly claimed them. */
@@ -410,6 +550,7 @@
 		recordPrefs.load();
 		void identityStore.load();
 		mixStore.loadVolume();
+		masterStore.loadSettings();
 		playbackStore.loadVolume();
 		recorderStore.loadDevices();
 		void (async () => {
@@ -420,6 +561,7 @@
 
 		return () => {
 			mixStore.close();
+			masterStore.clear();
 			playbackStore.close();
 			if (sessionStore.dirty) void sessionStore.save();
 			sessionStore.close();
@@ -676,11 +818,43 @@
 							they are.
 						</p>
 					</details>
+
+					<LaneRepair
+						trackId={t.id}
+						take={t.take}
+						laneNumber={i + 1}
+						selectionIn={trimIn[t.id] ?? 0}
+						selectionOut={trimOut[t.id] ?? 0}
+						onkept={(made) => keepRepair(t, made)}
+					/>
+
+					<LaneSplice
+						trackId={t.id}
+						take={t.take}
+						laneNumber={i + 1}
+						playhead={local}
+						shelf={shelf.map((s) => ({ file_name: s.file_name, seconds: s.seconds }))}
+						armed={punchArmed?.trackId === t.id}
+						{recording}
+						onarm={(ask) => armPunch(t, ask)}
+						onkeep={keepPunch}
+						ondiscard={discardPunch}
+						onmade={(made, detail) => landMade(t, made, 'splice', detail)}
+					/>
 				</li>
 			{/each}
 		</ol>
 		{#if trimNote}
 			<p class="note-line" role="status">{trimNote}</p>
+		{/if}
+		{#if editNote}
+			<p class="note-line" role="status">{editNote}</p>
+		{/if}
+		{#if repairStore.told}
+			<p class="note-line" role="status">{repairStore.told}</p>
+		{/if}
+		{#if spliceStore.told}
+			<p class="note-line" role="status">{spliceStore.told}</p>
 		{/if}
 
 		<!-- ── Add a lane ──────────────────────────────────────────────── -->
@@ -737,6 +911,18 @@
 						Saves itself at {fmtMax(recordPrefs.maxSecs)}.
 					{/if}
 				</p>
+			{:else if punchArmed}
+				<div class="live">
+					<p class="listening" aria-live="polite">● Listening</p>
+					<p class="live-elapsed">{fmt(recorderStore.elapsedSecs)}</p>
+					<p class="live-facts">
+						punching into {punchArmed.take} · {recorderStore.device} · {recorderStore.sampleRate} Hz
+					</p>
+					<div class="meter" role="img" aria-label="Input level">
+						<div class="meter-fill" class:hot={recorderStore.peak > 0.9} style="width: {Math.min(100, recorderStore.peak * 100)}%"></div>
+					</div>
+					<p class="hint">Keep or discard the punch on that lane's splice bench.</p>
+				</div>
 			{:else}
 				<div class="live">
 					<p class="listening" aria-live="polite">● Listening</p>
@@ -855,6 +1041,20 @@
 				<p class="hint">{sealTold}</p>
 			{/if}
 		</section>
+
+		<!-- ── Master ──────────────────────────────────────────────────── -->
+		<Master
+			{tracks}
+			chapters={sessionStore.chapters}
+			{position}
+			onaddchapter={addChapterHere}
+			onmovechapter={(id, patch) => sessionStore.updateChapter(id, patch)}
+			onremovechapter={(id) => sessionStore.removeChapter(id)}
+			onlanded={landedMaster}
+		/>
+		{#if masterNote}
+			<p class="note-line" role="status">{masterNote}</p>
+		{/if}
 
 		{#if lastBounce}
 			<section class="last-bounce" aria-label="The last bounce">

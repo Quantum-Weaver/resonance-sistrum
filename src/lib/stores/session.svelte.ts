@@ -3,11 +3,13 @@ import { invoke } from '@tauri-apps/api/core';
 import { generateId } from '$lib/stores/db';
 import {
 	newSession,
+	normalizeChapter,
 	normalizeTrack,
 	parseSession,
 	type SessionDoc,
 	type SessionTrack
 } from '$lib/studio';
+import type { ChapterMark } from '$lib/container';
 
 // The session lives in a `<name>.session.json` sidecar ON THE TAKES SHELF (the plan's §4.1) — the marks' own road, nothing in this database.
 // A track POINTS at a take; removing a lane leaves the take exactly where it is.
@@ -127,6 +129,36 @@ function removeTrack(id: string) {
 	touch();
 }
 
+// ── Chapter marks (the chapterized container) ───────────────────────────────
+//
+// A chapter is a point on the mix's clock with a title. It lives in the session
+// document beside the lanes, so it is on disk a breath after it is made and is
+// still there when the session is opened again.
+
+function addChapter(atMs: number, title = ''): ChapterMark | null {
+	if (!doc) return null;
+	const chapter = normalizeChapter({ id: generateId(), at_ms: atMs, title });
+	const chapters = [...doc.chapters, chapter].sort((a, b) => a.at_ms - b.at_ms);
+	doc = { ...doc, chapters };
+	touch();
+	return chapter;
+}
+
+function updateChapter(id: string, patch: Partial<Omit<ChapterMark, 'id'>>) {
+	if (!doc) return;
+	const chapters = doc.chapters
+		.map((c) => (c.id === id ? normalizeChapter({ ...c, ...patch }) : c))
+		.sort((a, b) => a.at_ms - b.at_ms);
+	doc = { ...doc, chapters };
+	touch();
+}
+
+function removeChapter(id: string) {
+	if (!doc) return;
+	doc = { ...doc, chapters: doc.chapters.filter((c) => c.id !== id) };
+	touch();
+}
+
 function clearError() {
 	error = null;
 }
@@ -140,6 +172,9 @@ export const sessionStore = {
 	},
 	get tracks() {
 		return doc?.tracks ?? [];
+	},
+	get chapters() {
+		return doc?.chapters ?? [];
 	},
 	get sessions() {
 		return sessions;
@@ -166,6 +201,9 @@ export const sessionStore = {
 	addTrack,
 	updateTrack,
 	removeTrack,
+	addChapter,
+	updateChapter,
+	removeChapter,
 	clearError,
 	byId(id: string) {
 		return doc?.tracks.find((t) => t.id === id);
