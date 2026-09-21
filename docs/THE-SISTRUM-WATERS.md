@@ -22,7 +22,7 @@ voices, the assembly of 55 chapters, splice and punch-in and repair, mastering a
 A water is pure: numbers and words in, numbers and words out, no DOM, no clock, no disk, no network, no randomness,
 laws as data, proofs beside it. The microphone, the speakers, the AudioContext, the canvas, the shelf and the socket
 are the consumer's dress. KP, the same day, on why the split exists at all: *"this is why awen exists, because stand
-alone tools exist needed in multiple places."* (`../resonance-chamber/desk/THE-FINAL-FEATURES-PLAN.md:710`)
+alone tools exist needed in multiple places."* (`../resonance-chamber/desk/THE-FINAL-FEATURES-PLAN.md:714`)
 
 ## What stands
 
@@ -96,7 +96,8 @@ host) · `the-release-model` (single, EP, album, beats, tracks).
 ## The waters to imagine
 
 Ten. W1 to W4 are already written here, pure and proven, and have never been carried to the spring; what they want is
-a README, their proofs re-homed, and a `MIRROR.md` on the copy that stays. W5 to W10 do not exist anywhere.
+a README, their proofs re-homed, and a `MIRROR.md` on the copy that stays. W5, W6 and W9 stand, built and flowing, as
+`resonance-awen/tools/the-grid`, `the-inserts` and `the-ledger`; W7, W8 and W10 do not exist anywhere.
 
 | # | what it does | in | out | what stands already | shared with | mark |
 |---|---|---|---|---|---|---|
@@ -147,7 +148,7 @@ sphragis and the merismos already stand in the spring; nothing of it is sistrum'
 | 1 | W2 and W4 to the spring — the smallest carries, the arithmetic already proven here, proofs travelling with them | small |
 | 2 | W1 and W3 to the spring, sistrum on byte-faithful mirrors with a `MIRROR.md` each, proofs green in both | medium |
 | 3 | W10 — it closes plan 82's §4.4 and replaces a nudge with a number | small |
-| 4 | W5 — the grid the "reaper.fm"/"ableton" sentence asks for and nothing in the house has | medium |
+| 4 | W5 — the grid the "reaper.fm"/"ableton" sentence asks for: `resonance-awen/tools/the-grid`, built and flowing | medium |
 | 5 | W6 — the insert chain and its automation, standing before any plugin | medium |
 | 6 | W8 — after 0.19; 4.20 is then assembly on `the-sruth`'s far side | medium |
 | 7 | W9 — after the door's shape; six apps wait on the same water | large |
