@@ -97,7 +97,7 @@ host) · `the-release-model` (single, EP, album, beats, tracks).
 
 Ten. W1 to W4 are already written here, pure and proven, and have never been carried to the spring; what they want is
 a README, their proofs re-homed, and a `MIRROR.md` on the copy that stays. W5, W6 and W9 stand, built and flowing, as
-`resonance-awen/tools/the-grid`, `the-inserts` and `the-ledger`; W7, W8 and W10 do not exist anywhere.
+`resonance-awen/tools/the-grid`, `the-inserts` and `the-ledger`, and W8 as `the-broadcaster`; W7 and W10 do not exist anywhere.
 
 | # | what it does | in | out | what stands already | shared with | mark |
 |---|---|---|---|---|---|---|
